@@ -3,9 +3,11 @@
 import Link from "next/link";
 import { useState } from "react";
 import { siteConfig } from "@/lib/site-config";
+import { useCart } from "@/lib/cart-context";
 
 export function Header() {
   const [open, setOpen] = useState(false);
+  const { itemCount } = useCart();
 
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-cream/95 backdrop-blur">
@@ -32,7 +34,7 @@ export function Header() {
             aria-label="Cart"
             className="text-sm text-ink-soft transition-colors hover:text-ink"
           >
-            Cart (0)
+            Cart ({itemCount})
           </Link>
           <button
             type="button"

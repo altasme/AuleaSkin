@@ -1,23 +1,55 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "./Button";
 import { trackEvent } from "@/lib/analytics";
+import { useCart } from "@/lib/cart-context";
 import type { Product } from "@/data/products";
 
 export function ProductActions({ product }: { product: Product }) {
+  const { addItem } = useCart();
+  const [quantity, setQuantity] = useState(1);
+  const [justAdded, setJustAdded] = useState(false);
+
   useEffect(() => {
     trackEvent("ViewContent", { content_ids: [product.slug], content_name: product.name });
   }, [product.slug, product.name]);
 
+  function handleAddToCart() {
+    addItem(product.slug, quantity);
+    trackEvent("AddToCart", {
+      content_ids: [product.slug],
+      content_name: product.name,
+      quantity,
+    });
+    setJustAdded(true);
+    setTimeout(() => setJustAdded(false), 1800);
+  }
+
   return (
-    <Button
-      onClick={() =>
-        trackEvent("AddToCart", { content_ids: [product.slug], content_name: product.name })
-      }
-      className="w-full sm:w-auto"
-    >
-      Add to Cart
-    </Button>
+    <div className="flex flex-wrap items-center gap-4">
+      <div className="flex items-center rounded-full border border-line">
+        <button
+          type="button"
+          aria-label="Decrease quantity"
+          className="px-3 py-2.5 text-ink-soft hover:text-ink"
+          onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+        >
+          −
+        </button>
+        <span className="min-w-6 text-center text-sm text-ink">{quantity}</span>
+        <button
+          type="button"
+          aria-label="Increase quantity"
+          className="px-3 py-2.5 text-ink-soft hover:text-ink"
+          onClick={() => setQuantity((q) => q + 1)}
+        >
+          +
+        </button>
+      </div>
+      <Button onClick={handleAddToCart} className="flex-1 sm:flex-none">
+        {justAdded ? "Added ✓" : "Add to Cart"}
+      </Button>
+    </div>
   );
 }
