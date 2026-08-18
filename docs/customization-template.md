@@ -14,10 +14,16 @@ PRIMARY BUSINESS OBJECTIVE:A premium-but-accessible storefront distinctly Aulea'
 PRIMARY CONVERSION:        Purchase (Browse → Add to Cart → Checkout → Payment/COD → Order)
 SECONDARY CONVERSION:      Email signup (not yet wired — no destination named, spec F5)
 TRAFFIC SOURCES:           Paid social (Meta), plus existing Shopee audience
-CORE PRODUCTS / SERVICES:  7 confirmed SKUs (spec B6): Sunscreen (SPF 30), Organic Vitamin C
-                            Serum (15 mL), Niacinamide Facial Wash (60 mL), Collagen + Vitamin E
-                            Firming Lotion, Aulea Natural Soap, Glass Skin Natural Soap, Ultimate
-                            Whitening Natural Soap — prices/sizes/ingredients still pending
+CORE PRODUCTS / SERVICES:  8 SKUs, reconciled against real product photography received this
+                            round (supersedes spec B6's text list — see docs/intake-checklist.md):
+                            Sunscreen SPF 50 with Alpha Arbutin (30 mL — label says 50, spec text
+                            said 30, needs client confirmation), Organic Vitamin C Serum (15 mL),
+                            Niacinamide Facial Wash (60 mL), Collagen + Vitamin E Firming Lotion
+                            (100 mL), Glass Skin Natural Soap (70 g), Ultimate Whitening Natural
+                            Soap (70 g), Essence for Men (50 mL EDP, scents Paul/Cedrick — new,
+                            not in any spec version), Essence for Women (50 mL EDP, scents
+                            Irish/Nathalie/Courtney — new). Plain "Aulea Natural Soap" dropped —
+                            no photo evidence it exists. Prices/ingredients still pending for all.
 WEBSITE TYPE:              E-COMMERCE
 CHECKOUT MODEL:            OWN CHECKOUT — confirmed (spec §2), not an open decision. Checkout UI
                             is built as a flow preview (src/app/checkout); no payment gateway or
@@ -34,9 +40,10 @@ MEASUREMENT (F5):          GA4 + Meta Pixel/CAPI scaffolded (src/lib/analytics.t
                             wired (ViewContent, AddToCart, Lead), IDs not yet supplied — see
                             .env.example. Email capture destination not yet named.
 COMPLIANCE (C2):           CPN numbers: NOT SUPPLIED. Substantiation: NOT SUPPLIED. Whitening /
-                            Glass Skin / Firming / Organic / SPF 30 flagged as compliance holds —
-                            Ultimate Whitening is the highest-exposure item in the catalog. See
-                            docs/compliance-notes.md.
+                            Glass Skin / Firming / pore-minimizing-brightening / Organic / SPF 50
+                            + Alpha Arbutin flagged as compliance holds — Ultimate Whitening is
+                            the highest-exposure item. Essence Men/Women carry no efficacy claim.
+                            See docs/compliance-notes.md.
 BRAND DIRECTION:           LOCKED per spec PART A — Navy #1F1A76 (accent), Navy Deep #131047
                             (large fills: hero + footer + one promo band only), Gold #E2AB2D
                             (decoration/hover only, never body text), Cream #F8EFE0 (base), Cream
@@ -45,15 +52,16 @@ BRAND DIRECTION:           LOCKED per spec PART A — Navy #1F1A76 (accent), Nav
                             session — that deviation is retired; PART A is the locked source of
                             truth now. Typography: Bebas Neue (caps, final), Fraunces (display,
                             placeholder for Tan Pearl/Sego pending licensing), Mulish (body,
-                            final per spec A4). Vector logo files still needed (spec B2: do not
-                            redesign the logo).
-CLIENT MATERIALS RECEIVED: Brand kit (locked colour/type system), founder story, 7 confirmed SKU
-                            names, contact email, Shopee store link, courier list, free-shipping
+                            final per spec A4). Logo: RECEIVED and live (full lockup + icon),
+                            used as supplied per spec B2 — see assets/logo-source/README.md.
+CLIENT MATERIALS RECEIVED: Brand kit (locked colour/type system), founder story, real logo
+                            (lockup + icon), sitewide hero photo, product photography for 6 of 8
+                            SKUs, contact email, Shopee store link, courier list, free-shipping
                             threshold, payment methods list (GCash/Maya/Bank Transfer/COD)
-MISSING MATERIALS:         Prices, full product descriptions/benefits/ingredients (all 7 SKUs),
-                            label photos, high-res product/lifestyle photography, CPN +
-                            substantiation, vector logo, payment gateway access, DNS/pixel
-                            access, order backend — see docs/intake-checklist.md
+MISSING MATERIALS:         Prices, full product descriptions/benefits (all 8 SKUs), legible
+                            ingredients-panel photos, founder photo, CPN + substantiation,
+                            SPF 30-vs-50 confirmation, payment gateway access, DNS/pixel access,
+                            order backend — see docs/intake-checklist.md
 ESTIMATED BUILD TIME:      4 to 6 days from Build-Ready confirmation (spec G3) — not started,
                             clock has not begun
 PHASE 1 STATUS:            BUILDING (design system, brand content, and full page structure in

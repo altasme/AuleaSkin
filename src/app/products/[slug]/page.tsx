@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 import { ComplianceBadge } from "@/components/ComplianceBadge";
-import { Placeholder } from "@/components/Placeholder";
 import { ProductActions } from "@/components/ProductActions";
 import { ProductCard } from "@/components/ProductCard";
 import { Section } from "@/components/Section";
@@ -41,12 +41,22 @@ export default async function ProductPage({
       <Section className="pt-14">
         <div className="grid gap-12 lg:grid-cols-2">
           <div className="grid grid-cols-2 gap-4">
-            {Array.from({ length: product.images }).map((_, i) => (
-              <Placeholder
-                key={i}
-                label={`${product.name} — photo ${i + 1}`}
-                className={i === 0 ? "col-span-2 aspect-[4/3]" : ""}
-              />
+            {product.images.map((src, i) => (
+              <div
+                key={src}
+                className={`relative overflow-hidden rounded-sm bg-white ${
+                  i === 0 ? "col-span-2 aspect-[4/3]" : "aspect-square"
+                }`}
+              >
+                <Image
+                  src={src}
+                  alt={`${product.name} — photo ${i + 1}`}
+                  fill
+                  sizes="(min-width: 1024px) 50vw, 100vw"
+                  className="object-cover"
+                  priority={i === 0}
+                />
+              </div>
             ))}
           </div>
 
@@ -56,6 +66,28 @@ export default async function ProductPage({
             </p>
             <h1 className="mt-2 font-display text-3xl text-ink sm:text-4xl">{product.name}</h1>
             <p className="mt-3 text-lg text-ink/70">{product.priceDisplay}</p>
+
+            {product.variants && (
+              <div className="mt-4">
+                <p className="text-xs font-medium uppercase tracking-[0.1em] text-ink/70 mb-2">
+                  Available scents
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {product.variants.map((variant) => (
+                    <span
+                      key={variant}
+                      className="rounded-full border border-ink/12 px-4 py-1.5 text-sm text-ink/70"
+                    >
+                      {variant}
+                    </span>
+                  ))}
+                </div>
+                <p className="mt-2 text-xs text-ink/70">
+                  Scent selection at checkout isn&apos;t wired yet — noted here as available
+                  options only.
+                </p>
+              </div>
+            )}
 
             {product.complianceHold && (
               <div className="mt-4">

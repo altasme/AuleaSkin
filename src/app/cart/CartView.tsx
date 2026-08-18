@@ -1,7 +1,7 @@
 "use client";
 
+import Image from "next/image";
 import { LinkButton } from "@/components/Button";
-import { Placeholder } from "@/components/Placeholder";
 import { Section, SectionHeading } from "@/components/Section";
 import { getProductBySlug, type Product } from "@/data/products";
 import { useCart, type CartLine } from "@/lib/cart-context";
@@ -39,8 +39,14 @@ export function CartView() {
         <div className="lg:col-span-2 divide-y divide-ink/12 border-y border-ink/12">
           {items.map(({ line, product }) => (
             <div key={product.slug} className="flex gap-4 py-6">
-              <div className="w-24 shrink-0">
-                <Placeholder label="Photo" aspect="aspect-square" />
+              <div className="relative aspect-square w-24 shrink-0 overflow-hidden rounded-sm bg-white">
+                <Image
+                  src={product.images[0]}
+                  alt={product.name}
+                  fill
+                  sizes="96px"
+                  className="object-cover p-1.5"
+                />
               </div>
               <div className="flex flex-1 flex-col justify-between">
                 <div>

@@ -8,12 +8,9 @@ export function Footer() {
       <div className="mx-auto max-w-6xl px-6 py-14 sm:px-10 lg:px-16">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <Logo className="[&_span]:text-cream" />
-            <p className="mt-3 text-sm text-cream/70 leading-relaxed">
+            <Logo onDark height={28} />
+            <p className="mt-4 text-sm text-cream/70 leading-relaxed">
               {siteConfig.shortDescription}
-            </p>
-            <p className="mt-3 font-label text-sm tracking-[0.15em] text-cream">
-              {siteConfig.tagline}
             </p>
           </div>
 

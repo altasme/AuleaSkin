@@ -1,5 +1,5 @@
+import Image from "next/image";
 import Link from "next/link";
-import { Placeholder } from "./Placeholder";
 import type { Product } from "@/data/products";
 
 // Editorial, not marketplace (spec D4): large clean imagery, minimal
@@ -8,13 +8,19 @@ import type { Product } from "@/data/products";
 export function ProductCard({ product }: { product: Product }) {
   return (
     <Link href={`/products/${product.slug}`} className="group block">
-      <div className="relative rounded-md bg-white p-4 transition-opacity group-hover:opacity-90">
+      <div className="relative aspect-square overflow-hidden rounded-md bg-white transition-opacity group-hover:opacity-90">
         {product.complianceHold && (
           <span className="absolute left-3 top-3 z-10 rounded-full bg-cream px-2.5 py-1 text-[0.65rem] font-medium uppercase tracking-[0.05em] text-ink/70">
             ⚠ Compliance hold
           </span>
         )}
-        <Placeholder label={`Product photo — ${product.name}`} bare />
+        <Image
+          src={product.images[0]}
+          alt={product.name}
+          fill
+          sizes="(min-width: 1024px) 25vw, 50vw"
+          className="object-cover p-4"
+        />
       </div>
       <p className="mt-4 text-xs font-medium uppercase tracking-[0.1em] text-ink/70">
         {product.category} · {product.size}

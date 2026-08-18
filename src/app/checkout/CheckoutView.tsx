@@ -8,9 +8,9 @@
 // laid out per spec D5/E1-E3 so the intended flow can be reviewed, but
 // submission is disabled rather than faking a completed order.
 
+import Image from "next/image";
 import Link from "next/link";
 import { LinkButton } from "@/components/Button";
-import { Placeholder } from "@/components/Placeholder";
 import { Section, SectionHeading } from "@/components/Section";
 import { getProductBySlug } from "@/data/products";
 import { siteConfig } from "@/lib/site-config";
@@ -98,8 +98,14 @@ export function CheckoutView() {
             <div className="space-y-4">
               {items.map(({ line, product }) => (
                 <div key={product!.slug} className="flex gap-3">
-                  <div className="w-14 shrink-0">
-                    <Placeholder label="Photo" aspect="aspect-square" />
+                  <div className="relative aspect-square w-14 shrink-0 overflow-hidden rounded-sm bg-white">
+                    <Image
+                      src={product!.images[0]}
+                      alt={product!.name}
+                      fill
+                      sizes="56px"
+                      className="object-cover p-1"
+                    />
                   </div>
                   <div className="flex-1 text-sm">
                     <p className="text-ink">{product!.name}</p>

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { LinkButton } from "@/components/Button";
 import { Placeholder } from "@/components/Placeholder";
@@ -11,7 +12,7 @@ const routineSteps = [
   { step: "Cleanse", slug: "niacinamide-facial-wash" },
   { step: "Treat", slug: "organic-vitamin-c-serum" },
   { step: "Hydrate", slug: "collagen-vitamin-e-firming-lotion" },
-  { step: "Protect", slug: "sunscreen-spf-30" },
+  { step: "Protect", slug: "sunscreen-spf-50" },
 ];
 
 export default function Home() {
@@ -41,11 +42,16 @@ export default function Home() {
               </LinkButton>
             </div>
           </div>
-          <Placeholder
-            label="Hero image — pending client product/lifestyle photography"
-            aspect="aspect-[4/5]"
-            className="bg-cream/10"
-          />
+          <div className="relative aspect-[4/5] overflow-hidden rounded-sm">
+            <Image
+              src="/images/hero/sitewide-hero.webp"
+              alt="Auléa Skin product lineup"
+              fill
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              className="object-cover"
+              priority
+            />
+          </div>
         </div>
       </section>
 
@@ -128,8 +134,14 @@ export default function Home() {
                 <p className="text-xs font-medium uppercase tracking-[0.1em] text-navy/70">
                   {step}
                 </p>
-                <div className="mt-3 rounded-md bg-cream p-4">
-                  <Placeholder label={product.category} aspect="aspect-square" bare />
+                <div className="relative mt-3 aspect-square overflow-hidden rounded-md bg-white">
+                  <Image
+                    src={product.images[0]}
+                    alt={product.name}
+                    fill
+                    sizes="(min-width: 1024px) 25vw, 50vw"
+                    className="object-cover p-3"
+                  />
                 </div>
                 <p className="mt-2 font-display text-sm text-ink">{product.name}</p>
               </Link>

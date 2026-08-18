@@ -10,30 +10,37 @@ v2.0.
 
 ## Project status: intake NOT READY (spec G3/H1)
 
-The spec resolved a lot: locked colour/type system, founder story (now
-written first-person on Home + About), and 7 confirmed SKU names. What's
-still blocking a launch-ready build: **prices**, full product
-descriptions/ingredients/benefits, product & label photography, FDA CPN
-numbers + written claim substantiation (Ultimate Whitening is the highest
-compliance exposure in the catalog), the vector logo, and payment/
-DNS/pixel access. See [`docs/intake-checklist.md`](docs/intake-checklist.md)
-for the full list.
+Real assets have landed: the locked colour/type system, founder story (now
+written first-person on Home + About), the real logo, a sitewide hero
+photo, and product photography for 6 of the catalog's 8 SKUs. What's still
+blocking a launch-ready build: **prices**, full product
+descriptions/benefits, legible ingredient-panel photos, FDA CPN numbers +
+written claim substantiation (Ultimate Whitening is the highest compliance
+exposure in the catalog), a founder photo, and payment/DNS/pixel access.
+See [`docs/intake-checklist.md`](docs/intake-checklist.md) for the full
+list — including two things the photography itself changed: the sunscreen
+label reads **SPF 50**, not the SPF 30 in the spec text, and two SKUs not
+in any spec version (**Auléa Essence for Men/Women**, a fragrance line)
+turned up in the supplied photos.
 
 - **What's here:** the locked design system (Navy `#1F1A76` / Navy Deep
   `#131047` / Gold `#E2AB2D` / Cream `#F8EFE0` / Cream Deep `#F1E7D6` /
   Mist `#ECEAF3` / Ink `#201B3B`), Fraunces/Bebas Neue/Mulish typography,
-  the real first-person founder story, the confirmed 7-SKU catalog with
-  compliance holds on the five regulated names, a working client-side
-  cart, and the full customer journey (Home → Shop → Product → Cart →
-  Checkout preview → Order Confirmation template → Contact).
-- **What's not here:** real prices or product copy; a wired payment/COD
-  checkout (own checkout is the confirmed model, spec §2 — what's missing
-  is the implementation: this is a static export with no backend, so
-  `/checkout` is a reachable UI preview with submission disabled, and
-  `/order-confirmation` is a static template, not a real receipt); live
-  analytics/pixel IDs; compliance sign-off; the real vector logo;
-  before/after or video testimonial content (no fabricated reviews or
-  results, spec C1/C3).
+  the real logo (`public/images/logo/`, source in `assets/logo-source/`),
+  real product photography wired into every product card/gallery/cart/
+  checkout thumbnail, the real first-person founder story, the confirmed
+  8-SKU catalog with compliance holds on the six regulated names, a
+  working client-side cart, and the full customer journey (Home → Shop →
+  Product → Cart → Checkout preview → Order Confirmation template →
+  Contact).
+- **What's not here:** real prices or product copy; a founder photo; a
+  wired payment/COD checkout (own checkout is the confirmed model, spec
+  §2 — what's missing is the implementation: this is a static export with
+  no backend, so `/checkout` is a reachable UI preview with submission
+  disabled, and `/order-confirmation` is a static template, not a real
+  receipt); live analytics/pixel IDs; compliance sign-off; before/after or
+  video testimonial content (no fabricated reviews or results, spec
+  C1/C3).
 
 Every placeholder in the codebase is marked with `[bracketed text]`, a 🖼️
 placeholder box, or a ⚠ compliance-hold badge — nothing invented (spec
@@ -66,8 +73,10 @@ src/
                         checkout (preview), order-confirmation (template), contact, policies
   components/          Shared UI (Header, Footer, Logo, ProductCard, ProductActions,
                         ComplianceBadge, EmailSignup, ContactForm, Button, Section, Placeholder)
-  data/products.ts     7 confirmed SKUs — real names/categories, price/description/ingredients
-                        pending; compliance-hold flags per spec C2
+  data/products.ts     8 confirmed SKUs — real names/categories/sizes/images, price/description/
+                        ingredients pending; compliance-hold flags per spec C2
+public/images/         Real product photography + logo (product/, hero/, logo/)
+assets/logo-source/    Original logo export files, kept for reference — see its README
   lib/site-config.ts   Real business info (email, Shopee link, tagline, nav) + genuine gaps
   lib/cart-context.tsx Client-side cart (useSyncExternalStore + localStorage)
   lib/analytics.tsx    GA4 + Meta Pixel/CAPI scaffolding (spec F5)
