@@ -48,7 +48,7 @@ export default async function ProductPage({
           </div>
 
           <div>
-            <p className="font-label text-sm tracking-[0.15em] text-gold">
+            <p className="text-xs font-medium uppercase tracking-[0.1em] text-ink-soft">
               {product.category} · {product.size}
             </p>
             <h1 className="mt-2 font-display text-3xl text-ink sm:text-4xl">{product.name}</h1>
@@ -73,18 +73,18 @@ export default async function ProductPage({
 
             <dl className="mt-10 space-y-6 border-t border-line pt-6">
               <div>
-                <dt className="font-label text-xs tracking-[0.15em] text-ink-soft">Benefits</dt>
+                <dt className="text-xs font-medium uppercase tracking-[0.1em] text-ink-soft/80">Benefits</dt>
                 <dd className="mt-2 text-sm leading-relaxed text-ink-soft">
                   [Benefits pending client input — not published without written substantiation
                   where they involve an efficacy claim.]
                 </dd>
               </div>
               <div>
-                <dt className="font-label text-xs tracking-[0.15em] text-ink-soft">How to use</dt>
+                <dt className="text-xs font-medium uppercase tracking-[0.1em] text-ink-soft/80">How to use</dt>
                 <dd className="mt-2 text-sm leading-relaxed text-ink-soft">{product.usage}</dd>
               </div>
               <div>
-                <dt className="font-label text-xs tracking-[0.15em] text-ink-soft">
+                <dt className="text-xs font-medium uppercase tracking-[0.1em] text-ink-soft/80">
                   Ingredients
                 </dt>
                 <dd className="mt-2 text-sm leading-relaxed text-ink-soft">
@@ -92,7 +92,7 @@ export default async function ProductPage({
                 </dd>
               </div>
               <div>
-                <dt className="font-label text-xs tracking-[0.15em] text-ink-soft">
+                <dt className="text-xs font-medium uppercase tracking-[0.1em] text-ink-soft/80">
                   Suitable for
                 </dt>
                 <dd className="mt-2 text-sm leading-relaxed text-ink-soft">

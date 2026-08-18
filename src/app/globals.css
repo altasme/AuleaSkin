@@ -1,26 +1,34 @@
 @import "tailwindcss";
 
 :root {
-  /* Brand kit palette (spec §13.2) */
+  /* Brand kit palette (spec §13.2) — confirmed hex values kept exact. */
   --brand-cream: #f8efe0;
-  --brand-cream-deep: #f0e0c6;
-  --brand-indigo: #1f1a76;
-  --brand-indigo-soft: #4b4788;
-  --brand-gold: #e2ab2d;
-  --brand-line: #e6d7ba;
+  --brand-sand: #f5eedd; /* subtle section tint, close to cream on purpose */
+  --brand-indigo: #1f1a76; /* brand accent: logo, buttons, footer/hero fills — not body text */
+  --brand-gold: #e2ab2d; /* accent, used sparingly */
+  --brand-line: #e7dcc4;
+
+  /* Reading colors, split out from --brand-indigo. Using the full brand
+     indigo as default body/heading text (as in the first pass) reads as
+     loud and tiring across long copy — these are desaturated, near-neutral
+     so large blocks of text stay comfortable; the saturated brand colors
+     stay reserved for accents, per §13.2's own "restrained accent"
+     guidance. */
+  --brand-ink: #211f2e;
+  --brand-ink-soft: #68636f;
 
   --background: var(--brand-cream);
-  --foreground: var(--brand-indigo);
+  --foreground: var(--brand-ink);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-cream: var(--brand-cream);
-  --color-sand: var(--brand-cream-deep);
+  --color-sand: var(--brand-sand);
   --color-indigo: var(--brand-indigo);
-  --color-ink: var(--brand-indigo);
-  --color-ink-soft: var(--brand-indigo-soft);
+  --color-ink: var(--brand-ink);
+  --color-ink-soft: var(--brand-ink-soft);
   --color-gold: var(--brand-gold);
   --color-line: var(--brand-line);
   --font-sans: var(--font-geist-sans);
@@ -34,17 +42,12 @@ body {
   color: var(--foreground);
 }
 
+/* Flat, quiet stand-in for a missing image — no busy pattern. */
 .placeholder-box {
-  background-image: repeating-linear-gradient(
-    45deg,
-    var(--brand-cream-deep),
-    var(--brand-cream-deep) 10px,
-    #f4e6cd 10px,
-    #f4e6cd 20px
-  );
+  background-color: #efe6d2;
 }
 
 .font-label {
   font-family: var(--font-label);
-  letter-spacing: 0.06em;
+  letter-spacing: 0.03em;
 }

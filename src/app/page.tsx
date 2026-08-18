@@ -77,24 +77,24 @@ export default function Home() {
       </Section>
 
       {/* Why Aulea */}
-      <Section className="bg-sand/40">
+      <Section>
         <SectionHeading eyebrow="Why Aulea" title="Skincare that doesn't have to be complicated" />
         <div className="grid gap-8 sm:grid-cols-3">
-          <div className="border border-line rounded-sm bg-cream p-6">
+          <div className="border border-line rounded-sm p-6">
             <h3 className="font-display text-lg text-ink">Born from real experience</h3>
             <p className="mt-2 text-sm text-ink-soft leading-relaxed">
               Aulea started because the founder struggled to find products that felt comfortable
               for sensitive, easily-irritated skin — not as a generic beauty brand.
             </p>
           </div>
-          <div className="border border-line rounded-sm bg-cream p-6">
+          <div className="border border-line rounded-sm p-6">
             <h3 className="font-display text-lg text-ink">Accessible pricing</h3>
             <p className="mt-2 text-sm text-ink-soft leading-relaxed">
               Reasonably priced by design, so a good routine doesn&apos;t have to be a luxury
               purchase.
             </p>
           </div>
-          <div className="border border-line rounded-sm bg-cream p-6">
+          <div className="border border-line rounded-sm p-6">
             <h3 className="font-display text-lg text-ink">Simple, everyday routines</h3>
             <p className="mt-2 text-sm text-ink-soft leading-relaxed">
               Skincare that fits into a normal day — not an intimidating, multi-step regimen.
@@ -104,7 +104,7 @@ export default function Home() {
       </Section>
 
       {/* Product discovery / routine */}
-      <Section>
+      <Section className="bg-sand/40">
         <SectionHeading
           eyebrow="Product Discovery"
           title="Cleanse → Treat → Protect → Moisturize"
@@ -113,7 +113,7 @@ export default function Home() {
         <div className="grid gap-6 sm:grid-cols-4">
           {routineSteps.map(({ step, product }) => (
             <div key={step} className="text-center">
-              <p className="font-label text-sm tracking-[0.15em] text-gold">{step}</p>
+              <p className="text-xs font-medium uppercase tracking-[0.1em] text-indigo/70">{step}</p>
               {product ? (
                 <Link href={`/products/${product.slug}`} className="mt-3 block">
                   <Placeholder label={product.category} aspect="aspect-square" />
@@ -134,13 +134,13 @@ export default function Home() {
       </Section>
 
       {/* Customer love */}
-      <Section className="bg-sand/40">
+      <Section>
         <SectionHeading
           eyebrow="Customer Love"
           title="What customers are saying"
           description="Aulea's previous social pages were lost and are being recovered, so history here is limited by design — nothing below is invented (spec §10, §13)."
         />
-        <div className="rounded-sm border border-line bg-cream p-8 text-center">
+        <div className="rounded-sm border border-line p-8 text-center">
           <p className="text-ink-soft leading-relaxed">
             [Authentic customer feedback screenshots pending from the client — see
             docs/intake-checklist.md. Only real, supplied feedback will be published here.]
@@ -152,7 +152,9 @@ export default function Home() {
       <Section>
         <div className="grid items-center gap-12 lg:grid-cols-2">
           <div>
-            <p className="font-label text-sm tracking-[0.2em] text-gold mb-3">The Aulea Story</p>
+            <p className="text-xs font-medium uppercase tracking-[0.15em] text-indigo/70 mb-3">
+              The Aulea Story
+            </p>
             <h2 className="font-display text-3xl text-ink sm:text-4xl">
               Started from personal experience, not a marketing plan
             </h2>
@@ -180,21 +182,18 @@ export default function Home() {
         <EmailSignup />
       </Section>
 
-      {/* Final CTA */}
+      {/* Final CTA — quiet treatment; full indigo fill is reserved for the
+          footer only (spec §13.2: "reserve full indigo for the hero and
+          footer"), and a second saturated block back-to-back with the
+          footer reads as heavy rather than confident. */}
       <Section>
-        <div className="rounded-sm border border-line bg-indigo px-8 py-14 text-center sm:px-16">
-          <h2 className="font-display text-3xl text-cream sm:text-4xl">
+        <div className="rounded-sm border-t-2 border-gold px-8 py-14 text-center sm:px-16">
+          <h2 className="font-display text-3xl text-ink sm:text-4xl">
             Start your everyday skincare routine with Aulea Skin.
           </h2>
-          <p className="mt-3 text-cream/80">{siteConfig.contactEmail}</p>
+          <p className="mt-3 text-ink-soft">{siteConfig.contactEmail}</p>
           <div className="mt-8">
-            <LinkButton
-              href="/products"
-              variant="secondary"
-              className="border-cream text-cream hover:bg-cream hover:text-indigo"
-            >
-              Shop Aulea
-            </LinkButton>
+            <LinkButton href="/products">Shop Aulea</LinkButton>
           </div>
         </div>
       </Section>

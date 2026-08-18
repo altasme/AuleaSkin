@@ -9,7 +9,7 @@ export function ProductCard({ product }: { product: Product }) {
         label={`Product photo — ${product.name}`}
         className="group-hover:opacity-90 transition-opacity"
       />
-      <p className="mt-4 font-label text-sm tracking-[0.15em] text-gold">
+      <p className="mt-4 text-xs font-medium uppercase tracking-[0.1em] text-ink-soft">
         {product.category} · {product.size}
       </p>
       <h3 className="mt-1 font-display text-lg text-ink">{product.name}</h3>

@@ -44,7 +44,7 @@ export function CartView() {
               </div>
               <div className="flex flex-1 flex-col justify-between">
                 <div>
-                  <p className="text-xs uppercase tracking-[0.15em] text-gold">
+                  <p className="text-xs font-medium uppercase tracking-[0.1em] text-ink-soft">
                     {product.category}
                   </p>
                   <h3 className="mt-1 font-display text-lg text-ink">{product.name}</h3>

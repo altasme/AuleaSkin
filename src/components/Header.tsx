@@ -22,7 +22,7 @@ export function Header() {
             <Link
               key={item.href}
               href={item.href}
-              className="font-label text-sm tracking-wider text-ink-soft transition-colors hover:text-ink"
+              className="text-sm text-ink-soft transition-colors hover:text-ink"
             >
               {item.label}
             </Link>
@@ -33,7 +33,7 @@ export function Header() {
           <Link
             href="/cart"
             aria-label="Cart"
-            className="font-label text-sm tracking-wider text-ink-soft transition-colors hover:text-ink"
+            className="text-sm text-ink-soft transition-colors hover:text-ink"
           >
             Cart ({itemCount})
           </Link>
@@ -55,7 +55,7 @@ export function Header() {
             <Link
               key={item.href}
               href={item.href}
-              className="font-label py-2 text-sm tracking-wider text-ink-soft hover:text-ink"
+              className="py-2 text-sm text-ink-soft hover:text-ink"
               onClick={() => setOpen(false)}
             >
               {item.label}

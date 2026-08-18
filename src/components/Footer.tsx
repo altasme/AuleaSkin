@@ -18,7 +18,7 @@ export function Footer() {
           </div>
 
           <div>
-            <p className="font-label text-sm tracking-[0.15em] text-gold mb-3">Shop</p>
+            <p className="text-xs font-medium uppercase tracking-[0.15em] text-cream/50 mb-3">Shop</p>
             <ul className="space-y-2 text-sm">
               {siteConfig.nav.map((item) => (
                 <li key={item.href}>
@@ -31,7 +31,7 @@ export function Footer() {
           </div>
 
           <div>
-            <p className="font-label text-sm tracking-[0.15em] text-gold mb-3">Policies</p>
+            <p className="text-xs font-medium uppercase tracking-[0.15em] text-cream/50 mb-3">Policies</p>
             <ul className="space-y-2 text-sm">
               {siteConfig.footerPolicyLinks.map((item) => (
                 <li key={item.href}>
@@ -44,7 +44,7 @@ export function Footer() {
           </div>
 
           <div>
-            <p className="font-label text-sm tracking-[0.15em] text-gold mb-3">Contact</p>
+            <p className="text-xs font-medium uppercase tracking-[0.15em] text-cream/50 mb-3">Contact</p>
             <ul className="space-y-2 text-sm text-cream/80">
               <li>{siteConfig.contactEmail}</li>
               <li>{siteConfig.businessType}</li>

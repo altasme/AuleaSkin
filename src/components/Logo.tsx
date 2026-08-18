@@ -26,8 +26,8 @@ export function Logo({ className = "" }: { className?: string }) {
   return (
     <span className={`inline-flex items-center gap-1.5 ${className}`}>
       <LeafAccent className="h-4 w-4 text-gold" />
-      <span className="font-display text-xl tracking-wide text-ink">Auléa</span>
-      <span className="font-label text-[0.7rem] tracking-[0.2em] text-ink-soft self-end mb-0.5">
+      <span className="font-display text-xl tracking-wide text-indigo">Auléa</span>
+      <span className="font-label text-[0.7rem] tracking-[0.15em] text-indigo/60 self-end mb-0.5">
         SKIN
       </span>
     </span>
