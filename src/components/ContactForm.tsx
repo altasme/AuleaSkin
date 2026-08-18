@@ -17,7 +17,7 @@ export function ContactForm() {
 
   if (submitted) {
     return (
-      <p className="rounded-sm border border-line bg-sand/40 p-6 text-sm text-ink-soft">
+      <p className="rounded-sm border border-ink/12 bg-cream-deep/40 p-6 text-sm text-ink/70">
         Thanks — this is a placeholder confirmation. The form isn&apos;t connected to a real
         inbox yet; wire it to an email service before launch.
       </p>
@@ -27,18 +27,18 @@ export function ContactForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label className="mb-1 block text-sm text-ink-soft" htmlFor="name">
+        <label className="mb-1 block text-sm text-ink/70" htmlFor="name">
           Name
         </label>
         <input
           id="name"
           name="name"
           required
-          className="w-full rounded-sm border border-line bg-cream px-4 py-2.5 text-ink outline-none focus:border-accent"
+          className="w-full rounded-sm border border-ink/12 bg-cream px-4 py-2.5 text-ink outline-none focus:border-gold"
         />
       </div>
       <div>
-        <label className="mb-1 block text-sm text-ink-soft" htmlFor="email">
+        <label className="mb-1 block text-sm text-ink/70" htmlFor="email">
           Email
         </label>
         <input
@@ -46,11 +46,11 @@ export function ContactForm() {
           name="email"
           type="email"
           required
-          className="w-full rounded-sm border border-line bg-cream px-4 py-2.5 text-ink outline-none focus:border-accent"
+          className="w-full rounded-sm border border-ink/12 bg-cream px-4 py-2.5 text-ink outline-none focus:border-gold"
         />
       </div>
       <div>
-        <label className="mb-1 block text-sm text-ink-soft" htmlFor="message">
+        <label className="mb-1 block text-sm text-ink/70" htmlFor="message">
           Message
         </label>
         <textarea
@@ -58,7 +58,7 @@ export function ContactForm() {
           name="message"
           rows={4}
           required
-          className="w-full rounded-sm border border-line bg-cream px-4 py-2.5 text-ink outline-none focus:border-accent"
+          className="w-full rounded-sm border border-ink/12 bg-cream px-4 py-2.5 text-ink outline-none focus:border-gold"
         />
       </div>
       <Button type="submit">Send Message</Button>

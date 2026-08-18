@@ -1,43 +1,36 @@
 @import "tailwindcss";
 
 :root {
-  /* Palette v2 — moved off the brand-kit indigo/gold (spec §13.2) at the
-     client's direction: the original palette read too corporate/cold for
-     a beauty brand. This aims for warmth, charm, and care — elegant, but
-     deliberately not luxury-coded (no black, no metallic gold, no heavy
-     jewel tones). A dusty rose + sage pairing is a common language for
-     "gentle, botanical, approachable skincare" for exactly that reason.
-     This is a real deviation from the confirmed brand kit — flag it back
-     to the client before treating it as final (see docs/intake-checklist.md). */
-  --brand-cream: #fbf3ec;
-  --brand-sand: #f6eae2;
-  --brand-primary: #c17f72; /* dusty rose/terracotta — logo, buttons, footer/hero fill */
-  --brand-accent: #93a283; /* soft sage — secondary accent, the logo's leaf */
-  --brand-line: #ead9ce;
-  --brand-panel: #f5ebe3;
+  /* PART A — LOCKED DESIGN SYSTEM (spec v2.0). Exact tokens, do not
+     invent colours outside this set. Tints/shades below are derived from
+     these three core colours (navy / gold / cream) only, via opacity. */
+  --navy: #1f1a76; /* brand accent — headings, buttons, nav accents, icons, links. Not overused. */
+  --navy-deep: #131047; /* large dark fills only — hero, footer, at most one promo band */
+  --gold: #e2ab2d; /* decoration only — leaf, highlights, dividers, focus rings, hover, badges. Never body text. */
+  --cream: #f8efe0; /* primary background / reading surface */
+  --cream-deep: #f1e7d6; /* warm alternating section background */
+  --mist: #eceaf3; /* cool pale-indigo alternating surface for cards/sections */
+  --ink: #201b3b; /* body text on light — warm near-black, calmer than pure black */
+  --white: #ffffff; /* product image areas, sparing */
 
-  --brand-ink: #3b2e2a; /* warm near-black, not cool/corporate black */
-  --brand-ink-soft: #8b7a72;
-
-  --background: var(--brand-cream);
-  --foreground: var(--brand-ink);
+  --background: var(--cream);
+  --foreground: var(--ink);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-cream: var(--brand-cream);
-  --color-sand: var(--brand-sand);
-  --color-panel: var(--brand-panel);
-  --color-primary: var(--brand-primary);
-  --color-accent: var(--brand-accent);
-  --color-ink: var(--brand-ink);
-  --color-ink-soft: var(--brand-ink-soft);
-  --color-line: var(--brand-line);
-  --font-sans: var(--font-geist-sans);
+  --color-navy: var(--navy);
+  --color-navy-deep: var(--navy-deep);
+  --color-gold: var(--gold);
+  --color-cream: var(--cream);
+  --color-cream-deep: var(--cream-deep);
+  --color-mist: var(--mist);
+  --color-ink: var(--ink);
+  --color-white: var(--white);
+  --font-sans: var(--font-body);
   --font-display: var(--font-display);
   --font-label: var(--font-label);
-  --font-mono: var(--font-geist-mono);
 }
 
 body {
@@ -45,9 +38,10 @@ body {
   color: var(--foreground);
 }
 
-/* Flat, quiet stand-in for a missing image — no busy pattern. */
+/* Flat, quiet stand-in for a missing image — no busy pattern. Tinted
+   from Ink at low opacity so it stays inside the locked palette. */
 .placeholder-box {
-  background-color: #efe2d5;
+  background-color: color-mix(in srgb, var(--ink) 8%, var(--cream));
 }
 
 .font-label {

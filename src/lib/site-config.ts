@@ -1,5 +1,5 @@
 // Central, editable source of site copy and settings.
-// Values sourced from the client brand kit / spec v1.4 are real; anything
+// Values sourced from the client brand kit / spec v2.0 are real; anything
 // still marked "pending" is a genuine intake gap — see
 // docs/intake-checklist.md. Do not treat brackets as final copy, but do
 // not soften the confirmed values either.
@@ -8,9 +8,10 @@ export const siteConfig = {
   businessName: "Aulea Skin",
   wordmark: "Auléa",
   tagline: "A Better You.",
+  positioningLine: "Accessible skincare, beautifully made.",
   shortDescription:
     "Everyday skincare that's accessible, reasonably priced, and easy to fit into your routine — Aulea Skin's own online home.",
-  brandPromise: "Taking care of your skin does not have to be complicated or expensive.",
+  brandPromise: "Taking care of your skin doesn't have to be complicated or expensive.",
   legalName: "Aulea Skin",
   established: "December 2025",
   businessType: "Online-based business",
@@ -21,9 +22,8 @@ export const siteConfig = {
   cpnStatus:
     "FDA Cosmetic Product Notification (CPN) numbers pending. Do not publish without them — see docs/compliance-notes.md.",
   social: {
-    // Previous social pages were lost and are being recovered (spec §3,
-    // §24) — do not fabricate links; do not treat recovery as a launch
-    // dependency.
+    // Previous social pages were lost and are being recovered (spec B2) —
+    // do not fabricate links; do not treat recovery as a launch dependency.
     instagram: "[recovering — not yet relinked]",
     tiktok: "[recovering — not yet relinked]",
     facebook: "[recovering — not yet relinked]",
@@ -36,11 +36,13 @@ export const siteConfig = {
   checkoutModel: "own" as const,
   freeShippingThreshold: 400,
   couriers: ["J&T Express", "Lalamove", "LBC"],
+  paymentMethods: ["GCash", "Maya", "Bank Transfer", "Cash on Delivery"],
+  // Minimal, premium nav per spec D1 — Home / About Us / Shop / Contact.
+  // Trust/FAQ content folded into homepage sections + footer rather than
+  // kept as separate nav items.
   nav: [
     { label: "Shop", href: "/products" },
-    { label: "About", href: "/about" },
-    { label: "Trust & Reviews", href: "/trust" },
-    { label: "FAQ", href: "/faq" },
+    { label: "About Us", href: "/about" },
     { label: "Contact", href: "/contact" },
   ],
   footerPolicyLinks: [

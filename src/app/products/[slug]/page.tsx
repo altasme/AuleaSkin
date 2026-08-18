@@ -31,7 +31,10 @@ export default async function ProductPage({
   const product = getProductBySlug(slug);
   if (!product) notFound();
 
-  const related = products.filter((p) => p.slug !== product.slug);
+  const sameCategory = products.filter(
+    (p) => p.slug !== product.slug && p.category === product.category
+  );
+  const related = (sameCategory.length > 0 ? sameCategory : products.filter((p) => p.slug !== product.slug)).slice(0, 3);
 
   return (
     <>
@@ -48,11 +51,11 @@ export default async function ProductPage({
           </div>
 
           <div>
-            <p className="text-xs font-medium uppercase tracking-[0.1em] text-ink-soft">
+            <p className="text-xs font-medium uppercase tracking-[0.1em] text-ink/70">
               {product.category} · {product.size}
             </p>
             <h1 className="mt-2 font-display text-3xl text-ink sm:text-4xl">{product.name}</h1>
-            <p className="mt-3 text-lg text-ink-soft">{product.priceDisplay}</p>
+            <p className="mt-3 text-lg text-ink/70">{product.priceDisplay}</p>
 
             {product.complianceHold && (
               <div className="mt-4">
@@ -60,42 +63,42 @@ export default async function ProductPage({
               </div>
             )}
 
-            <p className="mt-6 leading-relaxed text-ink-soft">{product.description}</p>
+            <p className="mt-6 leading-relaxed text-ink/70">{product.description}</p>
 
             <div className="mt-8">
               <ProductActions product={product} />
             </div>
 
-            <p className="mt-4 text-xs text-ink-soft">
+            <p className="mt-4 text-xs text-ink/70">
               Free shipping on orders ₱{siteConfig.freeShippingThreshold}+ (subject to courier
               arrangement). Ships nationwide via {siteConfig.couriers.join(", ")}.
             </p>
 
-            <dl className="mt-10 space-y-6 border-t border-line pt-6">
+            <dl className="mt-10 space-y-6 border-t border-ink/12 pt-6">
               <div>
-                <dt className="text-xs font-medium uppercase tracking-[0.1em] text-ink-soft/80">Benefits</dt>
-                <dd className="mt-2 text-sm leading-relaxed text-ink-soft">
+                <dt className="text-xs font-medium uppercase tracking-[0.1em] text-ink/60">Benefits</dt>
+                <dd className="mt-2 text-sm leading-relaxed text-ink/70">
                   [Benefits pending client input — not published without written substantiation
                   where they involve an efficacy claim.]
                 </dd>
               </div>
               <div>
-                <dt className="text-xs font-medium uppercase tracking-[0.1em] text-ink-soft/80">How to use</dt>
-                <dd className="mt-2 text-sm leading-relaxed text-ink-soft">{product.usage}</dd>
+                <dt className="text-xs font-medium uppercase tracking-[0.1em] text-ink/60">How to use</dt>
+                <dd className="mt-2 text-sm leading-relaxed text-ink/70">{product.usage}</dd>
               </div>
               <div>
-                <dt className="text-xs font-medium uppercase tracking-[0.1em] text-ink-soft/80">
+                <dt className="text-xs font-medium uppercase tracking-[0.1em] text-ink/60">
                   Ingredients
                 </dt>
-                <dd className="mt-2 text-sm leading-relaxed text-ink-soft">
+                <dd className="mt-2 text-sm leading-relaxed text-ink/70">
                   {product.ingredientsNote}
                 </dd>
               </div>
               <div>
-                <dt className="text-xs font-medium uppercase tracking-[0.1em] text-ink-soft/80">
+                <dt className="text-xs font-medium uppercase tracking-[0.1em] text-ink/60">
                   Suitable for
                 </dt>
-                <dd className="mt-2 text-sm leading-relaxed text-ink-soft">
+                <dd className="mt-2 text-sm leading-relaxed text-ink/70">
                   {product.suitableFor}
                 </dd>
               </div>
@@ -104,9 +107,9 @@ export default async function ProductPage({
         </div>
       </Section>
 
-      <Section className="bg-sand/40">
+      <Section className="bg-cream-deep">
         <h2 className="font-display text-xl text-ink mb-4">Customer feedback</h2>
-        <p className="max-w-xl text-sm text-ink-soft leading-relaxed">
+        <p className="max-w-xl text-sm text-ink/70 leading-relaxed">
           No feedback for this product has been supplied yet. Aulea&apos;s prior social pages
           are being recovered — only authentic, client-supplied feedback will appear here (no
           invented reviews).
@@ -115,7 +118,7 @@ export default async function ProductPage({
 
       {related.length > 0 && (
         <Section>
-          <h2 className="font-display text-xl text-ink mb-6">Complete the routine</h2>
+          <h2 className="font-display text-xl text-ink mb-6">You Might Also Like</h2>
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {related.map((p) => (
               <ProductCard key={p.slug} product={p} />

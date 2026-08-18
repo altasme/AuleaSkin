@@ -18,9 +18,9 @@ export function Placeholder({
 }) {
   return (
     <div
-      className={`${bare ? "" : "placeholder-box border border-line"} ${aspect} w-full flex items-center justify-center rounded-sm ${className}`}
+      className={`${bare ? "" : "placeholder-box border border-ink/12"} ${aspect} w-full flex items-center justify-center rounded-sm ${className}`}
     >
-      <span className="bg-cream/90 text-ink-soft text-xs tracking-wide px-3 py-1.5 text-center">
+      <span className="bg-cream/90 text-ink/70 text-xs tracking-wide px-3 py-1.5 text-center">
         🖼️ {label}
       </span>
     </div>

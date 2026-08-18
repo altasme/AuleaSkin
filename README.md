@@ -1,42 +1,43 @@
 # Aulea Skin
 
 Aulea Skin's own e-commerce storefront, built following
-[`docs/aulea-skin-phase1-spec-v1.4.md`](docs/aulea-skin-phase1-spec-v1.4.md)
-— the client-specific spec, brand kit included, that's authoritative for
-this project. (`docs/altaventures-phase1-spec.md` is the generic
-ALTAVENTURES process template the v1.4 spec was instantiated from; defer
-to v1.4 wherever the two differ.)
+[`docs/aulea-skin-build-spec-v2.0.md`](docs/aulea-skin-build-spec-v2.0.md)
+— **the locked, authoritative spec for this project.** Its design system
+(PART A) is explicitly locked: exact color tokens, named fonts, button
+roles. Earlier spec versions and an experimental rose/sage palette from a
+prior session are superseded; don't follow them where they conflict with
+v2.0.
 
-## Project status: intake NOT READY (spec §34)
+## Project status: intake NOT READY (spec G3/H1)
 
-The brand kit resolved a real amount: business name, tagline ("A Better
-You."), full color/type system, founder story, and 3 confirmed SKU names.
-What's still blocking a launch-ready build: **prices**, full product
+The spec resolved a lot: locked colour/type system, founder story (now
+written first-person on Home + About), and 7 confirmed SKU names. What's
+still blocking a launch-ready build: **prices**, full product
 descriptions/ingredients/benefits, product & label photography, FDA CPN
-numbers + written claim substantiation, the vector logo, body-font
-confirmation, and payment/DNS/pixel access. See
-[`docs/intake-checklist.md`](docs/intake-checklist.md) for the full list.
+numbers + written claim substantiation (Ultimate Whitening is the highest
+compliance exposure in the catalog), the vector logo, and payment/
+DNS/pixel access. See [`docs/intake-checklist.md`](docs/intake-checklist.md)
+for the full list.
 
-- **What's here:** the real founder story and brand promise, the confirmed
-  3-SKU catalog structure with compliance holds on "Organic"/"SPF 30", a
-  working client-side cart, and the full customer journey (Home → Shop →
-  Product → Trust → FAQ → Contact → Cart → Checkout-UI). Typography is
-  from the brand kit (Bebas Neue for labels, a display-face placeholder
-  for Tan Pearl/Sego). **Color palette is a draft, not the confirmed brand
-  kit** — dusty rose/sage now, swapped in at the client's direction
-  because the kit's indigo/gold read too corporate for a beauty brand.
-  This hasn't gone back to the actual client for sign-off — see
-  docs/intake-checklist.md and docs/customization-template.md.
+- **What's here:** the locked design system (Navy `#1F1A76` / Navy Deep
+  `#131047` / Gold `#E2AB2D` / Cream `#F8EFE0` / Cream Deep `#F1E7D6` /
+  Mist `#ECEAF3` / Ink `#201B3B`), Fraunces/Bebas Neue/Mulish typography,
+  the real first-person founder story, the confirmed 7-SKU catalog with
+  compliance holds on the five regulated names, a working client-side
+  cart, and the full customer journey (Home → Shop → Product → Cart →
+  Checkout preview → Order Confirmation template → Contact).
 - **What's not here:** real prices or product copy; a wired payment/COD
-  checkout (own checkout is the *confirmed* model, spec §2 — what's
-  missing is the implementation, not the decision); live analytics/pixel
-  IDs; compliance sign-off; the real vector logo; before/after or video
-  testimonial content (explicitly out of scope per spec §11 — don't add
-  placeholders implying it exists).
+  checkout (own checkout is the confirmed model, spec §2 — what's missing
+  is the implementation: this is a static export with no backend, so
+  `/checkout` is a reachable UI preview with submission disabled, and
+  `/order-confirmation` is a static template, not a real receipt); live
+  analytics/pixel IDs; compliance sign-off; the real vector logo;
+  before/after or video testimonial content (no fabricated reviews or
+  results, spec C1/C3).
 
-Every placeholder in the codebase is marked with `[bracketed text]`, a
-🖼️ placeholder box, or a ⚠ compliance-hold badge — nothing invented (spec
-§13/§27). Compliance specifics are in
+Every placeholder in the codebase is marked with `[bracketed text]`, a 🖼️
+placeholder box, or a ⚠ compliance-hold badge — nothing invented (spec
+C1/C2). Compliance specifics are in
 [`docs/compliance-notes.md`](docs/compliance-notes.md).
 
 ## Tech stack
@@ -61,20 +62,23 @@ Access) — nothing in `src/lib/analytics.tsx` fires without them.
 
 ```
 src/
-  app/                 Pages (App Router) — one route per customer-journey step
-  components/          Shared UI (Header, Footer, Logo, ProductCard, Faq, TrustStack,
-                        ComplianceBadge, EmailSignup, ...)
-  data/products.ts     3 confirmed SKUs — real names/sizes, price/description/ingredients pending
-  lib/site-config.ts   Real business info (email, Shopee link, tagline) + genuine gaps
+  app/                 Pages (App Router): /, about, products, products/[slug], cart,
+                        checkout (preview), order-confirmation (template), contact, policies
+  components/          Shared UI (Header, Footer, Logo, ProductCard, ProductActions,
+                        ComplianceBadge, EmailSignup, ContactForm, Button, Section, Placeholder)
+  data/products.ts     7 confirmed SKUs — real names/categories, price/description/ingredients
+                        pending; compliance-hold flags per spec C2
+  lib/site-config.ts   Real business info (email, Shopee link, tagline, nav) + genuine gaps
   lib/cart-context.tsx Client-side cart (useSyncExternalStore + localStorage)
-  lib/analytics.tsx    GA4 + Meta Pixel/CAPI scaffolding (§33)
+  lib/analytics.tsx    GA4 + Meta Pixel/CAPI scaffolding (spec F5)
 docs/
-  aulea-skin-phase1-spec-v1.4.md   Authoritative spec for this project
-  altaventures-phase1-spec.md      Generic process template (superseded by v1.4 for content)
-  intake-checklist.md              §34 checklist — current gate status
-  customization-template.md        Filled-in project template
-  compliance-notes.md              §27 PH cosmetics compliance rules, brand-specific
-  deployment.md                    Cloudflare Pages setup (build settings, custom domain)
+  aulea-skin-build-spec-v2.0.md   Authoritative, locked spec for this project
+  aulea-skin-phase1-spec-v1.4.md  Superseded prior spec version, kept for history
+  altaventures-phase1-spec.md     Generic process template, superseded for content
+  intake-checklist.md             Build-ready checklist — current gate status
+  customization-template.md       Filled-in project template
+  compliance-notes.md             PH cosmetics compliance rules, brand-specific (spec C2)
+  deployment.md                   Cloudflare Pages setup (build settings, custom domain)
 ```
 
 ## Deployment

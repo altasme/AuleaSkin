@@ -12,13 +12,13 @@ export default function PrivacyPage() {
         title="Privacy Policy"
         description="Draft skeleton only. Confirm data handling practices, third-party tools in use (analytics, pixel, payment processor), and Data Privacy Act (RA 10173) compliance details with the client before publishing."
       />
-      <div className="max-w-2xl space-y-6 text-ink-soft leading-relaxed">
+      <div className="max-w-2xl space-y-6 text-ink/70 leading-relaxed">
         <div>
           <h2 className="font-display text-xl text-ink">Information We Collect</h2>
           <p className="mt-2">
             [Pending — will include contact form submissions, order/checkout/COD-confirmation
             data (Aulea&apos;s own checkout is confirmed, spec §2), and analytics/pixel data per
-            §33.]
+            spec F5.]
           </p>
         </div>
         <div>
@@ -28,8 +28,8 @@ export default function PrivacyPage() {
         <div>
           <h2 className="font-display text-xl text-ink">Third-Party Services</h2>
           <p className="mt-2">
-            [Pending — will include Google Analytics, Meta Pixel/CAPI once configured (§33), and
-            the payment processor(s) selected for checkout.]
+            [Pending — will include Google Analytics, Meta Pixel/CAPI once configured (spec F5),
+            and the payment processor(s) selected for checkout.]
           </p>
         </div>
         <div>

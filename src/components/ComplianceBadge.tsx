@@ -1,6 +1,6 @@
 export function ComplianceBadge({ note }: { note?: string }) {
   return (
-    <div className="inline-flex items-start gap-2 rounded-sm border border-primary/50 bg-primary/10 px-3 py-2 text-xs text-ink-soft">
+    <div className="inline-flex items-start gap-2 rounded-sm border border-navy/50 bg-navy/10 px-3 py-2 text-xs text-ink/70">
       <span aria-hidden="true">⚠</span>
       <span>
         <span className="font-medium text-ink">Compliance hold — not cleared to publish.</span>{" "}

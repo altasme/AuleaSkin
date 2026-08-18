@@ -13,8 +13,8 @@ export function CartView() {
     return (
       <Section className="pt-14">
         <SectionHeading eyebrow="Cart" title="Your cart" />
-        <div className="max-w-xl rounded-sm border border-line bg-sand/40 p-8">
-          <p className="text-ink-soft leading-relaxed">
+        <div className="max-w-xl rounded-sm border border-ink/12 bg-cream-deep p-8">
+          <p className="text-ink/70 leading-relaxed">
             Your cart is empty.
           </p>
           <div className="mt-6">
@@ -36,7 +36,7 @@ export function CartView() {
       <SectionHeading eyebrow="Cart" title="Your cart" />
 
       <div className="grid gap-12 lg:grid-cols-3">
-        <div className="lg:col-span-2 divide-y divide-line border-y border-line">
+        <div className="lg:col-span-2 divide-y divide-ink/12 border-y border-ink/12">
           {items.map(({ line, product }) => (
             <div key={product.slug} className="flex gap-4 py-6">
               <div className="w-24 shrink-0">
@@ -44,18 +44,18 @@ export function CartView() {
               </div>
               <div className="flex flex-1 flex-col justify-between">
                 <div>
-                  <p className="text-xs font-medium uppercase tracking-[0.1em] text-ink-soft">
+                  <p className="text-xs font-medium uppercase tracking-[0.1em] text-ink/70">
                     {product.category}
                   </p>
                   <h3 className="mt-1 font-display text-lg text-ink">{product.name}</h3>
-                  <p className="mt-1 text-sm text-ink-soft">{product.priceDisplay}</p>
+                  <p className="mt-1 text-sm text-ink/70">{product.priceDisplay}</p>
                 </div>
                 <div className="mt-3 flex items-center gap-4">
-                  <div className="flex items-center rounded-full border border-line">
+                  <div className="flex items-center rounded-full border border-ink/12">
                     <button
                       type="button"
                       aria-label="Decrease quantity"
-                      className="px-3 py-1.5 text-ink-soft hover:text-ink"
+                      className="px-3 py-1.5 text-ink/70 hover:text-ink"
                       onClick={() => setQuantity(product.slug, line.quantity - 1)}
                     >
                       −
@@ -66,7 +66,7 @@ export function CartView() {
                     <button
                       type="button"
                       aria-label="Increase quantity"
-                      className="px-3 py-1.5 text-ink-soft hover:text-ink"
+                      className="px-3 py-1.5 text-ink/70 hover:text-ink"
                       onClick={() => setQuantity(product.slug, line.quantity + 1)}
                     >
                       +
@@ -74,7 +74,7 @@ export function CartView() {
                   </div>
                   <button
                     type="button"
-                    className="text-xs text-ink-soft underline underline-offset-4 hover:text-ink"
+                    className="text-xs text-ink/70 underline underline-offset-4 hover:text-ink"
                     onClick={() => removeItem(product.slug)}
                   >
                     Remove
@@ -85,27 +85,21 @@ export function CartView() {
           ))}
         </div>
 
-        <div className="h-fit rounded-sm border border-line bg-sand/40 p-6">
+        <div className="h-fit rounded-sm border border-ink/12 bg-cream-deep p-6">
           <h3 className="font-display text-lg text-ink">Order summary</h3>
-          <p className="mt-3 text-sm text-ink-soft leading-relaxed">
+          <p className="mt-3 text-sm text-ink/70 leading-relaxed">
             [Prices pending client input — subtotal will calculate automatically once real
             prices are in <code>src/data/products.ts</code>.]
           </p>
-          <div className="mt-6 border-t border-line pt-4">
-            <p className="text-xs text-ink-soft leading-relaxed">
-              Aulea Skin&apos;s own checkout is the confirmed Phase 1 model (spec §2, §14) — this
-              isn&apos;t an open strategic decision. What&apos;s still pending is the
-              implementation: payment method access (GCash / Maya / bank transfer), the COD
-              order-confirmation workflow (§20), and courier arrangement. See
-              docs/intake-checklist.md.
+          <div className="mt-6 border-t border-ink/12 pt-4">
+            <p className="text-xs text-ink/70 leading-relaxed">
+              Aulea Skin&apos;s own checkout is the confirmed Phase 1 model (spec §2, §14) — the
+              checkout page below is a flow preview only, since no payment method is technically
+              configured yet (spec E2). See docs/intake-checklist.md.
             </p>
-            <button
-              type="button"
-              disabled
-              className="mt-4 w-full cursor-not-allowed rounded-full bg-ink/20 px-6 py-3 font-label text-sm tracking-wider uppercase text-ink/50"
-            >
+            <LinkButton href="/checkout" className="mt-4 block w-full text-center">
               Proceed to Checkout
-            </button>
+            </LinkButton>
           </div>
         </div>
       </div>

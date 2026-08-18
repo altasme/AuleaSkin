@@ -1,37 +1,29 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Playfair_Display, Bebas_Neue } from "next/font/google";
+import { Fraunces, Bebas_Neue, Mulish } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { siteConfig } from "@/lib/site-config";
 import { AnalyticsScripts } from "@/lib/analytics";
 
-// Body copy: the brand kit doesn't specify a body typeface (spec §13.3
-// flags this as a gap to confirm with the client). Geist Sans is used as
-// the "clean, readable web sans" placeholder the spec recommends pairing
-// with the display faces — swap once the client confirms.
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+// Body / UI / prices / forms (spec PART A4): the brand faces are display-
+// only and must never carry paragraph copy. Mulish is the named fallback.
+const bodyFont = Mulish({
+  variable: "--font-body",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-// Display headings: the brand kit specifies Tan Pearl + Sego, which are
-// not available as web fonts here and whose web-embedding license is
-// still unconfirmed (§13.3, §34). Playfair Display stands in as the
-// nearest readily-licensable elegant serif — replace with the real files
-// once licensed and supplied.
-const displayFont = Playfair_Display({
+// Display / headings: Tan Pearl / Sego are the brand faces but aren't
+// available as web fonts here and web-embedding licensing is still
+// unconfirmed (spec A4, §34). Fraunces is the spec's named free fallback —
+// replace with the real files once licensed and supplied.
+const displayFont = Fraunces({
   variable: "--font-display",
   subsets: ["latin"],
 });
 
-// Labels / buttons / nav: Bebas Neue is specified directly in the brand
-// kit (§13.3) and is available as a web font, so this one is final.
+// Caps / eyebrows / small labels: Bebas Neue is the brand face and is
+// available as a free web font, so this one is final (spec A4).
 const labelFont = Bebas_Neue({
   variable: "--font-label",
   weight: "400",
@@ -50,7 +42,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${displayFont.variable} ${labelFont.variable} h-full antialiased`}
+      className={`${bodyFont.variable} ${displayFont.variable} ${labelFont.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans">
         <AnalyticsScripts />
