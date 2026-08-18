@@ -7,7 +7,7 @@ export function FaqList({ items }: { items: FaqItem[] }) {
         <details key={item.question} className="group py-5">
           <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-ink">
             <span className="font-medium">{item.question}</span>
-            <span className="shrink-0 text-gold transition-transform group-open:rotate-45">
+            <span className="shrink-0 text-accent transition-transform group-open:rotate-45">
               +
             </span>
           </summary>

@@ -27,7 +27,7 @@ export default function TrustPage() {
           </p>
           <a
             href={siteConfig.social.shopee}
-            className="mt-4 inline-block text-sm font-medium text-indigo underline underline-offset-4"
+            className="mt-4 inline-block text-sm font-medium text-primary underline underline-offset-4"
           >
             Visit the Aulea Skin Shopee store ↗
           </a>

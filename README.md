@@ -17,13 +17,16 @@ numbers + written claim substantiation, the vector logo, body-font
 confirmation, and payment/DNS/pixel access. See
 [`docs/intake-checklist.md`](docs/intake-checklist.md) for the full list.
 
-- **What's here:** the confirmed brand system (indigo `#1F1A76` / gold
-  `#E2AB2D` / cream `#F8EFE0`, Bebas Neue for labels, a display-face
-  placeholder for Tan Pearl/Sego), the real founder story and brand
-  promise, the confirmed 3-SKU catalog structure with compliance holds on
-  "Organic"/"SPF 30", a working client-side cart, and the full customer
-  journey (Home → Shop → Product → Trust → FAQ → Contact → Cart →
-  Checkout-UI).
+- **What's here:** the real founder story and brand promise, the confirmed
+  3-SKU catalog structure with compliance holds on "Organic"/"SPF 30", a
+  working client-side cart, and the full customer journey (Home → Shop →
+  Product → Trust → FAQ → Contact → Cart → Checkout-UI). Typography is
+  from the brand kit (Bebas Neue for labels, a display-face placeholder
+  for Tan Pearl/Sego). **Color palette is a draft, not the confirmed brand
+  kit** — dusty rose/sage now, swapped in at the client's direction
+  because the kit's indigo/gold read too corporate for a beauty brand.
+  This hasn't gone back to the actual client for sign-off — see
+  docs/intake-checklist.md and docs/customization-template.md.
 - **What's not here:** real prices or product copy; a wired payment/COD
   checkout (own checkout is the *confirmed* model, spec §2 — what's
   missing is the implementation, not the decision); live analytics/pixel

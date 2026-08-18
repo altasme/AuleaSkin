@@ -6,14 +6,19 @@ export function Placeholder({
   label,
   className = "",
   aspect = "aspect-square",
+  bare = false,
 }: {
   label: string;
   className?: string;
   aspect?: string;
+  /** Drop the own background/border — for use inside an already-surfaced
+   * card (e.g. a panel-colored product tile), so the image area doesn't
+   * get a second nested box. */
+  bare?: boolean;
 }) {
   return (
     <div
-      className={`placeholder-box ${aspect} w-full flex items-center justify-center border border-line rounded-sm ${className}`}
+      className={`${bare ? "" : "placeholder-box border border-line"} ${aspect} w-full flex items-center justify-center rounded-sm ${className}`}
     >
       <span className="bg-cream/90 text-ink-soft text-xs tracking-wide px-3 py-1.5 text-center">
         🖼️ {label}

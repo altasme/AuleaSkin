@@ -19,7 +19,7 @@ export function EmailSignup() {
         <button
           type="button"
           disabled
-          className="cursor-not-allowed rounded-full bg-indigo/30 px-6 py-3 font-label text-sm tracking-wider uppercase text-cream/80"
+          className="cursor-not-allowed rounded-full bg-primary/30 px-6 py-3 font-label text-sm tracking-wider uppercase text-cream/80"
         >
           Notify Me
         </button>

@@ -1,21 +1,23 @@
 @import "tailwindcss";
 
 :root {
-  /* Brand kit palette (spec §13.2) — confirmed hex values kept exact. */
-  --brand-cream: #f8efe0;
-  --brand-sand: #f5eedd; /* subtle section tint, close to cream on purpose */
-  --brand-indigo: #1f1a76; /* brand accent: logo, buttons, footer/hero fills — not body text */
-  --brand-gold: #e2ab2d; /* accent, used sparingly */
-  --brand-line: #e7dcc4;
+  /* Palette v2 — moved off the brand-kit indigo/gold (spec §13.2) at the
+     client's direction: the original palette read too corporate/cold for
+     a beauty brand. This aims for warmth, charm, and care — elegant, but
+     deliberately not luxury-coded (no black, no metallic gold, no heavy
+     jewel tones). A dusty rose + sage pairing is a common language for
+     "gentle, botanical, approachable skincare" for exactly that reason.
+     This is a real deviation from the confirmed brand kit — flag it back
+     to the client before treating it as final (see docs/intake-checklist.md). */
+  --brand-cream: #fbf3ec;
+  --brand-sand: #f6eae2;
+  --brand-primary: #c17f72; /* dusty rose/terracotta — logo, buttons, footer/hero fill */
+  --brand-accent: #93a283; /* soft sage — secondary accent, the logo's leaf */
+  --brand-line: #ead9ce;
+  --brand-panel: #f5ebe3;
 
-  /* Reading colors, split out from --brand-indigo. Using the full brand
-     indigo as default body/heading text (as in the first pass) reads as
-     loud and tiring across long copy — these are desaturated, near-neutral
-     so large blocks of text stay comfortable; the saturated brand colors
-     stay reserved for accents, per §13.2's own "restrained accent"
-     guidance. */
-  --brand-ink: #211f2e;
-  --brand-ink-soft: #68636f;
+  --brand-ink: #3b2e2a; /* warm near-black, not cool/corporate black */
+  --brand-ink-soft: #8b7a72;
 
   --background: var(--brand-cream);
   --foreground: var(--brand-ink);
@@ -26,10 +28,11 @@
   --color-foreground: var(--foreground);
   --color-cream: var(--brand-cream);
   --color-sand: var(--brand-sand);
-  --color-indigo: var(--brand-indigo);
+  --color-panel: var(--brand-panel);
+  --color-primary: var(--brand-primary);
+  --color-accent: var(--brand-accent);
   --color-ink: var(--brand-ink);
   --color-ink-soft: var(--brand-ink-soft);
-  --color-gold: var(--brand-gold);
   --color-line: var(--brand-line);
   --font-sans: var(--font-geist-sans);
   --font-display: var(--font-display);
@@ -44,7 +47,7 @@ body {
 
 /* Flat, quiet stand-in for a missing image — no busy pattern. */
 .placeholder-box {
-  background-color: #efe6d2;
+  background-color: #efe2d5;
 }
 
 .font-label {

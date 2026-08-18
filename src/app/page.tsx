@@ -23,7 +23,7 @@ export default function Home() {
       <Section className="pt-14 sm:pt-20">
         <div className="grid items-center gap-12 lg:grid-cols-2">
           <div>
-            <p className="font-label text-sm tracking-[0.2em] text-gold mb-4">
+            <p className="font-label text-sm tracking-[0.2em] text-accent mb-4">
               {siteConfig.tagline}
             </p>
             <h1 className="font-display text-4xl leading-tight text-ink sm:text-5xl">
@@ -46,17 +46,19 @@ export default function Home() {
       </Section>
 
       {/* Shop the collection */}
-      <Section className="bg-sand/40">
+      <Section>
         <SectionHeading eyebrow="Shop The Collection" title="Find your routine" />
         <div className="grid gap-6 sm:grid-cols-3">
           {categories.map((category) => (
             <Link
               key={category}
               href="/products"
-              className="group flex items-center justify-between rounded-sm border border-line bg-cream px-6 py-5 transition-colors hover:border-gold"
+              className="group flex items-center justify-between rounded-md bg-panel px-6 py-5 transition-colors hover:bg-panel/70"
             >
               <span className="font-display text-lg text-ink">{category}</span>
-              <span className="text-gold transition-transform group-hover:translate-x-1">→</span>
+              <span className="text-ink-soft transition-transform group-hover:translate-x-1">
+                →
+              </span>
             </Link>
           ))}
         </div>
@@ -104,7 +106,7 @@ export default function Home() {
       </Section>
 
       {/* Product discovery / routine */}
-      <Section className="bg-sand/40">
+      <Section>
         <SectionHeading
           eyebrow="Product Discovery"
           title="Cleanse → Treat → Protect → Moisturize"
@@ -113,15 +115,17 @@ export default function Home() {
         <div className="grid gap-6 sm:grid-cols-4">
           {routineSteps.map(({ step, product }) => (
             <div key={step} className="text-center">
-              <p className="text-xs font-medium uppercase tracking-[0.1em] text-indigo/70">{step}</p>
+              <p className="text-xs font-medium uppercase tracking-[0.1em] text-primary/70">{step}</p>
               {product ? (
                 <Link href={`/products/${product.slug}`} className="mt-3 block">
-                  <Placeholder label={product.category} aspect="aspect-square" />
+                  <div className="rounded-md bg-panel p-4">
+                    <Placeholder label={product.category} aspect="aspect-square" bare />
+                  </div>
                   <p className="mt-2 font-display text-sm text-ink">{product.name}</p>
                 </Link>
               ) : (
                 <div className="mt-3">
-                  <div className="flex aspect-square w-full items-center justify-center rounded-sm border border-dashed border-line">
+                  <div className="flex aspect-square w-full items-center justify-center rounded-md border border-dashed border-line">
                     <span className="px-3 text-center text-xs text-ink-soft">
                       Not in the catalog yet
                     </span>
@@ -152,7 +156,7 @@ export default function Home() {
       <Section>
         <div className="grid items-center gap-12 lg:grid-cols-2">
           <div>
-            <p className="text-xs font-medium uppercase tracking-[0.15em] text-indigo/70 mb-3">
+            <p className="text-xs font-medium uppercase tracking-[0.15em] text-primary/70 mb-3">
               The Aulea Story
             </p>
             <h2 className="font-display text-3xl text-ink sm:text-4xl">
@@ -182,12 +186,11 @@ export default function Home() {
         <EmailSignup />
       </Section>
 
-      {/* Final CTA — quiet treatment; full indigo fill is reserved for the
-          footer only (spec §13.2: "reserve full indigo for the hero and
-          footer"), and a second saturated block back-to-back with the
-          footer reads as heavy rather than confident. */}
+      {/* Final CTA — quiet treatment; the solid brand fill is reserved for
+          the footer only, so a second saturated block back-to-back with
+          the footer doesn't read as heavy. */}
       <Section>
-        <div className="rounded-sm border-t-2 border-gold px-8 py-14 text-center sm:px-16">
+        <div className="rounded-sm border-t-2 border-accent px-8 py-14 text-center sm:px-16">
           <h2 className="font-display text-3xl text-ink sm:text-4xl">
             Start your everyday skincare routine with Aulea Skin.
           </h2>

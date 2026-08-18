@@ -1,8 +1,9 @@
 // Text-based wordmark standing in for the real logo. The brand kit (§12,
-// §34) supplies the color/type system but not vector logo files yet — this
-// renders "Auléa" in the display face with a small gold leaf accent, per
-// §13.1 ("small gold leaf accent above it"). Swap for the real SVG/AI
-// artwork once supplied; keep this component's call sites unchanged.
+// §34) doesn't have vector logo files yet — this renders "Auléa" in the
+// display face with a small leaf accent, echoing the kit's "small gold
+// leaf accent above it" (§13.1) but in the sage accent color now that the
+// palette has moved off gold/indigo (see globals.css). Swap for the real
+// SVG/AI artwork once supplied; keep this component's call sites unchanged.
 
 function LeafAccent({ className = "" }: { className?: string }) {
   return (
@@ -25,9 +26,9 @@ function LeafAccent({ className = "" }: { className?: string }) {
 export function Logo({ className = "" }: { className?: string }) {
   return (
     <span className={`inline-flex items-center gap-1.5 ${className}`}>
-      <LeafAccent className="h-4 w-4 text-gold" />
-      <span className="font-display text-xl tracking-wide text-indigo">Auléa</span>
-      <span className="font-label text-[0.7rem] tracking-[0.15em] text-indigo/60 self-end mb-0.5">
+      <LeafAccent className="h-4 w-4 text-accent" />
+      <span className="font-display text-xl tracking-wide text-primary">Auléa</span>
+      <span className="font-label text-[0.7rem] tracking-[0.15em] text-primary/60 self-end mb-0.5">
         SKIN
       </span>
     </span>

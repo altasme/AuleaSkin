@@ -24,8 +24,15 @@ below is what's still outstanding.
 
 ## Brand & content
 
-- [x] Logo variants, palette, typefaces, tagline — received (brand kit,
-      folded into `src/app/globals.css` / `src/app/layout.tsx`)
+- [ ] **Sign-off on the color palette deviation.** The brand kit's indigo
+      #1F1A76 / gold #E2AB2D were replaced with a dusty rose / sage
+      palette at the client's direction (this session) — see
+      docs/customization-template.md. This has not gone back to the
+      actual client for approval; treat the current color system as a
+      draft pending that confirmation, not a settled decision.
+- [x] Logo variants, typefaces, tagline — received (brand kit, folded into
+      `src/app/layout.tsx`); color palette received but since revised —
+      see above
 - [ ] **Vector logo files** (SVG/AI/PDF) for web/retina rendering +
       favicon — `src/components/Logo.tsx` is a text-based stand-in until
       these arrive

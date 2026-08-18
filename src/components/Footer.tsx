@@ -4,7 +4,7 @@ import { Logo } from "./Logo";
 
 export function Footer() {
   return (
-    <footer className="border-t border-line bg-indigo text-cream">
+    <footer className="border-t border-line bg-primary text-cream">
       <div className="mx-auto max-w-6xl px-6 py-14 sm:px-10 lg:px-16">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div>
@@ -12,7 +12,7 @@ export function Footer() {
             <p className="mt-3 text-sm text-cream/70 leading-relaxed">
               {siteConfig.shortDescription}
             </p>
-            <p className="mt-3 font-label text-sm tracking-[0.15em] text-gold">
+            <p className="mt-3 font-label text-sm tracking-[0.15em] text-cream">
               {siteConfig.tagline}
             </p>
           </div>

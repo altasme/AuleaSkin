@@ -29,8 +29,14 @@ MEASUREMENT (§33):         GA4 + Meta Pixel/CAPI scaffolded (src/lib/analytics.
 COMPLIANCE (§27):          CPN numbers: NOT SUPPLIED. Substantiation: NOT SUPPLIED. "Organic"
                             and "SPF 30" flagged as compliance holds on their respective product
                             pages — see docs/compliance-notes.md.
-BRAND DIRECTION:           Confirmed from brand kit — indigo #1F1A76 / gold #E2AB2D / cream
-                            #F8EFE0; Tan Pearl + Sego (display, placeholder: Playfair Display),
+BRAND DIRECTION:           DEVIATES FROM BRAND KIT COLOR SYSTEM — client direction (this
+                            session) was that the confirmed indigo #1F1A76 / gold #E2AB2D read
+                            too corporate/cold for a beauty brand. Palette v2 (src/app/globals.css)
+                            moves to dusty rose #C17F72 (primary) + sage #93A283 (accent) + warm
+                            ivory #FBF3EC, aiming for charm/care/elegance without luxury signaling.
+                            This has NOT been confirmed with the actual client — flag it back
+                            before treating it as final (see docs/intake-checklist.md). Typography
+                            unchanged: Tan Pearl + Sego (display, placeholder: Playfair Display),
                             Bebas Neue (labels/buttons, final), body font unconfirmed (placeholder:
                             Geist Sans). Vector logo files still needed.
 CLIENT MATERIALS RECEIVED: Brand kit (logo variants, palette, typefaces, tagline, product hero
