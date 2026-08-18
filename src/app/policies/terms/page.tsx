@@ -8,7 +8,7 @@ export default function TermsPage() {
   return (
     <Section className="pt-14">
       <SectionHeading
-        eyebrow="Policy — Draft"
+        eyebrow="Policy, Draft"
         title="Terms of Service"
         description="Draft skeleton only. Confirm legal business name, registration details, and terms with the client before publishing."
       />
@@ -23,7 +23,7 @@ export default function TermsPage() {
         <div>
           <h2 className="font-display text-xl text-ink">Orders & Payment</h2>
           <p className="mt-2">
-            [Pending — Aulea&apos;s own checkout is the confirmed model (spec §2); terms here
+            [Pending: Aulea&apos;s own checkout is the confirmed model (spec §2); terms here
             depend on which payment methods and COD terms are finalized (spec E2–E3).]
           </p>
         </div>

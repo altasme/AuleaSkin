@@ -2,7 +2,7 @@
 
 // A minimal external store (not React Context) so multiple components can
 // read/write the cart without prop drilling, while staying SSR-safe via
-// useSyncExternalStore — avoids the "setState during effect" hydration
+// useSyncExternalStore, avoiding the "setState during effect" hydration
 // dance a Context + useEffect(localStorage) version would need.
 
 import { useMemo, useSyncExternalStore } from "react";
@@ -30,7 +30,7 @@ function persist() {
   try {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(lines));
   } catch {
-    // Storage unavailable (private browsing, quota) — cart still works
+    // Storage unavailable (private browsing, quota); cart still works
     // in-memory for the session.
   }
 }

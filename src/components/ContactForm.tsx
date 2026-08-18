@@ -9,7 +9,7 @@ export function ContactForm() {
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    // No backend wired yet — this only confirms the UI flow.
+    // No backend wired yet, this only confirms the UI flow.
     // Wire to a real form handler / email service before launch.
     trackEvent("Lead", { form: "contact" });
     setSubmitted(true);
@@ -18,7 +18,7 @@ export function ContactForm() {
   if (submitted) {
     return (
       <p className="rounded-sm border border-ink/12 bg-cream-deep/40 p-6 text-sm text-ink/70">
-        Thanks — this is a placeholder confirmation. The form isn&apos;t connected to a real
+        Thanks! This is a placeholder confirmation. The form isn&apos;t connected to a real
         inbox yet; wire it to an email service before launch.
       </p>
     );

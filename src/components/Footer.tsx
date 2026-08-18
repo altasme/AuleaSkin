@@ -54,11 +54,10 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col gap-2 border-t border-cream/20 pt-6 text-xs text-cream/60 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-12 border-t border-cream/20 pt-6 text-xs text-cream/60">
           <p>
             © {new Date().getFullYear()} {siteConfig.legalName}. All rights reserved.
           </p>
-          <p>{siteConfig.cpnStatus}</p>
         </div>
       </div>
     </footer>

@@ -1,10 +1,10 @@
 "use client";
 
 // This is a flow PREVIEW, not a live checkout. Spec E2 is explicit: "Only
-// enable methods that are technically configured and operational — never
+// enable methods that are technically configured and operational, never
 // show an unconfigured method." Nothing here is wired to a real payment
 // processor, order database, or email service (this is a static export
-// with no backend) — see docs/intake-checklist.md. The form is built and
+// with no backend), see docs/intake-checklist.md. The form is built and
 // laid out per spec D5/E1-E3 so the intended flow can be reviewed, but
 // submission is disabled rather than faking a completed order.
 
@@ -28,7 +28,7 @@ export function CheckoutView() {
 
       <div className="mb-8 rounded-sm border border-navy/30 bg-navy/5 p-4 text-sm text-ink/70">
         <strong className="text-ink">Preview only.</strong> This checkout isn&apos;t connected to
-        a payment processor or order system yet — no payment methods are technically configured
+        a payment processor or order system yet, no payment methods are technically configured
         (spec E2). See{" "}
         <Link href="/order-confirmation" className="underline underline-offset-4 hover:text-ink">
           what a confirmation will look like
@@ -117,7 +117,7 @@ export function CheckoutView() {
               ))}
             </div>
             <p className="mt-4 border-t border-ink/12 pt-4 text-xs text-ink/70">
-              [Subtotal pending real prices — see src/data/products.ts.] Free shipping on orders
+              [Subtotal pending real prices, see src/data/products.ts.] Free shipping on orders
               ₱{siteConfig.freeShippingThreshold}+.
             </p>
             <button

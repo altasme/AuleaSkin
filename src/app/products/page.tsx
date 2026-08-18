@@ -12,7 +12,7 @@ export default function ProductsPage() {
         <SectionHeading
           eyebrow="Shop"
           title="The Aulea collection"
-          description="The confirmed catalog so far — additional SKUs may be added as the full range is confirmed (spec B6)."
+          description="The confirmed catalog so far. Additional SKUs may be added as the full range is confirmed (spec B6)."
         />
       </Section>
 

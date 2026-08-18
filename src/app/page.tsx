@@ -18,7 +18,7 @@ const routineSteps = [
 export default function Home() {
   return (
     <>
-      {/* 2. Hero — Navy Deep band per spec D3, one of only two large dark
+      {/* 2. Hero: Navy Deep band per spec D3, one of only two large dark
           fills (the other is the footer). */}
       <section className="bg-navy-deep px-6 py-20 sm:px-10 sm:py-28 lg:px-16">
         <div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-2">
@@ -67,7 +67,7 @@ export default function Home() {
         <SectionHeading
           eyebrow="Featured"
           title="Shop Aulea"
-          description="A first look at the confirmed catalog — merchandising (featured/best-seller flags) is pending real sales data, not assumed."
+          description="A first look at the confirmed catalog. Merchandising (featured/best-seller flags) is pending real sales data, not assumed."
         />
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {products.slice(0, 4).map((product) => (
@@ -96,7 +96,7 @@ export default function Home() {
       {/* 6. Founder / brand story */}
       <Section>
         <div className="grid items-center gap-12 lg:grid-cols-2">
-          <Placeholder label="Founder photo — pending" aspect="aspect-[4/5]" />
+          <Placeholder label="Founder photo, pending" aspect="aspect-[4/5]" />
           <div>
             <p className="text-xs font-medium uppercase tracking-[0.15em] text-navy/70 mb-3">
               Our Story
@@ -105,7 +105,7 @@ export default function Home() {
               &ldquo;I started Aulea because of my own sensitive skin.&rdquo;
             </h2>
             <p className="mt-4 text-ink/70 leading-relaxed">
-              Finding skincare that felt comfortable — without costing too much — wasn&apos;t
+              Finding skincare that felt comfortable, without costing too much, wasn&apos;t
               easy. That gap is why Aulea exists: accessible, reasonably priced products that
               fit an everyday routine without feeling complicated.
             </p>
@@ -118,7 +118,7 @@ export default function Home() {
         </div>
       </Section>
 
-      {/* 7. Product-focused editorial — Cleanse/Treat/Hydrate/Protect maps
+      {/* 7. Product-focused editorial: Cleanse/Treat/Hydrate/Protect maps
           to today's confirmed catalog (spec D8). */}
       <Section className="bg-mist">
         <SectionHeading
@@ -150,7 +150,7 @@ export default function Home() {
         </div>
       </Section>
 
-      {/* 8. Promotional offer — the one extra Navy Deep band spec A2
+      {/* 8. Promotional offer: the one extra Navy Deep band spec A2
           allows ("at most one promo band"), real and supplied (free
           shipping threshold), never an invented discount. */}
       <section className="bg-navy-deep px-6 py-16 text-center sm:px-10 lg:px-16">
@@ -168,11 +168,11 @@ export default function Home() {
         <SectionHeading
           eyebrow="Customer Love"
           title="What customers are saying"
-          description="Aulea's previous social pages were lost and are being recovered, so history here is limited by design — nothing below is invented (spec C3)."
+          description="Aulea's previous social pages were lost and are being recovered, so history here is limited by design. Nothing below is invented (spec C3)."
         />
         <div className="rounded-sm border border-ink/12 bg-cream-deep p-8 text-center">
           <p className="text-ink/70 leading-relaxed">
-            [Genuine customer feedback pending from the client — see docs/intake-checklist.md.
+            [Genuine customer feedback pending from the client, see docs/intake-checklist.md.
             Only real, supplied feedback (labeled &ldquo;Verified customer feedback&rdquo; where
             identity is unavailable) will be published here.]
           </p>
@@ -187,7 +187,7 @@ export default function Home() {
             <h3 className="font-display text-lg text-ink">Born from real experience</h3>
             <p className="mt-2 text-sm text-ink/70 leading-relaxed">
               Aulea started because the founder struggled to find products that felt comfortable
-              for sensitive, easily-irritated skin — not as a generic beauty brand.
+              for sensitive, easily-irritated skin, not as a generic beauty brand.
             </p>
           </div>
           <div className="rounded-md bg-cream p-6">
@@ -200,7 +200,7 @@ export default function Home() {
           <div className="rounded-md bg-cream p-6">
             <h3 className="font-display text-lg text-ink">Simple, everyday routines</h3>
             <p className="mt-2 text-sm text-ink/70 leading-relaxed">
-              Skincare that fits into a normal day — not an intimidating, multi-step regimen.
+              Skincare that fits into a normal day, not an intimidating, multi-step regimen.
             </p>
           </div>
         </div>
@@ -212,7 +212,7 @@ export default function Home() {
         <EmailSignup />
       </Section>
 
-      {/* 11. Final CTA — quiet treatment; large dark fills are reserved
+      {/* 11. Final CTA: quiet treatment; large dark fills are reserved
           for the hero, footer, and the one promo band above. */}
       <Section>
         <div className="rounded-sm border-t-2 border-gold bg-cream-deep px-8 py-14 text-center sm:px-16">

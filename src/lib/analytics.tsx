@@ -1,7 +1,7 @@
 "use client";
 
 // Measurement scaffolding per spec §8. Nothing fires until real IDs are
-// supplied in .env.local (see .env.example) — this only wires the plumbing
+// supplied in .env.local (see .env.example). This only wires the plumbing
 // so Phase 1 completion (§8, §21) is a config step, not a rebuild.
 //
 // Event map (mirrors §8):
@@ -47,7 +47,7 @@ export function trackEvent(
   }
 
   if (!window.gtag && !window.fbq) {
-    // No analytics configured yet — surface events in dev so the event map
+    // No analytics configured yet, surface events in dev so the event map
     // can be sanity-checked before real IDs are wired up.
     if (process.env.NODE_ENV === "development") {
       console.info("[analytics:pending config]", event, params);

@@ -1,5 +1,5 @@
 // Visual stand-in for an asset that hasn't been supplied yet.
-// Swap for a real <Image> once the client asset arrives — see
+// Swap for a real <Image> once the client asset arrives, see
 // docs/intake-checklist.md for what's outstanding.
 
 export function Placeholder({
@@ -11,7 +11,7 @@ export function Placeholder({
   label: string;
   className?: string;
   aspect?: string;
-  /** Drop the own background/border — for use inside an already-surfaced
+  /** Drop the own background/border, for use inside an already-surfaced
    * card (e.g. a panel-colored product tile), so the image area doesn't
    * get a second nested box. */
   bare?: boolean;

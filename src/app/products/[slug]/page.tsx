@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { ComplianceBadge } from "@/components/ComplianceBadge";
 import { ProductActions } from "@/components/ProductActions";
 import { ProductCard } from "@/components/ProductCard";
 import { Section } from "@/components/Section";
@@ -50,7 +49,7 @@ export default async function ProductPage({
               >
                 <Image
                   src={src}
-                  alt={`${product.name} — photo ${i + 1}`}
+                  alt={`${product.name}, photo ${i + 1}`}
                   fill
                   sizes="(min-width: 1024px) 50vw, 100vw"
                   className="object-cover"
@@ -83,15 +82,9 @@ export default async function ProductPage({
                   ))}
                 </div>
                 <p className="mt-2 text-xs text-ink/70">
-                  Scent selection at checkout isn&apos;t wired yet — noted here as available
+                  Scent selection at checkout isn&apos;t wired yet, noted here as available
                   options only.
                 </p>
-              </div>
-            )}
-
-            {product.complianceHold && (
-              <div className="mt-4">
-                <ComplianceBadge note={product.complianceNote} />
               </div>
             )}
 
@@ -110,8 +103,7 @@ export default async function ProductPage({
               <div>
                 <dt className="text-xs font-medium uppercase tracking-[0.1em] text-ink/60">Benefits</dt>
                 <dd className="mt-2 text-sm leading-relaxed text-ink/70">
-                  [Benefits pending client input — not published without written substantiation
-                  where they involve an efficacy claim.]
+                  [Full benefits copy pending client input.]
                 </dd>
               </div>
               <div>
@@ -143,7 +135,7 @@ export default async function ProductPage({
         <h2 className="font-display text-xl text-ink mb-4">Customer feedback</h2>
         <p className="max-w-xl text-sm text-ink/70 leading-relaxed">
           No feedback for this product has been supplied yet. Aulea&apos;s prior social pages
-          are being recovered — only authentic, client-supplied feedback will appear here (no
+          are being recovered, only authentic, client-supplied feedback will appear here (no
           invented reviews).
         </p>
       </Section>

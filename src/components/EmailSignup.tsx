@@ -2,7 +2,7 @@
 // forbids implying a newsletter that isn't wired ("no dead field, no
 // implied newsletter that isn't wired"). No capture destination (list /
 // store / Resend or equivalent) has been named yet, so this renders as
-// visibly disabled rather than as a form that silently goes nowhere —
+// visibly disabled rather than as a form that silently goes nowhere,
 // same pattern as the disabled checkout button in the cart.
 
 export function EmailSignup() {
@@ -25,7 +25,7 @@ export function EmailSignup() {
         </button>
       </div>
       <p className="mt-3 text-xs text-ink/70 leading-relaxed">
-        Signup isn&apos;t wired to a real list yet — spec F5 requires a named capture
+        Signup isn&apos;t wired to a real list yet, spec F5 requires a named capture
         destination before this goes live. See docs/intake-checklist.md.
       </p>
     </div>

@@ -34,7 +34,7 @@ export default function ContactPage() {
           <div>
             <p className="text-xs font-medium uppercase tracking-[0.1em] text-ink/70">Social</p>
             <p className="mt-1">
-              Aulea&apos;s previous social pages are being recovered — links will be added here
+              Aulea&apos;s previous social pages are being recovered, links will be added here
               once accounts are back, rather than guessed at (spec §24).
             </p>
           </div>

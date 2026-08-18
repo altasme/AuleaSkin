@@ -94,12 +94,12 @@ export function CartView() {
         <div className="h-fit rounded-sm border border-ink/12 bg-cream-deep p-6">
           <h3 className="font-display text-lg text-ink">Order summary</h3>
           <p className="mt-3 text-sm text-ink/70 leading-relaxed">
-            [Prices pending client input — subtotal will calculate automatically once real
+            [Prices pending client input. Subtotal will calculate automatically once real
             prices are in <code>src/data/products.ts</code>.]
           </p>
           <div className="mt-6 border-t border-ink/12 pt-4">
             <p className="text-xs text-ink/70 leading-relaxed">
-              Aulea Skin&apos;s own checkout is the confirmed Phase 1 model (spec §2, §14) — the
+              Aulea Skin&apos;s own checkout is the confirmed Phase 1 model (spec §2, §14). The
               checkout page below is a flow preview only, since no payment method is technically
               configured yet (spec E2). See docs/intake-checklist.md.
             </p>

@@ -15,7 +15,7 @@ const bodyFont = Mulish({
 
 // Display / headings: Tan Pearl / Sego are the brand faces but aren't
 // available as web fonts here and web-embedding licensing is still
-// unconfirmed (spec A4, §34). Fraunces is the spec's named free fallback —
+// unconfirmed (spec A4, §34). Fraunces is the spec's named free fallback,
 // replace with the real files once licensed and supplied.
 const displayFont = Fraunces({
   variable: "--font-display",
@@ -32,7 +32,7 @@ const labelFont = Bebas_Neue({
 
 export const metadata: Metadata = {
   title: {
-    default: `${siteConfig.businessName} — ${siteConfig.tagline}`,
+    default: `${siteConfig.businessName}: ${siteConfig.tagline}`,
     template: `%s | ${siteConfig.businessName}`,
   },
   description: siteConfig.shortDescription,
