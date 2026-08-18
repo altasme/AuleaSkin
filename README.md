@@ -60,4 +60,12 @@ docs/
   intake-checklist.md           §19 checklist — current gate status
   customization-template.md     §31 filled-in project template
   compliance-notes.md           §11 PH cosmetics compliance rules
+  deployment.md                 Cloudflare Pages setup (build settings, custom domain)
 ```
+
+## Deployment
+
+Static export, deployed on Cloudflare Pages — see
+[`docs/deployment.md`](docs/deployment.md) for the exact dashboard
+settings (connecting the repo needs your Cloudflare login, which this
+session doesn't have).
