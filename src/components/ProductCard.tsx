@@ -9,11 +9,14 @@ export function ProductCard({ product }: { product: Product }) {
         label={`Product photo — ${product.name}`}
         className="group-hover:opacity-90 transition-opacity"
       />
-      <p className="mt-4 text-xs uppercase tracking-[0.15em] text-sage">
-        {product.category}
+      <p className="mt-4 font-label text-sm tracking-[0.15em] text-gold">
+        {product.category} · {product.size}
       </p>
-      <h3 className="mt-1 font-serif text-lg text-ink">{product.name}</h3>
+      <h3 className="mt-1 font-display text-lg text-ink">{product.name}</h3>
       <p className="mt-1 text-sm text-ink-soft">{product.priceDisplay}</p>
+      {product.complianceHold && (
+        <p className="mt-2 text-xs text-ink-soft">⚠ Compliance hold</p>
+      )}
     </Link>
   );
 }

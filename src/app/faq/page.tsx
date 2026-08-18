@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { FaqList } from "@/components/Faq";
 import { Section, SectionHeading } from "@/components/Section";
+import { siteConfig } from "@/lib/site-config";
 
 export const metadata: Metadata = { title: "FAQ" };
 
@@ -10,7 +11,13 @@ const categories = [
     items: [
       {
         question: "What payment methods do you accept?",
-        answer: "[Pending client input — GCash / Maya / cards / COD per §9.2.]",
+        answer:
+          "Aulea can accommodate GCash, Maya, bank transfer, and Cash on Delivery (COD) — but Phase 1 only shows the methods actually connected and operational at checkout, not everything the brand could theoretically accept. Which methods are live at launch is still being confirmed (spec §18).",
+      },
+      {
+        question: "Do you offer Cash on Delivery?",
+        answer:
+          "Yes — COD nationwide is intended, subject to courier availability and coverage in your area. Because COD carries real risk for a new brand (mistaken or bogus orders, return-to-sender costs), orders may go through a short confirmation step before dispatch — a quick check, not a hurdle (spec §19–20).",
       },
       {
         question: "Can I change or cancel my order?",
@@ -22,12 +29,16 @@ const categories = [
     name: "Shipping",
     items: [
       {
-        question: "How long does shipping take?",
-        answer: "[Pending client input on shipping timelines and areas served.]",
+        question: "Do you ship nationwide?",
+        answer: `Yes, including provinces, via ${siteConfig.couriers.join(", ")}. Fees depend on your location, courier, and arrangement.`,
       },
       {
-        question: "Do you ship nationwide?",
-        answer: "[Pending client input.]",
+        question: "Is there free shipping?",
+        answer: `Free shipping applies on orders ₱${siteConfig.freeShippingThreshold} and above, subject to courier arrangement — not an unconditional guarantee unless confirmed at checkout.`,
+      },
+      {
+        question: "How long does shipping take?",
+        answer: "[Delivery timelines pending client input.]",
       },
     ],
   },
@@ -37,7 +48,7 @@ const categories = [
       {
         question: "Can I return a product?",
         answer:
-          "[Pending client input. Note: opened cosmetics are commonly non-returnable on hygiene grounds under RA 7394 / DTI rules — the real policy must match the client's actual product category and fulfillment terms. See §11.5.]",
+          "Opened cosmetics are commonly non-returnable on hygiene grounds under the Consumer Act of the Philippines (RA 7394) and DTI rules. The exact policy — what qualifies, timeframes, how to request one — is still being confirmed with the client and will not be published as a generic template. See Shipping & Returns.",
       },
     ],
   },
@@ -45,13 +56,18 @@ const categories = [
     name: "Product & Ingredients",
     items: [
       {
-        question: "Is this product suitable for sensitive skin?",
+        question: "Are Aulea products suitable for sensitive skin?",
         answer:
-          "[No claim published without written substantiation from the client — see docs/compliance-notes.md.]",
+          "Aulea's products are generally intended for all skin types, and the brand itself started from the founder's own experience with sensitive skin. Specific per-product suitability claims are only published once the client supplies and confirms them — see docs/compliance-notes.md.",
       },
       {
         question: "Where can I find the full ingredient list?",
-        answer: "[Pending client input — INCI list per product.]",
+        answer:
+          "Ingredient lists come directly from photos of each product's actual label. They'll appear on each product page once the client supplies the label photos — nothing is invented in the meantime.",
+      },
+      {
+        question: "Is FDA CPN information available?",
+        answer: siteConfig.cpnStatus,
       },
     ],
   },
@@ -64,7 +80,7 @@ export default function FaqPage() {
       <div className="space-y-12">
         {categories.map((category) => (
           <div key={category.name}>
-            <h2 className="mb-4 font-serif text-xl text-ink">{category.name}</h2>
+            <h2 className="mb-4 font-display text-xl text-ink">{category.name}</h2>
             <FaqList items={category.items} />
           </div>
         ))}

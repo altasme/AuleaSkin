@@ -13,32 +13,29 @@ export default function ContactPage() {
         <ContactForm />
         <div className="space-y-6 text-sm text-ink-soft">
           <div>
-            <p className="text-xs font-medium uppercase tracking-[0.15em] text-ink">Email</p>
+            <p className="font-label text-xs tracking-[0.15em] text-ink">Email</p>
             <p className="mt-1">{siteConfig.contactEmail}</p>
           </div>
           <div>
-            <p className="text-xs font-medium uppercase tracking-[0.15em] text-ink">Phone</p>
-            <p className="mt-1">{siteConfig.contactPhone}</p>
-          </div>
-          <div>
-            <p className="text-xs font-medium uppercase tracking-[0.15em] text-ink">Address</p>
-            <p className="mt-1">{siteConfig.address}</p>
-          </div>
-          <div>
-            <p className="text-xs font-medium uppercase tracking-[0.15em] text-ink">Hours</p>
-            <p className="mt-1">{siteConfig.hours}</p>
-          </div>
-          <div>
-            <p className="text-xs font-medium uppercase tracking-[0.15em] text-ink">
-              Social & Marketplace
-            </p>
+            <p className="font-label text-xs tracking-[0.15em] text-ink">Business</p>
             <p className="mt-1">
-              {siteConfig.social.instagram} · {siteConfig.social.tiktok} ·{" "}
-              {siteConfig.social.facebook}
+              {siteConfig.businessType}, established {siteConfig.established}
             </p>
+          </div>
+          <div>
+            <p className="font-label text-xs tracking-[0.15em] text-ink">Shopee</p>
+            <a
+              href={siteConfig.social.shopee}
+              className="mt-1 block underline underline-offset-4 hover:text-ink"
+            >
+              shopee.ph/shop/1889974610 ↗
+            </a>
+          </div>
+          <div>
+            <p className="font-label text-xs tracking-[0.15em] text-ink">Social</p>
             <p className="mt-1">
-              {siteConfig.social.shopee} · {siteConfig.social.tiktokShop} ·{" "}
-              {siteConfig.social.lazada}
+              Aulea&apos;s previous social pages are being recovered — links will be added here
+              once accounts are back, rather than guessed at (spec §24).
             </p>
           </div>
         </div>

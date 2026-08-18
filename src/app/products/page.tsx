@@ -10,8 +10,8 @@ export default function ProductsPage() {
     <Section className="pt-14">
       <SectionHeading
         eyebrow="Shop"
-        title="The full routine"
-        description="Placeholder catalog structure — replace with the client's real products from intake (§19)."
+        title="The Aulea collection"
+        description="The confirmed catalog so far — additional SKUs may be added as the full range is confirmed (spec §7)."
       />
       <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
         {products.map((product) => (

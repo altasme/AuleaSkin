@@ -34,7 +34,7 @@ export function ContactForm() {
           id="name"
           name="name"
           required
-          className="w-full rounded-sm border border-line bg-cream px-4 py-2.5 text-ink outline-none focus:border-sage"
+          className="w-full rounded-sm border border-line bg-cream px-4 py-2.5 text-ink outline-none focus:border-gold"
         />
       </div>
       <div>
@@ -46,7 +46,7 @@ export function ContactForm() {
           name="email"
           type="email"
           required
-          className="w-full rounded-sm border border-line bg-cream px-4 py-2.5 text-ink outline-none focus:border-sage"
+          className="w-full rounded-sm border border-line bg-cream px-4 py-2.5 text-ink outline-none focus:border-gold"
         />
       </div>
       <div>
@@ -58,7 +58,7 @@ export function ContactForm() {
           name="message"
           rows={4}
           required
-          className="w-full rounded-sm border border-line bg-cream px-4 py-2.5 text-ink outline-none focus:border-sage"
+          className="w-full rounded-sm border border-line bg-cream px-4 py-2.5 text-ink outline-none focus:border-gold"
         />
       </div>
       <Button type="submit">Send Message</Button>

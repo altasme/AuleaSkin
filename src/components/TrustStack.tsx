@@ -1,55 +1,38 @@
-import { Placeholder } from "./Placeholder";
+import { siteConfig } from "@/lib/site-config";
 
 type TrustItem = {
   title: string;
   description: string;
-  placeholder?: string;
 };
 
 const items: TrustItem[] = [
   {
     title: "Full ingredient transparency",
     description:
-      "[Complete INCI ingredient list per product, pending client input. Honest, plain-language descriptions of what each ingredient does.]",
+      "[Ingredients taken from photos of the actual product labels, pending client input. Honest, plain-language descriptions — nothing invented.]",
   },
   {
-    title: "Founder & formulation story",
+    title: "Founder story",
     description:
-      "[Why Aulea Skin exists and how the products are made — pending brand story from client intake.]",
+      "Aulea started from the founder's own experience with sensitive skin — not a generic brand story. Read more on the About page.",
   },
   {
     title: "Regulatory standing",
-    description:
-      "[FDA Cosmetic Product Notification (CPN) number(s) will display here once supplied. Cosmetics are notified, not \"approved\" — see docs/compliance-notes.md.]",
-  },
-  {
-    title: "Real customer content",
-    description:
-      "[Embedded TikTok / Instagram content from real customers or the founder — pending UGC assets.]",
-    placeholder: "UGC embed placeholder",
-  },
-  {
-    title: "Marketplace proof",
-    description:
-      "[Rating badge and review count pulled from the brand's real Shopee / TikTok Shop / Lazada store, once linked.]",
-    placeholder: "Marketplace rating badge",
+    description: siteConfig.cpnStatus,
   },
   {
     title: "Operational trust",
     description:
-      "[Real contact details, transparent shipping timelines, and a returns policy matched to the product category — pending operations info.]",
+      "Real contact details, nationwide shipping with named couriers, and a returns policy matched to the cosmetics category — see FAQ and Policies.",
   },
 ];
 
 export function TrustStack() {
   return (
-    <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
       {items.map((item) => (
         <div key={item.title} className="flex flex-col gap-3">
-          {item.placeholder && (
-            <Placeholder label={item.placeholder} aspect="aspect-video" />
-          )}
-          <h3 className="font-serif text-lg text-ink">{item.title}</h3>
+          <h3 className="font-display text-lg text-ink">{item.title}</h3>
           <p className="text-sm leading-relaxed text-ink-soft">{item.description}</p>
         </div>
       ))}

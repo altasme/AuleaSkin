@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { siteConfig } from "@/lib/site-config";
 import { useCart } from "@/lib/cart-context";
+import { Logo } from "./Logo";
 
 export function Header() {
   const [open, setOpen] = useState(false);
@@ -12,8 +13,8 @@ export function Header() {
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-cream/95 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4 sm:px-10 lg:px-16">
-        <Link href="/" className="font-serif text-xl tracking-wide text-ink">
-          {siteConfig.businessName}
+        <Link href="/" aria-label={siteConfig.businessName}>
+          <Logo />
         </Link>
 
         <nav className="hidden gap-8 md:flex">
@@ -21,7 +22,7 @@ export function Header() {
             <Link
               key={item.href}
               href={item.href}
-              className="text-sm text-ink-soft transition-colors hover:text-ink"
+              className="font-label text-sm tracking-wider text-ink-soft transition-colors hover:text-ink"
             >
               {item.label}
             </Link>
@@ -32,7 +33,7 @@ export function Header() {
           <Link
             href="/cart"
             aria-label="Cart"
-            className="text-sm text-ink-soft transition-colors hover:text-ink"
+            className="font-label text-sm tracking-wider text-ink-soft transition-colors hover:text-ink"
           >
             Cart ({itemCount})
           </Link>
@@ -54,7 +55,7 @@ export function Header() {
             <Link
               key={item.href}
               href={item.href}
-              className="py-2 text-sm text-ink-soft hover:text-ink"
+              className="font-label py-2 text-sm tracking-wider text-ink-soft hover:text-ink"
               onClick={() => setOpen(false)}
             >
               {item.label}

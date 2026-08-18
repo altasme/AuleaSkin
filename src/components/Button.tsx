@@ -2,11 +2,11 @@ import Link from "next/link";
 import { ButtonHTMLAttributes } from "react";
 
 const base =
-  "inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-medium tracking-wide transition-colors";
+  "inline-flex items-center justify-center rounded-full px-7 py-3 font-label text-base tracking-wider uppercase transition-colors";
 const variants = {
-  primary: "bg-sage text-cream hover:bg-sage-dark",
-  secondary: "border border-ink text-ink hover:bg-ink hover:text-cream",
-  ghost: "text-ink underline underline-offset-4 hover:text-sage",
+  primary: "bg-indigo text-cream hover:opacity-90",
+  secondary: "border border-gold text-ink hover:bg-gold hover:text-ink",
+  ghost: "font-sans normal-case text-ink underline underline-offset-4 hover:text-gold",
 } as const;
 
 type Variant = keyof typeof variants;

@@ -1,68 +1,63 @@
-# Client Intake & Asset Checklist — Aulea Skin
+# Build-Ready Intake & Asset Checklist — Aulea Skin
 
-Per ALTAVENTURES Phase 1 spec §19. This is the gate for §20 Step 1
-("Confirm inputs"). The full Phase 1 build (real copy, real product data,
-checkout implementation, live measurement, compliance sign-off) does not
-start until this comes back READY.
+Mirrors spec §34 (`docs/aulea-skin-phase1-spec-v1.4.md`). This is the gate
+before the 4–6 day build clock starts. The brand kit resolved a lot (name,
+colors, type, tagline, founder story, 3 confirmed SKU names) — what's
+below is what's still outstanding.
 
-**Intake status: NOT READY**
+**Status: NOT READY** — blockers below still open.
 
-Nothing below has been supplied yet. Everything currently in the repo
-(`src/data/products.ts`, `src/lib/site-config.ts`, all page copy) is a
-structural placeholder only — see the `[bracketed]` notes throughout the
-codebase and the image-placeholder convention from the spec.
+## Blockers (build cannot fully proceed without these)
 
-## Brand
+- [ ] Complete product list — **prices**, sizes/variants beyond what's
+      confirmed, descriptions, benefits, how-to-use (3 SKUs named via the
+      brand kit; everything else about them is still missing — §7)
+- [ ] Product **label photos** (ingredient info must come from the actual
+      label, not be invented)
+- [ ] Product photography — originals/high-res (hero shots seen in the
+      kit; source files needed)
+- [ ] **FDA CPN number(s)** or written status — especially for the
+      "Organic" and "SPF 30" claims baked into the confirmed SKU names
+      (§27)
+- [ ] **Written substantiation** for any efficacy claim to be published
+      (brightening, pore-minimizing, SPF value, "organic")
 
-- [ ] Logo files (vector preferred)
-- [ ] Brand colors / fonts / guidelines
-- [ ] Brand story, mission, positioning
+## Brand & content
 
-*Current state: the site uses a provisional placeholder palette (cream /
-sage / clay, see `src/app/globals.css`) and a serif/sans pairing. Replace
-once real brand guidelines arrive.*
+- [x] Logo variants, palette, typefaces, tagline — received (brand kit,
+      folded into `src/app/globals.css` / `src/app/layout.tsx`)
+- [ ] **Vector logo files** (SVG/AI/PDF) for web/retina rendering +
+      favicon — `src/components/Logo.tsx` is a text-based stand-in until
+      these arrive
+- [ ] **Body/paragraph typeface** confirmed (§13.3) — Geist Sans used as
+      placeholder pairing
+- [ ] Web-embedding **font licensing** for Tan Pearl / Sego confirmed —
+      Playfair Display used as a placeholder display face in the meantime
+- [ ] Authentic customer feedback screenshots (§10)
+- [x] Founder story — received and implemented on Home + About
 
-## Products
+## Operations
 
-- [ ] Product list with names, prices, variants, sizes
-- [ ] Descriptions, benefits, usage instructions
-- [ ] Ingredients / INCI lists
-- [ ] Product photography
-- [ ] **CPN number(s)** (skincare/cosmetics — see §11 / `docs/compliance-notes.md`)
-- [ ] **Written claim substantiation** for any efficacy claim
+- [ ] Payment methods that can actually be connected (§18)
+- [ ] COD terms + any order-value ceiling (§19–20)
+- [x] Shipping/couriers + ₱400 free-ship threshold — stated (J&T Express,
+      Lalamove, LBC); confirm operational accuracy before launch
+- [ ] Returns/refund terms for cosmetics (§41) — `docs/compliance-notes.md`
+      has the drafting note, not a publishable policy
+- [x] Primary contact email — auleaskinessentials@gmail.com; confirm any
+      other official channel
 
-*Current state: `src/data/products.ts` has 5 placeholder catalog entries
-(Cleanser, Toner, Serum, Moisturizer, Sunscreen) as structural stand-ins
-for a routine, not a real catalog.*
+## Technical access
 
-## Trust
+- [ ] Domain registrar / DNS access (or named controller)
+- [ ] Meta ad account / pixel access for §33 measurement
+- [ ] Any existing hosting/store admin access
+- [ ] Email capture destination (list/store/Resend or equivalent) for the
+      homepage signup — see §33; the signup is intentionally disabled
+      (`src/components/EmailSignup.tsx`) until this exists
 
-- [ ] Real reviews / testimonials (with consent where required)
-- [ ] Customer / UGC photos
-- [ ] Certifications / registrations / media features
+## Outstanding, in short
 
-## Business & Operations
-
-- [ ] Business name (legal), contact, address, hours, service areas
-- [ ] Social + marketplace links (Shopee / TikTok Shop / Lazada / FB / IG)
-- [ ] Payment methods, shipping, delivery, returns/refund terms
-
-## Technical Access
-
-- [ ] Domain registrar / DNS access (or named person who controls it)
-- [ ] Ad account / pixel access for §8 measurement setup
-- [ ] Any existing hosting / store admin access
-
-## Forced Strategic Decision (§9.1)
-
-- [ ] **Checkout vs. Marketplace routing decision** — own checkout, marketplace
-      routing (Shopee / TikTok Shop / Lazada), or hybrid. This determines
-      whether the `/cart` page becomes a real checkout or a routing hub, and
-      is currently unresolved (`checkoutModel: "pending"` in
-      `src/lib/site-config.ts`).
-
-## Outstanding
-
-Everything above. This checklist should be the first artifact sent back to
-the client; do not proceed to Step 2 (website strategy) or real content
-population until it returns READY.
+Full product data + prices, label photos, high-res product images,
+CPN/substantiation, vector logo, body font confirmation, payment/DNS/pixel
+access, email capture destination.
