@@ -25,6 +25,27 @@ pending-feedback panel, and the catalog stays the confirmed 8 SKUs. If any
 of those prices or testimonials are real and meant to publish, please
 confirm and we'll wire them in directly.
 
+A follow-up request asked to match the reference's colours and lead with
+product-only photography, both now done:
+
+- [x] **Colour tokens updated to match the reference**, sampled directly
+      from the screenshots (`src/app/globals.css`). This is a real navy
+      blue (`#102048`) and a muted bronze-gold (`#c68b57`) on a near-white
+      background, noticeably different from spec v2.0 PART A's warmer
+      indigo (`#1F1A76`) and bright golden-yellow (`#E2AB2D`) on a warm
+      cream. Treat the reference as the current source of truth for
+      colour, same as the real photography superseded spec text elsewhere
+      in this project, please confirm this is the intended direction
+      since it's a real deviation from the originally locked spec, not
+      just an approximation.
+- [x] **Product cards, homepage, and category tiles now lead with a
+      product-only shot** for every SKU that has one (7 of 8, all but the
+      two Essence lines which were already product-only). Model/lifestyle
+      photography from the same shoot stays in the product detail
+      gallery as supporting images, just not the lead. See
+      `docs/image-requirements.md` for the canvas sizes, format, and
+      aspect ratio needed for any future photography.
+
 ## Received: product & lifestyle photography + logo
 
 Real assets landed and are now live on the site (`public/images/`,

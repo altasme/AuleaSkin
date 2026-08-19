@@ -41,13 +41,16 @@ MEASUREMENT (F5):          GA4 + Meta Pixel/CAPI scaffolded (src/lib/analytics.t
                             .env.example. Email capture destination not yet named.
 REGULATORY REFERENCE:      Informational only, not a build gate for this project, see
                             docs/compliance-notes.md for what's on the real product labels.
-BRAND DIRECTION:           LOCKED per spec PART A, Navy #1F1A76 (accent), Navy Deep #131047
-                            (large fills: hero + footer + one promo band only), Gold #E2AB2D
-                            (decoration/hover only, never body text), Cream #F8EFE0 (base), Cream
-                            Deep #F1E7D6 + Mist #ECEAF3 (alternating surfaces), Ink #201B3B (body
-                            text). This supersedes the rose/sage palette explored in an earlier
-                            session, that deviation is retired; PART A is the locked source of
-                            truth now. Typography: Bebas Neue (caps, final), Fraunces (display,
+BRAND DIRECTION:           Updated to match a client-supplied reference design
+                            (Aulea__template.zip), colours sampled directly from those
+                            screenshots: Navy #102048 (accent + large fills: hero, footer, promo
+                            band), Gold #C68B57 (muted bronze, decoration/hover only, never body
+                            text), Cream #FBFAF8 (near-white base), Cream Deep #F5F2EC + Mist
+                            #F0EFEB (alternating surfaces), Ink #16223D (body/heading text). This
+                            supersedes spec v2.0 PART A's warmer indigo/bright-gold/yellow-cream
+                            values (#1F1A76/#E2AB2D/#F8EFE0), please confirm this is the intended
+                            direction since it's a real deviation from the originally locked spec.
+                            Typography unchanged: Bebas Neue (caps, final), Fraunces (display,
                             placeholder for Tan Pearl/Sego pending licensing), Mulish (body,
                             final per spec A4). Logo: RECEIVED and live (full lockup + icon),
                             used as supplied per spec B2, see assets/logo-source/README.md.

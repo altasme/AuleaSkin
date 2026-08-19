@@ -22,9 +22,12 @@ reads **SPF 50**, not the SPF 30 in the spec text, and two SKUs not in any
 spec version (**Auléa Essence for Men/Women**, a fragrance line) turned up
 in the supplied photos.
 
-- **What's here:** the locked design system (Navy `#1F1A76` / Navy Deep
-  `#131047` / Gold `#E2AB2D` / Cream `#F8EFE0` / Cream Deep `#F1E7D6` /
-  Mist `#ECEAF3` / Ink `#201B3B`), Fraunces/Bebas Neue/Mulish typography,
+- **What's here:** the design system, colours matched to a client-supplied
+  reference design and sampled directly from it (Navy `#102048` / Navy
+  Deep `#0A1730` / Gold `#C68B57` / Cream `#FBFAF8` / Cream Deep `#F5F2EC`
+  / Mist `#F0EFEB` / Ink `#16223D`, superseding spec v2.0 PART A's warmer
+  indigo/gold/cream values, flagged in `docs/intake-checklist.md` for
+  confirmation), Fraunces/Bebas Neue/Mulish typography,
   the real logo (`public/images/logo/`, source in `assets/logo-source/`),
   real product photography wired into every product card/gallery/cart/
   checkout thumbnail, the real first-person founder story, the confirmed
@@ -85,6 +88,7 @@ docs/
   customization-template.md       Filled-in project template
   compliance-notes.md             PH cosmetics regulatory reference, informational only
   deployment.md                   Cloudflare Pages setup (build settings, custom domain)
+  image-requirements.md           Canvas sizes, format, aspect ratio for every image slot
 ```
 
 ## Deployment

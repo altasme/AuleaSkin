@@ -1,16 +1,19 @@
 @import "tailwindcss";
 
 :root {
-  /* PART A: LOCKED DESIGN SYSTEM (spec v2.0). Exact tokens, do not
-     invent colours outside this set. Tints/shades below are derived from
-     these three core colours (navy / gold / cream) only, via opacity. */
-  --navy: #1f1a76; /* brand accent: headings, buttons, nav accents, icons, links. Not overused. */
-  --navy-deep: #131047; /* large dark fills only: hero, footer, at most one promo band */
-  --gold: #e2ab2d; /* decoration only: leaf, highlights, dividers, focus rings, hover, badges. Never body text. */
-  --cream: #f8efe0; /* primary background / reading surface */
-  --cream-deep: #f1e7d6; /* warm alternating section background */
-  --mist: #eceaf3; /* cool pale-indigo alternating surface for cards/sections */
-  --ink: #201b3b; /* body text on light: warm near-black, calmer than pure black */
+  /* Colour values updated to match the client-supplied reference design
+     (Aulea__template.zip screenshots), sampled directly from the
+     reference images rather than guessed. This supersedes the exact hex
+     values in spec v2.0 PART A (a warmer indigo/gold/cream set); token
+     names and roles are unchanged, so every component that reads
+     bg-navy/text-ink/etc. picked up the new values automatically. */
+  --navy: #102048; /* brand accent + large dark fills: headings, buttons, hero, footer, promo band */
+  --navy-deep: #0a1730; /* slightly deeper navy for the largest fills (hero/footer), same family as navy */
+  --gold: #c68b57; /* decoration only: eyebrow labels, dividers, hover, links on dark bg. Never body text. */
+  --cream: #fbfaf8; /* primary background, near-white per reference (not the old warm yellow-cream) */
+  --cream-deep: #f5f2ec; /* warm-neutral alternating section background */
+  --mist: #f0efeb; /* neutral alternating surface for cards/sections */
+  --ink: #16223d; /* body text on light: dark navy-charcoal, matches the reference's headline colour */
   --white: #ffffff; /* product image areas, sparing */
 
   --background: var(--cream);

@@ -16,6 +16,11 @@
 //
 // Price, ingredient lists, and usage instructions are still pending
 // client input for every SKU and are marked as such below.
+//
+// `images` order was reworked to lead with a product-only shot (matching
+// the client-supplied reference design's product-forward look) for every
+// SKU where one exists; the model-photography shots stay in the array as
+// supporting gallery images on the product detail page, just not first.
 
 export type Product = {
   slug: string;
@@ -47,8 +52,8 @@ export const products: Product[] = [
       "[Full ingredient list pending, a legible ingredients panel is still needed from the client.]",
     suitableFor: "Generally suitable for all skin types (per-product suitability pending confirmation).",
     images: [
-      "/images/products/sunscreen-spf-50/hero.webp",
       "/images/products/sunscreen-spf-50/secondary-1.webp",
+      "/images/products/sunscreen-spf-50/hero.webp",
       "/images/products/sunscreen-spf-50/secondary-2.webp",
     ],
   },
@@ -66,8 +71,8 @@ export const products: Product[] = [
       "[Full ingredient list pending, a legible ingredients panel is still needed from the client.]",
     suitableFor: "Generally suitable for all skin types (per-product suitability pending confirmation).",
     images: [
-      "/images/products/organic-vitamin-c-serum/hero.webp",
       "/images/products/organic-vitamin-c-serum/secondary-1.webp",
+      "/images/products/organic-vitamin-c-serum/hero.webp",
       "/images/products/organic-vitamin-c-serum/secondary-2.webp",
     ],
   },
@@ -85,8 +90,8 @@ export const products: Product[] = [
       "[Full ingredient list pending, a legible ingredients panel is still needed from the client.]",
     suitableFor: "Generally suitable for all skin types (per-product suitability pending confirmation).",
     images: [
-      "/images/products/niacinamide-facial-wash/hero.webp",
       "/images/products/niacinamide-facial-wash/secondary-1.webp",
+      "/images/products/niacinamide-facial-wash/hero.webp",
       "/images/products/niacinamide-facial-wash/secondary-2.webp",
     ],
   },
@@ -104,8 +109,8 @@ export const products: Product[] = [
       "[Full ingredient list pending, a legible ingredients panel is still needed from the client.]",
     suitableFor: "Generally suitable for all skin types (per-product suitability pending confirmation).",
     images: [
-      "/images/products/collagen-vitamin-e-firming-lotion/hero.webp",
       "/images/products/collagen-vitamin-e-firming-lotion/secondary-1.webp",
+      "/images/products/collagen-vitamin-e-firming-lotion/hero.webp",
     ],
   },
   {
@@ -122,8 +127,8 @@ export const products: Product[] = [
       "[Full ingredient list pending, a legible ingredients panel is still needed from the client.]",
     suitableFor: "Generally suitable for all skin types (per-product suitability pending confirmation).",
     images: [
-      "/images/products/glass-skin-natural-soap/hero.webp",
       "/images/products/glass-skin-natural-soap/secondary-1.webp",
+      "/images/products/glass-skin-natural-soap/hero.webp",
       "/images/products/glass-skin-natural-soap/secondary-2.webp",
     ],
   },
@@ -141,8 +146,8 @@ export const products: Product[] = [
       "[Full ingredient list pending, a legible ingredients panel is still needed from the client.]",
     suitableFor: "Generally suitable for all skin types (per-product suitability pending confirmation).",
     images: [
-      "/images/products/ultimate-whitening-natural-soap/hero.webp",
       "/images/products/ultimate-whitening-natural-soap/secondary-1.webp",
+      "/images/products/ultimate-whitening-natural-soap/hero.webp",
       "/images/products/ultimate-whitening-natural-soap/secondary-2.webp",
     ],
   },
