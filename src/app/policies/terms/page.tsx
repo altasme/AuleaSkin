@@ -8,7 +8,6 @@ export default function TermsPage() {
   return (
     <Section className="pt-14">
       <SectionHeading
-        eyebrow="Policy"
         title="Terms of Service"
         description="Composed from how this site actually works today; confirm legal business name and registration details with the client before treating as final."
       />

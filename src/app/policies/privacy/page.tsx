@@ -8,7 +8,6 @@ export default function PrivacyPage() {
   return (
     <Section className="pt-14">
       <SectionHeading
-        eyebrow="Policy"
         title="Privacy Policy"
         description="Composed from how this site actually works today; confirm against Data Privacy Act (RA 10173) requirements before treating as final."
       />

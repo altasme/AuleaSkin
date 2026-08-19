@@ -8,7 +8,6 @@ export default function ShippingReturnsPage() {
   return (
     <Section className="pt-14">
       <SectionHeading
-        eyebrow="Policy"
         title="Shipping & Returns"
         description="Composed from how orders actually flow today (via Shopee); confirm against Aulea's real fulfillment terms before treating as final, see docs/compliance-notes.md for cosmetics-specific context."
       />

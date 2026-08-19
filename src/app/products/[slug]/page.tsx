@@ -99,7 +99,7 @@ export default async function ProductPage({
 
             <dl className="mt-10 space-y-6 border-t border-ink/12 pt-6">
               <div>
-                <dt className="text-xs font-medium uppercase tracking-[0.1em] text-ink/60">Benefits</dt>
+                <dt className="text-xs font-medium uppercase tracking-[0.1em] text-ink/70">Benefits</dt>
                 <dd className="mt-2 text-sm leading-relaxed text-ink/70">
                   <ul className="list-disc space-y-1 pl-4">
                     {product.benefits.map((benefit) => (
@@ -109,11 +109,11 @@ export default async function ProductPage({
                 </dd>
               </div>
               <div>
-                <dt className="text-xs font-medium uppercase tracking-[0.1em] text-ink/60">How to use</dt>
+                <dt className="text-xs font-medium uppercase tracking-[0.1em] text-ink/70">How to use</dt>
                 <dd className="mt-2 text-sm leading-relaxed text-ink/70">{product.usage}</dd>
               </div>
               <div>
-                <dt className="text-xs font-medium uppercase tracking-[0.1em] text-ink/60">
+                <dt className="text-xs font-medium uppercase tracking-[0.1em] text-ink/70">
                   Ingredients
                 </dt>
                 <dd className="mt-2 text-sm leading-relaxed text-ink/70">
@@ -121,7 +121,7 @@ export default async function ProductPage({
                 </dd>
               </div>
               <div>
-                <dt className="text-xs font-medium uppercase tracking-[0.1em] text-ink/60">
+                <dt className="text-xs font-medium uppercase tracking-[0.1em] text-ink/70">
                   Suitable for
                 </dt>
                 <dd className="mt-2 text-sm leading-relaxed text-ink/70">

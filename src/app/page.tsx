@@ -52,10 +52,7 @@ export default function Home() {
       <section className="bg-cream-deep">
         <div className="mx-auto grid max-w-7xl items-center lg:grid-cols-2">
           <div className="px-6 py-20 sm:px-10 sm:py-28 lg:px-16">
-            <p className="text-xs font-medium uppercase tracking-[0.15em] text-navy/70 mb-4">
-              Aulea Skin &middot; Est. {siteConfig.established}
-            </p>
-            <h1 className="font-display text-4xl leading-tight text-ink sm:text-5xl lg:text-6xl">
+            <h1 className="font-display text-4xl leading-tight text-ink sm:text-5xl lg:text-6xl text-balance">
               Everyday skincare, made more accessible.
             </h1>
             <p className="mt-5 max-w-md text-ink/70 leading-relaxed">
@@ -92,7 +89,7 @@ export default function Home() {
       {/* Featured products */}
       <Section className="bg-mist">
         <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
-          <SectionHeading eyebrow="Featured" title="Shop Aulea" />
+          <SectionHeading title="Shop Aulea" />
           <Link
             href="/products"
             className="flex items-center gap-1 text-xs font-medium uppercase tracking-[0.1em] text-navy hover:text-navy-deep"
@@ -109,7 +106,7 @@ export default function Home() {
 
       {/* Shop by category */}
       <Section className="bg-cream-deep">
-        <SectionHeading align="center" eyebrow="Shop By Category" title="Find your ritual" />
+        <SectionHeading align="center" title="Find your ritual" />
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {categories.map((category) => {
             const rep = getProductsByCategory(category)[0];
@@ -158,10 +155,7 @@ export default function Home() {
             />
           </div>
           <div>
-            <p className="text-xs font-medium uppercase tracking-[0.15em] text-navy/70 mb-3">
-              The Aulea Story
-            </p>
-            <h2 className="font-display text-3xl text-ink sm:text-4xl">
+            <h2 className="font-display text-3xl text-ink sm:text-4xl text-balance">
               Born from a personal skincare journey.
             </h2>
             <p className="mt-4 text-ink/70 leading-relaxed">
@@ -182,10 +176,7 @@ export default function Home() {
       <Section className="bg-mist">
         <div className="grid items-center gap-12 lg:grid-cols-2">
           <div>
-            <p className="text-xs font-medium uppercase tracking-[0.15em] text-navy/70 mb-3">
-              The Ritual
-            </p>
-            <h2 className="font-display text-3xl text-ink sm:text-4xl">
+            <h2 className="font-display text-3xl text-ink sm:text-4xl text-balance">
               A few quiet minutes, every day.
             </h2>
             <p className="mt-4 text-ink/70 leading-relaxed">
@@ -216,15 +207,13 @@ export default function Home() {
       <section className="bg-navy-deep">
         <div className="mx-auto grid max-w-6xl items-center gap-8 px-6 py-14 sm:px-10 lg:grid-cols-2 lg:px-16">
           <div>
-            <p className="font-label text-sm tracking-[0.2em] text-gold mb-3">
-              A Small Gift, Every Order
-            </p>
-            <h2 className="font-display text-3xl text-cream sm:text-4xl">
+            <h2 className="font-display text-3xl text-cream sm:text-4xl text-balance">
               Free shipping on orders ₱{siteConfig.freeShippingThreshold}+
             </h2>
             <p className="mt-3 max-w-md text-cream/70">
-              Nationwide delivery available. Cash on delivery welcome where courier support
-              allows, subject to applicable courier and shipping arrangements.
+              A small gift on every order: nationwide delivery available, with cash on delivery
+              welcome where courier support allows, subject to applicable courier and shipping
+              arrangements.
             </p>
             <div className="mt-6">
               <LinkButton href="/products" variant="onDark">
@@ -248,7 +237,6 @@ export default function Home() {
       <Section>
         <SectionHeading
           align="center"
-          eyebrow="From Our Customers"
           title="Real feedback, in their words"
           description="Genuine reviews shared by Aulea customers."
         />
@@ -269,7 +257,7 @@ export default function Home() {
 
       {/* Why Aulea */}
       <Section className="bg-cream-deep">
-        <SectionHeading align="center" eyebrow="Why Aulea" title="Skincare, made simple" />
+        <SectionHeading align="center" title="Skincare, made simple" />
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {whyAulea.map(({ icon: Icon, title, body }) => (
             <div key={title} className="text-center sm:text-left">
@@ -285,7 +273,7 @@ export default function Home() {
 
       {/* Email signup */}
       <Section>
-        <SectionHeading align="center" eyebrow="Stay In The Loop" title="Hear about new products first" />
+        <SectionHeading align="center" title="Hear about new products first" />
         <div className="mx-auto max-w-md">
           <EmailSignup />
         </div>

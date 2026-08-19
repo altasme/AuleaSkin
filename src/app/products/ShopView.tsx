@@ -34,7 +34,6 @@ export function ShopView() {
       <Section className="pt-14 pb-10 bg-cream-deep">
         <SectionHeading
           align="center"
-          eyebrow="The Collection"
           title="Shop Auléa"
           description="Thoughtful skincare for your everyday ritual. Generally suitable for all skin types."
         />

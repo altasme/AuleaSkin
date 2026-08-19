@@ -12,7 +12,6 @@ export default function AboutPage() {
       <Section className="pt-14 pb-10 bg-cream-deep text-center">
         <SectionHeading
           align="center"
-          eyebrow="Our Story"
           title="Skincare, made for real life"
           description={`Aulea Skin began in ${siteConfig.established}, born from a personal journey with sensitive skin and a belief that taking care of yourself shouldn't feel complicated or out of reach.`}
         />
@@ -30,9 +29,9 @@ export default function AboutPage() {
             />
           </div>
           <div>
-            <p className="text-xs font-medium uppercase tracking-[0.15em] text-navy/70 mb-3">
-              How It Started
-            </p>
+            <h2 className="font-display text-2xl text-ink sm:text-3xl mb-4">
+              How Aulea started
+            </h2>
             <div className="space-y-4 text-ink/70 leading-relaxed">
               <p>
                 I started Aulea because of my own experience with sensitive skin. Finding
@@ -62,28 +61,27 @@ export default function AboutPage() {
       <Section className="bg-cream-deep text-center">
         <SectionHeading
           align="center"
-          eyebrow="Our Mission"
           title="Taking care of your skin doesn't have to be complicated or expensive."
           description="We want more people to feel that skincare can be part of their everyday, and to feel confident making it their own."
         />
       </Section>
 
       <Section>
-        <SectionHeading align="center" eyebrow="Looking Ahead" title="A brand built to grow with you" />
-        <div className="grid gap-6 sm:grid-cols-3">
-          <div className="rounded-md border border-ink/12 bg-white p-6">
+        <SectionHeading align="center" title="A brand built to grow with you" />
+        <div className="grid gap-8 sm:grid-cols-3 sm:gap-6">
+          <div className="border-t border-ink/15 pt-5">
             <h3 className="font-display text-lg text-ink">Expand the range</h3>
             <p className="mt-2 text-sm text-ink/70 leading-relaxed">
               Thoughtfully adding products that fit real, everyday routines.
             </p>
           </div>
-          <div className="rounded-md border border-ink/12 bg-white p-6">
+          <div className="border-t border-ink/15 pt-5">
             <h3 className="font-display text-lg text-ink">Build a community</h3>
             <p className="mt-2 text-sm text-ink/70 leading-relaxed">
               Creating a space where people feel supported in caring for their skin.
             </p>
           </div>
-          <div className="rounded-md border border-ink/12 bg-white p-6">
+          <div className="border-t border-ink/15 pt-5">
             <h3 className="font-display text-lg text-ink">Stay accessible</h3>
             <p className="mt-2 text-sm text-ink/70 leading-relaxed">
               Keeping skincare approachable as the brand grows.
