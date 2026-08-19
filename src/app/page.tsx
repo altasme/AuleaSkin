@@ -125,14 +125,19 @@ export default function Home() {
                     alt={category}
                     fill
                     sizes="(min-width: 1024px) 33vw, 50vw"
-                    className="object-cover transition-transform duration-300 group-hover:scale-105"
+                    className="object-cover"
                   />
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-ink/70 via-ink/10 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-ink/70 via-ink/10 to-transparent transition-colors duration-300 group-hover:from-ink/80" />
                 <div className="absolute inset-x-0 bottom-0 p-5 text-cream">
                   <h3 className="font-display text-lg">{category}</h3>
                   <p className="mt-1 text-xs text-cream/80">{categoryCopy[category]}</p>
-                  <p className="mt-2 text-xs font-medium uppercase tracking-[0.1em]">Shop Now →</p>
+                  <p className="mt-2 flex items-center gap-1 text-xs font-medium uppercase tracking-[0.1em]">
+                    Shop Now{" "}
+                    <span className="inline-block transition-transform duration-300 group-hover:translate-x-1">
+                      →
+                    </span>
+                  </p>
                 </div>
               </Link>
             );
