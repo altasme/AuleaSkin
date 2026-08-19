@@ -41,12 +41,6 @@ body {
   color: var(--foreground);
 }
 
-/* Flat, quiet stand-in for a missing image, no busy pattern. Tinted
-   from Ink at low opacity so it stays inside the locked palette. */
-.placeholder-box {
-  background-color: color-mix(in srgb, var(--ink) 8%, var(--cream));
-}
-
 .font-label {
   font-family: var(--font-label);
   letter-spacing: 0.03em;

@@ -59,13 +59,13 @@ BRAND DIRECTION:           Updated to match a client-supplied reference design
                             placeholder for Tan Pearl/Sego pending licensing), Mulish (body,
                             final per spec A4). Logo: RECEIVED and live (full lockup + icon),
                             used as supplied per spec B2, see assets/logo-source/README.md.
-CLIENT MATERIALS RECEIVED: Brand kit, founder story, real logo (lockup + icon + favicon source),
-                            sitewide hero photo, product photography for 6 of 8 SKUs, a real brand
-                            photo, 8 real customer testimonial graphics, real Shopee listing links
-                            for all 8 SKUs, contact email, Shopee store link, courier list,
-                            free-shipping threshold, payment methods list (GCash/Maya/Bank
-                            Transfer/COD, via Shopee)
-MISSING MATERIALS:         Legible ingredients-panel photos, founder photo, DNS/pixel access, see
+CLIENT MATERIALS RECEIVED: Brand kit, founder story, founder photo, real logo (lockup + icon +
+                            favicon source), sitewide hero photo, product photography for 6 of 8
+                            SKUs, a real brand photo, 8 real customer testimonial graphics, real
+                            Shopee listing links for all 8 SKUs, contact email, Shopee store link,
+                            courier list, free-shipping threshold, payment methods list
+                            (GCash/Maya/Bank Transfer/COD, via Shopee)
+MISSING MATERIALS:         Legible ingredients-panel photos, DNS/pixel access, see
                             docs/intake-checklist.md
 ESTIMATED BUILD TIME:      4 to 6 days from Build-Ready confirmation (spec G3), not started,
                             clock has not begun

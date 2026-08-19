@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { LinkButton } from "@/components/Button";
-import { Placeholder } from "@/components/Placeholder";
 import { ProductCard } from "@/components/ProductCard";
 import { Section, SectionHeading } from "@/components/Section";
 import { EmailSignup } from "@/components/EmailSignup";
@@ -144,7 +143,15 @@ export default function Home() {
       {/* Founder / brand story */}
       <Section>
         <div className="grid items-center gap-12 lg:grid-cols-2">
-          <Placeholder label="Founder photo, pending" aspect="aspect-[4/5]" />
+          <div className="relative aspect-[4/5] overflow-hidden rounded-md bg-white">
+            <Image
+              src="/images/founder/founder.webp"
+              alt="Aulea Skin founder"
+              fill
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              className="object-cover"
+            />
+          </div>
           <div>
             <p className="text-xs font-medium uppercase tracking-[0.15em] text-navy/70 mb-3">
               The Aulea Story

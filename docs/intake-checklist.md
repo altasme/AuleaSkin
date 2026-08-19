@@ -117,7 +117,8 @@ Catalog is now **8 SKUs**, not 7.
       panel, see "Composed copy" above for why this one can't be filled
       in with generated text
 - [ ] Whether plain "Aulea Natural Soap" is a real SKU
-- [ ] Founder photo (still a placeholder on Home and About)
+- [x] Founder photo, received and live on Home and About
+      (`public/images/founder/founder.webp`)
 - [ ] Domain registrar / DNS access (or named controller)
 - [ ] Meta ad account / pixel access for spec F5 measurement
 - [ ] Email capture destination (list/store/Resend or equivalent) for the
