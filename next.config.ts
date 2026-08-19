@@ -8,9 +8,7 @@ const nextConfig: NextConfig = {
   // change (e.g. to @cloudflare/next-on-pages).
   output: "export",
   images: {
-    // Static export can't use Next's image optimization server. No
-    // next/image usage yet (only placeholder boxes), but set this so it
-    // doesn't break the moment real product photography is dropped in.
+    // Static export can't use Next's image optimization server.
     unoptimized: true,
   },
 };

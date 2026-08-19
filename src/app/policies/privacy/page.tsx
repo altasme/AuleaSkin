@@ -8,28 +8,36 @@ export default function PrivacyPage() {
   return (
     <Section className="pt-14">
       <SectionHeading
-        eyebrow="Policy, Draft"
+        eyebrow="Policy"
         title="Privacy Policy"
-        description="Draft skeleton only. Confirm data handling practices, third-party tools in use (analytics, pixel, payment processor), and Data Privacy Act (RA 10173) compliance details with the client before publishing."
+        description="Composed from how this site actually works today; confirm against Data Privacy Act (RA 10173) requirements before treating as final."
       />
       <div className="max-w-2xl space-y-6 text-ink/70 leading-relaxed">
         <div>
           <h2 className="font-display text-xl text-ink">Information We Collect</h2>
           <p className="mt-2">
-            [Pending: will include contact form submissions, order/checkout/COD-confirmation
-            data (Aulea&apos;s own checkout is confirmed, spec §2), and analytics/pixel data per
-            spec F5.]
+            This website itself doesn&apos;t collect personal information through a contact form
+            or checkout, there isn&apos;t one. Buying a product takes you to that product&apos;s
+            Shopee listing, where Shopee collects whatever it needs to process your order
+            (name, address, payment details). We don&apos;t see or store that information.
           </p>
         </div>
         <div>
-          <h2 className="font-display text-xl text-ink">How We Use It</h2>
-          <p className="mt-2">[Pending client input.]</p>
+          <h2 className="font-display text-xl text-ink">Analytics</h2>
+          <p className="mt-2">
+            Once configured, this site may use Google Analytics and Meta Pixel to understand
+            traffic and improve the browsing experience (standard device/browsing data, not
+            personal order information). See .env.example for what&apos;s wired and pending.
+          </p>
         </div>
         <div>
           <h2 className="font-display text-xl text-ink">Third-Party Services</h2>
           <p className="mt-2">
-            [Pending: will include Google Analytics, Meta Pixel/CAPI once configured (spec F5),
-            and the payment processor(s) selected for checkout.]
+            Purchases are completed on Shopee, governed by{" "}
+            <a href="https://shopee.ph" className="underline underline-offset-4 hover:text-ink">
+              Shopee&apos;s own privacy policy
+            </a>
+            , not this one. Analytics tools (Google Analytics, Meta Pixel/CAPI) are listed above.
           </p>
         </div>
         <div>

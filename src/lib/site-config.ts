@@ -27,11 +27,10 @@ export const siteConfig = {
     facebook: "[recovering, not yet relinked]",
     shopee: "https://shopee.ph/shop/1889974610",
   },
-  // Confirmed: Phase 1 builds Aulea's own storefront (spec §2, §14). This
-  // is not the open decision it was under the generic ALTAVENTURES
-  // template. What's still pending is the payment/COD *implementation*,
-  // not the strategic choice.
-  checkoutModel: "own" as const,
+  // Purchases redirect to each product's real Shopee listing (client
+  // directive), superseding the earlier own-checkout plan from spec §2.
+  // No cart/checkout exists on this site; Shopee handles the transaction.
+  checkoutModel: "shopee" as const,
   freeShippingThreshold: 400,
   couriers: ["J&T Express", "Lalamove", "LBC"],
   paymentMethods: ["GCash", "Maya", "Bank Transfer", "Cash on Delivery"],

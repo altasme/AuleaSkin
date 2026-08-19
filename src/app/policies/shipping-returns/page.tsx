@@ -8,49 +8,51 @@ export default function ShippingReturnsPage() {
   return (
     <Section className="pt-14">
       <SectionHeading
-        eyebrow="Policy, Draft"
+        eyebrow="Policy"
         title="Shipping & Returns"
-        description="Draft only. Returns terms must match Aulea's actual fulfillment terms before publishing, see spec H3. A generic returns policy is not acceptable for cosmetics."
+        description="Composed from how orders actually flow today (via Shopee); confirm against Aulea's real fulfillment terms before treating as final, see docs/compliance-notes.md for cosmetics-specific context."
       />
       <div className="max-w-2xl space-y-6 text-ink/70 leading-relaxed">
         <div>
           <h2 className="font-display text-xl text-ink">Shipping</h2>
           <p className="mt-2">
-            Ships nationwide, including provinces, via {siteConfig.couriers.join(", ")}. Fees
-            depend on location, courier, and arrangement. Free shipping applies on orders ₱
-            {siteConfig.freeShippingThreshold}+ (subject to courier arrangement, not an
-            unconditional guarantee unless confirmed at checkout, spec E4).
+            Every order is placed and shipped through Shopee, so shipping, tracking, and delivery
+            timelines follow Shopee&apos;s own process for that listing. Aulea ships nationwide,
+            including provinces, via {siteConfig.couriers.join(", ")}, with free shipping
+            available on qualifying orders over ₱{siteConfig.freeShippingThreshold} where Shopee
+            offers it.
           </p>
         </div>
         <div>
           <h2 className="font-display text-xl text-ink">Payment Methods</h2>
           <p className="mt-2">
-            Aulea can accommodate {siteConfig.paymentMethods.join(", ")}, but only methods that
-            are technically configured and operational are shown as available at checkout (spec
-            E2). See the checkout page for current status.
+            Payment happens on Shopee at checkout, not on this site. Shopee generally supports{" "}
+            {siteConfig.paymentMethods.join(", ")}, though exact availability depends on Shopee&apos;s
+            own settings at the time of your order.
           </p>
         </div>
         <div>
           <h2 className="font-display text-xl text-ink">Cash on Delivery</h2>
           <p className="mt-2">
-            COD is offered nationwide where courier coverage allows. Because nationwide COD for a
-            new brand invites mistaken or bogus orders, orders may go through a short
-            confirmation step before dispatch, reachable phone and email are required at
-            checkout for this reason (spec E3).
+            Where available, Cash on Delivery is offered through Shopee&apos;s own COD program,
+            subject to Shopee&apos;s eligibility rules for your area and the specific listing.
           </p>
         </div>
         <div>
           <h2 className="font-display text-xl text-ink">Returns & Refunds</h2>
           <p className="mt-2">
-            [Pending client confirmation. Note for drafting: under the Philippine Consumer Act
-            (RA 7394) and DTI rules, opened cosmetics are commonly non-returnable on hygiene
-            grounds. This section will reflect Aulea&apos;s actual policy, not a generic
-            template, see spec C2/G4.]
+            Returns and refunds are requested and processed through Shopee&apos;s own Return &
+            Refund system for your order. As with most cosmetics, opened products are commonly
+            non-returnable on hygiene grounds under Philippine Consumer Act (RA 7394) and DTI
+            guidance, actual eligibility follows Shopee&apos;s policy at the time of your order.
           </p>
         </div>
         <div>
           <h2 className="font-display text-xl text-ink">Order Cancellations</h2>
-          <p className="mt-2">[Pending client input.]</p>
+          <p className="mt-2">
+            Cancel or modify an order directly through Shopee before it ships. If you need help,
+            reach out at {siteConfig.contactEmail}.
+          </p>
         </div>
       </div>
     </Section>

@@ -1,68 +1,33 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { Button } from "./Button";
+import { useEffect } from "react";
 import { trackEvent } from "@/lib/analytics";
-import { useCart } from "@/lib/cart-context";
 import type { Product } from "@/data/products";
 
-export function ProductActions({ product }: { product: Product }) {
-  const { addItem } = useCart();
-  const router = useRouter();
-  const [quantity, setQuantity] = useState(1);
-  const [justAdded, setJustAdded] = useState(false);
+const base =
+  "inline-flex items-center justify-center rounded-full px-7 py-3 font-label text-base tracking-wider uppercase transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-cream";
 
+export function ProductActions({ product }: { product: Product }) {
   useEffect(() => {
     trackEvent("ViewContent", { content_ids: [product.slug], content_name: product.name });
   }, [product.slug, product.name]);
 
-  function handleAddToCart() {
-    addItem(product.slug, quantity);
-    trackEvent("AddToCart", {
+  function handleBuyOnShopee() {
+    trackEvent("InitiateCheckout", {
       content_ids: [product.slug],
       content_name: product.name,
-      quantity,
     });
-    setJustAdded(true);
-    setTimeout(() => setJustAdded(false), 1800);
-  }
-
-  function handleBuyNow() {
-    addItem(product.slug, quantity);
-    trackEvent("AddToCart", {
-      content_ids: [product.slug],
-      content_name: product.name,
-      quantity,
-    });
-    router.push("/checkout");
   }
 
   return (
-    <div className="flex flex-wrap items-center gap-4">
-      <div className="flex items-center rounded-full border border-ink/12">
-        <button
-          type="button"
-          aria-label="Decrease quantity"
-          className="px-3 py-2.5 text-ink/70 hover:text-ink"
-          onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-        >
-          −
-        </button>
-        <span className="min-w-6 text-center text-sm text-ink">{quantity}</span>
-        <button
-          type="button"
-          aria-label="Increase quantity"
-          className="px-3 py-2.5 text-ink/70 hover:text-ink"
-          onClick={() => setQuantity((q) => q + 1)}
-        >
-          +
-        </button>
-      </div>
-      <Button onClick={handleAddToCart}>{justAdded ? "Added ✓" : "Add to Cart"}</Button>
-      <Button onClick={handleBuyNow} variant="secondary">
-        Buy Now
-      </Button>
-    </div>
+    <a
+      href={product.shopeeUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      onClick={handleBuyOnShopee}
+      className={`${base} bg-navy text-cream hover:bg-navy-deep`}
+    >
+      Buy on Shopee
+    </a>
   );
 }

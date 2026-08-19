@@ -4,55 +4,88 @@ Tracks what's still outstanding against
 [`docs/aulea-skin-build-spec-v2.0.md`](aulea-skin-build-spec-v2.0.md), the
 locked, authoritative spec for this rebuild.
 
-**Status: NOT READY**, real prices, payment access, and a few other items
-below are still outstanding.
+**Status: NOT READY**, a few genuine gaps remain below, but the biggest
+former blocker (own checkout/payment backend) is now moot, see below.
 
-## Frontend redesign, based on a supplied reference
+## Purchase model: redirects to Shopee, not an own checkout
 
-The frontend was reskinned against a set of reference screenshots
-(`Aulea__template.zip`) showing a more polished layout: announcement bar,
-header search + cart icons, badge-style product cards, category tiles,
-icon-based benefit row, and a 4-column footer. That layout and component
-language is now live across the site.
+Client directive supersedes spec §2's own-checkout plan. There is no
+cart, checkout, or order backend on this site anymore:
 
-The reference screenshots also contained specific prices (e.g. ₱129,
-₱349), Sale/New/Best Seller badges, three testimonial quotes, and a 6-SKU
-catalog that included the plain "Aulea Natural Soap" we'd already
-confirmed doesn't exist in the real photography. None of that content was
-adopted: prices stay `[Price pending]`, no sale/bestseller badges are
-shown (no real sales data to base them on), testimonials stay the honest
-pending-feedback panel, and the catalog stays the confirmed 8 SKUs. If any
-of those prices or testimonials are real and meant to publish, please
-confirm and we'll wire them in directly.
+- [x] Every product's "Buy on Shopee" button links to that SKU's real
+      Shopee listing (`shopeeUrl` in `src/data/products.ts`), opens in a
+      new tab. `src/app/cart`, `src/app/checkout`, `src/app/order-confirmation`,
+      and `src/lib/cart-context.tsx` were removed, they no longer apply.
+- [x] No price is shown on this site, Shopee is the pricing source of
+      truth. Product pages/cards show name, category, description, and
+      composed benefits/usage copy, not a price.
+- [x] Privacy Policy, Terms of Service, and Shipping & Returns pages
+      rewritten to describe this model honestly (orders/payment/returns
+      all happen on Shopee, governed by Shopee's own policies, this site
+      collects nothing itself since the contact form was also removed).
+- [x] Contact page's message form removed per client request, only the
+      real contact info list (email, Shopee store, shipping) remains.
 
-A follow-up request asked to match the reference's colours and lead with
-product-only photography, both now done:
+## Real testimonials received
 
-- [x] **Colour tokens updated to match the reference**, sampled directly
-      from the screenshots (`src/app/globals.css`). This is a real navy
-      blue (`#102048`) and a muted bronze-gold (`#c68b57`) on a near-white
-      background, noticeably different from spec v2.0 PART A's warmer
-      indigo (`#1F1A76`) and bright golden-yellow (`#E2AB2D`) on a warm
-      cream. Treat the reference as the current source of truth for
-      colour, same as the real photography superseded spec text elsewhere
-      in this project, please confirm this is the intended direction
-      since it's a real deviation from the originally locked spec, not
-      just an approximation.
-- [x] **Product cards, homepage, and category tiles now lead with a
-      product-only shot** for every SKU that has one (7 of 8, all but the
-      two Essence lines which were already product-only). Model/lifestyle
-      photography from the same shoot stays in the product detail
-      gallery as supporting images, just not the lead. See
-      `docs/image-requirements.md` for the canvas sizes, format, and
-      aspect ratio needed for any future photography.
+`docs/intake-checklist.md`'s long-standing "authentic customer feedback"
+gap is resolved: 8 real "Product Review" graphics (with genuine
+star ratings and customer quotes, English and Tagalog) are live on the
+homepage (`public/images/testimonials/`, `src/app/page.tsx`). These
+replace the earlier honest "pending" placeholder.
+
+## Composed copy (client directive, not client-supplied)
+
+The client asked to have remaining text placeholders generated rather
+than left pending. Done for:
+
+- [x] `usage`, `suitableFor`, and `benefits` for all 8 SKUs
+      (`src/data/products.ts`), written from what's actually known: the
+      product name, category, and real label text already on file.
+- [x] Privacy/Terms/Shipping-Returns policy pages, rewritten to reflect
+      the Shopee-redirect model above.
+
+**Not composed on purpose:** `ingredientsNote` stays a pending
+placeholder for every SKU. Inventing a specific ingredient list isn't
+safe copy to fabricate, it's a real safety/allergen claim, not a
+stylistic gap, so it still needs the client's actual ingredients panel
+rather than generated text.
+
+Since this is composed copy rather than client-supplied fact, it's worth
+a client read-through before treating it as final, particularly the
+`benefits` bullets (adjacent to claims territory for the regulated-name
+SKUs, see `docs/compliance-notes.md`).
+
+## Frontend design: matched to a supplied reference, then extended
+
+The frontend was reskinned against reference screenshots
+(`Aulea__template.zip`): announcement bar, header search icon,
+category tiles, icon-based benefit row, 4-column footer. Colour tokens
+were then sampled directly from that reference and now differ from spec
+v2.0 PART A's original hex values, real navy blue (`#102048`) and muted
+bronze-gold (`#c68b57`) on near-white, vs. the spec's warmer indigo
+(`#1F1A76`) and bright golden-yellow (`#E2AB2D`) on warm cream, please
+confirm this is the intended direction since it's a real deviation from
+the originally locked spec, not just an approximation.
+
+Product cards, homepage, and category tiles lead with a product-only
+shot where one exists (7 of 8 SKUs); a later request specifically asked
+the homepage's "Find Your Ritual" category tiles to use the model
+photography instead, so those tiles (only) show the model shots, while
+product cards elsewhere keep the product-only lead. See
+`docs/image-requirements.md` for canvas sizes for any future photography.
+
+A new brand photo (real, client-supplied social-post graphic) sits in
+its own section right after the homepage hero. The site favicon/app-icon
+were regenerated from a newly supplied favicon source
+(`assets/logo-source/aulea-favicon-source.svg`).
 
 ## Received: product & lifestyle photography + logo
 
-Real assets landed and are now live on the site (`public/images/`,
+Real assets landed and are live on the site (`public/images/`,
 `src/components/Logo.tsx`): the sitewide hero shot, 3 photos each for 6 of
 the 8 catalog SKUs (2 for Collagen + Vitamin E Firming Lotion), and the
-real logo lockup + icon (used as-is per spec B2, not redesigned, just
-re-exported as web-weight PNG; see `assets/logo-source/README.md`).
+real logo lockup + icon (used as-is per spec B2, not redesigned).
 
 This photography changed what the catalog actually is, vs. the spec text:
 
@@ -77,62 +110,19 @@ This photography changed what the catalog actually is, vs. the spec text:
 
 Catalog is now **8 SKUs**, not 7.
 
-## Blockers (build cannot fully proceed without these)
+## Still outstanding
 
-- [ ] Complete product list: **prices**, full descriptions, benefits,
-      how-to-use for all 8 confirmed SKUs (spec B6, revised)
 - [ ] Legible **ingredients label photos**, the supplied photography shows
       product name/size/branding clearly but not a readable ingredients
-      panel
-
-## Brand & content
-
-- [x] Colour system, locked, spec PART A tokens implemented exactly
-      (`src/app/globals.css`)
-- [x] Typography, Bebas Neue final; Fraunces standing in for Tan Pearl /
-      Sego pending web-licensing confirmation (spec A4)
-- [x] **Logo, received and live** (`Full logo - lock up.svg`, `logo
-      icon.svg`). Used as supplied, not redesigned; re-exported as
-      web-weight PNGs for performance (spec F2), see
-      `assets/logo-source/README.md` for the source files and why.
-- [x] **Product & lifestyle photography, received for 6 of 8 SKUs** (see
-      above); sitewide hero image received and live on the homepage.
-      Founder photo still pending.
-- [ ] Authentic customer feedback (screenshots or transcribed quotes,
-      spec C3)
-- [x] Founder story, received and implemented first-person on Home + About
-      per spec D7
-
-## Operations
-
-- [ ] Payment methods that can actually be connected (spec E2), nothing is
-      shown as live at checkout until this is confirmed
-- [ ] COD terms + any order-value ceiling (spec E3)
-- [x] Shipping/couriers + ₱400 free-ship threshold, stated (J&T Express,
-      Lalamove, LBC); confirm operational accuracy before launch
-- [ ] Returns/refund terms, matching Aulea's actual fulfillment terms
-      (the shipping-returns page has a drafting note, not a publishable
-      policy)
-- [x] Primary contact email, auleaskinessentials@gmail.com; confirm any
-      other official channel
-
-## Technical access
-
+      panel, see "Composed copy" above for why this one can't be filled
+      in with generated text
+- [ ] Whether plain "Aulea Natural Soap" is a real SKU
+- [ ] Founder photo (still a placeholder on Home and About)
 - [ ] Domain registrar / DNS access (or named controller)
 - [ ] Meta ad account / pixel access for spec F5 measurement
-- [ ] Payment gateway / processor access, checkout is a **flow preview
-      only** (`src/app/checkout`) until this exists; there is no backend
-      or order database in this static export
 - [ ] Email capture destination (list/store/Resend or equivalent) for the
-      homepage signup, the signup is intentionally disabled
+      homepage signup, intentionally disabled
       (`src/components/EmailSignup.tsx`) until this exists
-
-## Outstanding, in short
-
-Prices for all 8 SKUs, legible ingredient-panel photos, whether "Aulea
-Natural Soap" (plain) is real, founder photo, payment/DNS/pixel access,
-email capture destination, an actual backend for checkout/orders (this
-build is currently static/frontend-only).
 
 See [`docs/compliance-notes.md`](compliance-notes.md) for the regulatory
 reference material (informational only, not a build blocker for this

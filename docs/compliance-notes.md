@@ -35,5 +35,12 @@ just scent names.
   draft. Opened cosmetics are commonly non-returnable on hygiene grounds
   under RA 7394 / DTI rules, but the actual policy should reflect
   Aulea's real fulfillment terms whenever those are supplied.
-- Testimonials: only genuine, client-supplied feedback is used. No
-  fabricated names, ratings, before/after, or video.
+- Testimonials: 8 real, client-supplied "Product Review" graphics are
+  live on the homepage (`public/images/testimonials/`). No fabricated
+  names, ratings, before/after, or video content is used, and none has
+  been added beyond what was actually supplied.
+- Benefits copy: `benefits` in `src/data/products.ts` is composed
+  marketing copy (client directive), written from the product name,
+  category, and real label text already on file, not invented efficacy
+  claims. Worth a client read-through given several SKUs are already
+  regulated by name above.

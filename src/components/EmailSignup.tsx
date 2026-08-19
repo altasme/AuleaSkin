@@ -2,8 +2,7 @@
 // forbids implying a newsletter that isn't wired ("no dead field, no
 // implied newsletter that isn't wired"). No capture destination (list /
 // store / Resend or equivalent) has been named yet, so this renders as
-// visibly disabled rather than as a form that silently goes nowhere,
-// same pattern as the disabled checkout button in the cart.
+// visibly disabled rather than as a form that silently goes nowhere.
 
 export function EmailSignup() {
   return (

@@ -18,6 +18,11 @@ const categoryCopy: Record<string, string> = {
   Fragrance: "Eau de Parfum in scents for him and her.",
 };
 
+const testimonialImages = Array.from(
+  { length: 8 },
+  (_, i) => `/images/testimonials/review-${i + 1}.webp`
+);
+
 const whyAulea = [
   {
     icon: HeartIcon,
@@ -78,6 +83,19 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Brand moment: real social-post graphic supplied by the client. */}
+      <Section>
+        <div className="relative mx-auto aspect-[4/5] max-w-md overflow-hidden rounded-md">
+          <Image
+            src="/images/brand/shelf-social-moment.webp"
+            alt="Auléa Skin products, a moment from Aulea's social content"
+            fill
+            sizes="(min-width: 768px) 400px, 90vw"
+            className="object-cover"
+          />
+        </div>
+      </Section>
+
       {/* Brand statement */}
       <Section className="text-center">
         <p className="mx-auto max-w-2xl font-display text-2xl text-ink sm:text-3xl">
@@ -117,7 +135,7 @@ export default function Home() {
               >
                 {rep && (
                   <Image
-                    src={rep.images[0]}
+                    src={rep.images[1] ?? rep.images[0]}
                     alt={category}
                     fill
                     sizes="(min-width: 1024px) 33vw, 50vw"
@@ -227,20 +245,26 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Testimonials: honest empty state, no fabricated quotes (spec C3) */}
+      {/* Testimonials: real customer review graphics supplied by the client (spec C3), no invented quotes. */}
       <Section>
         <SectionHeading
           align="center"
           eyebrow="From Our Customers"
           title="Real feedback, in their words"
-          description="Aulea's previous social pages were lost and are being recovered, so history here is limited by design. Nothing below is invented (spec C3)."
+          description="Genuine reviews shared by Aulea customers."
         />
-        <div className="mx-auto max-w-xl rounded-sm border border-ink/12 bg-cream-deep p-8 text-center">
-          <p className="text-ink/70 leading-relaxed">
-            [Genuine customer feedback pending from the client, see docs/intake-checklist.md.
-            Only real, supplied feedback (labeled &ldquo;Verified customer feedback&rdquo; where
-            identity is unavailable) will be published here.]
-          </p>
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+          {testimonialImages.map((src, i) => (
+            <div key={src} className="relative aspect-square overflow-hidden rounded-md bg-white">
+              <Image
+                src={src}
+                alt={`Auléa Skin customer review ${i + 1}`}
+                fill
+                sizes="(min-width: 1024px) 25vw, 50vw"
+                className="object-cover"
+              />
+            </div>
+          ))}
         </div>
       </Section>
 

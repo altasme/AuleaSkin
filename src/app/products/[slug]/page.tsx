@@ -64,7 +64,6 @@ export default async function ProductPage({
               {product.category} · {product.size}
             </p>
             <h1 className="mt-2 font-display text-3xl text-ink sm:text-4xl">{product.name}</h1>
-            <p className="mt-3 text-lg text-ink/70">{product.priceDisplay}</p>
 
             {product.variants && (
               <div className="mt-4">
@@ -82,8 +81,7 @@ export default async function ProductPage({
                   ))}
                 </div>
                 <p className="mt-2 text-xs text-ink/70">
-                  Scent selection at checkout isn&apos;t wired yet, noted here as available
-                  options only.
+                  Pick your scent when you buy on Shopee.
                 </p>
               </div>
             )}
@@ -95,15 +93,19 @@ export default async function ProductPage({
             </div>
 
             <p className="mt-4 text-xs text-ink/70">
-              Free shipping on orders ₱{siteConfig.freeShippingThreshold}+ (subject to courier
-              arrangement). Ships nationwide via {siteConfig.couriers.join(", ")}.
+              Purchases complete on Shopee. Free shipping on orders ₱{siteConfig.freeShippingThreshold}
+              + (subject to courier arrangement). Ships nationwide via {siteConfig.couriers.join(", ")}.
             </p>
 
             <dl className="mt-10 space-y-6 border-t border-ink/12 pt-6">
               <div>
                 <dt className="text-xs font-medium uppercase tracking-[0.1em] text-ink/60">Benefits</dt>
                 <dd className="mt-2 text-sm leading-relaxed text-ink/70">
-                  [Full benefits copy pending client input.]
+                  <ul className="list-disc space-y-1 pl-4">
+                    {product.benefits.map((benefit) => (
+                      <li key={benefit}>{benefit}</li>
+                    ))}
+                  </ul>
                 </dd>
               </div>
               <div>
@@ -129,15 +131,6 @@ export default async function ProductPage({
             </dl>
           </div>
         </div>
-      </Section>
-
-      <Section className="bg-cream-deep">
-        <h2 className="font-display text-xl text-ink mb-4">Customer feedback</h2>
-        <p className="max-w-xl text-sm text-ink/70 leading-relaxed">
-          No feedback for this product has been supplied yet. Aulea&apos;s prior social pages
-          are being recovered, only authentic, client-supplied feedback will appear here (no
-          invented reviews).
-        </p>
       </Section>
 
       {related.length > 0 && (

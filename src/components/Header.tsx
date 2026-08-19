@@ -3,15 +3,13 @@
 import Link from "next/link";
 import { useState } from "react";
 import { siteConfig } from "@/lib/site-config";
-import { useCart } from "@/lib/cart-context";
 import { Logo } from "./Logo";
-import { BagIcon, SearchIcon } from "./Icons";
+import { SearchIcon } from "./Icons";
 import { SearchOverlay } from "./SearchOverlay";
 
 export function Header() {
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const { itemCount } = useCart();
 
   return (
     <>
@@ -46,18 +44,6 @@ export function Header() {
             >
               <SearchIcon />
             </button>
-            <Link
-              href="/cart"
-              aria-label={`Cart (${itemCount})`}
-              className="relative flex items-center text-ink/70 transition-colors hover:text-ink"
-            >
-              <BagIcon />
-              {itemCount > 0 && (
-                <span className="absolute -right-2 -top-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-navy px-1 text-[0.6rem] font-medium text-cream">
-                  {itemCount}
-                </span>
-              )}
-            </Link>
             <button
               type="button"
               aria-label="Toggle menu"

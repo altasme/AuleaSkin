@@ -8,9 +8,9 @@ export default function TermsPage() {
   return (
     <Section className="pt-14">
       <SectionHeading
-        eyebrow="Policy, Draft"
+        eyebrow="Policy"
         title="Terms of Service"
-        description="Draft skeleton only. Confirm legal business name, registration details, and terms with the client before publishing."
+        description="Composed from how this site actually works today; confirm legal business name and registration details with the client before treating as final."
       />
       <div className="max-w-2xl space-y-6 text-ink/70 leading-relaxed">
         <div>
@@ -23,20 +23,27 @@ export default function TermsPage() {
         <div>
           <h2 className="font-display text-xl text-ink">Orders & Payment</h2>
           <p className="mt-2">
-            [Pending: Aulea&apos;s own checkout is the confirmed model (spec §2); terms here
-            depend on which payment methods and COD terms are finalized (spec E2–E3).]
+            This website is a catalog, not a checkout. Every order and payment is completed on
+            Shopee through the linked product listing, and is governed by Shopee&apos;s own
+            terms of service, not this website&apos;s. Aulea Skin does not process or store
+            payment information.
           </p>
         </div>
         <div>
           <h2 className="font-display text-xl text-ink">Product Information</h2>
           <p className="mt-2">
-            We aim for accuracy but do not guarantee that product descriptions are error-free.
-            [Refine with client input.]
+            We aim for accuracy but do not guarantee that product descriptions on this site are
+            error-free. The listing on Shopee is the authoritative source for price, stock, and
+            variant availability at the time of your order.
           </p>
         </div>
         <div>
           <h2 className="font-display text-xl text-ink">Limitation of Liability</h2>
-          <p className="mt-2">[Pending legal review.]</p>
+          <p className="mt-2">
+            Aulea Skin isn&apos;t responsible for issues arising from the order or payment
+            process itself, that&apos;s handled by Shopee under its own terms. For anything
+            related to the products themselves, reach out at {siteConfig.contactEmail}.
+          </p>
         </div>
       </div>
     </Section>

@@ -87,7 +87,7 @@ export function Footer() {
               </li>
               <li className="flex items-start gap-2">
                 <WalletIcon className="mt-0.5 h-4 w-4 shrink-0 text-cream/50" />
-                <span>{siteConfig.paymentMethods.join(", ")}</span>
+                <span>Pay via Shopee: {siteConfig.paymentMethods.join(", ")}</span>
               </li>
             </ul>
           </div>
@@ -96,6 +96,26 @@ export function Footer() {
         <div className="mt-12 border-t border-cream/20 pt-6 text-xs text-cream/60">
           <p>
             © {new Date().getFullYear()} {siteConfig.legalName}. All rights reserved.
+          </p>
+          <p className="mt-2">
+            Website and hosting powered by{" "}
+            <a
+              href="https://altasme.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline underline-offset-4 hover:text-cream"
+            >
+              Altaventures
+            </a>{" "}
+            |{" "}
+            <a
+              href="https://altasme.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline underline-offset-4 hover:text-cream"
+            >
+              Get your business website for free!
+            </a>
           </p>
         </div>
       </div>

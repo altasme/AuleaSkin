@@ -1,50 +1,48 @@
 # Aulea Skin
 
-Aulea Skin's own e-commerce storefront, built following
+Aulea Skin's product catalog and brand site, built following
 [`docs/aulea-skin-build-spec-v2.0.md`](docs/aulea-skin-build-spec-v2.0.md),
-**the locked, authoritative spec for this project.** Its design system
-(PART A) is explicitly locked: exact color tokens, named fonts, button
-roles. Earlier spec versions and an experimental rose/sage palette from a
-prior session are superseded; don't follow them where they conflict with
-v2.0.
+originally the locked spec for this project. Two client directives since
+then have superseded parts of it (documented inline, not silently): the
+purchase model moved from an own-checkout build to redirecting each
+product to its real Shopee listing, and colours were re-matched to a
+later supplied reference design. Earlier spec versions and an
+experimental rose/sage palette from a prior session are also superseded.
 
-## Project status: intake NOT READY (spec G3/H1)
+## Project status: intake NOT READY
 
-Real assets have landed: the locked colour/type system, founder story (now
-written first-person on Home + About), the real logo, a sitewide hero
-photo, and product photography for 6 of the catalog's 8 SKUs. What's still
-blocking a launch-ready build: **prices**, full product
-descriptions/benefits, legible ingredient-panel photos, a founder photo,
-and payment/DNS/pixel access. See
+Real assets have landed: the colour/type system, founder story (written
+first-person on Home + About), the real logo, a sitewide hero photo,
+product photography for 6 of the catalog's 8 SKUs, 8 real customer
+testimonial graphics, and real Shopee listing links for all 8 SKUs. What's
+still genuinely missing: legible ingredient-panel photos (needed before
+publishing any ingredient list, see `docs/compliance-notes.md`), a founder
+photo, and DNS/pixel access. See
 [`docs/intake-checklist.md`](docs/intake-checklist.md) for the full list,
-including two things the photography itself changed: the sunscreen label
-reads **SPF 50**, not the SPF 30 in the spec text, and two SKUs not in any
-spec version (**Auléa Essence for Men/Women**, a fragrance line) turned up
-in the supplied photos.
+including what the real photography and client directives changed along
+the way (sunscreen is SPF 50 not SPF 30, two Essence SKUs found in
+photography, purchase model, composed copy, colour deviation).
 
-- **What's here:** the design system, colours matched to a client-supplied
-  reference design and sampled directly from it (Navy `#102048` / Navy
-  Deep `#0A1730` / Gold `#C68B57` / Cream `#FBFAF8` / Cream Deep `#F5F2EC`
-  / Mist `#F0EFEB` / Ink `#16223D`, superseding spec v2.0 PART A's warmer
-  indigo/gold/cream values, flagged in `docs/intake-checklist.md` for
-  confirmation), Fraunces/Bebas Neue/Mulish typography,
-  the real logo (`public/images/logo/`, source in `assets/logo-source/`),
-  real product photography wired into every product card/gallery/cart/
-  checkout thumbnail, the real first-person founder story, the confirmed
-  8-SKU catalog with real label-sourced descriptions, a working
-  client-side cart, and the full customer journey (Home → Shop → Product →
-  Cart → Checkout preview → Order Confirmation template → Contact).
-- **What's not here:** real prices or product copy; a founder photo; a
-  wired payment/COD checkout (own checkout is the confirmed model, spec §2,
-  what's missing is the implementation: this is a static export with no
-  backend, so `/checkout` is a reachable UI preview with submission
-  disabled, and `/order-confirmation` is a static template, not a real
-  receipt); live analytics/pixel IDs; before/after or video testimonial
-  content (no fabricated reviews or results, spec C1/C3).
+- **What's here:** the design system with colours matched to a
+  client-supplied reference and sampled directly from it (Navy `#102048` /
+  Navy Deep `#0A1730` / Gold `#C68B57` / Cream `#FBFAF8` / Cream Deep
+  `#F5F2EC` / Mist `#F0EFEB` / Ink `#16223D`, flagged in
+  `docs/intake-checklist.md` for confirmation since it deviates from spec
+  v2.0 PART A), Fraunces/Bebas Neue/Mulish typography, the real logo
+  (`public/images/logo/`, source in `assets/logo-source/`), real product
+  photography wired into every product card/gallery, the real first-person
+  founder story, the confirmed 8-SKU catalog with composed
+  benefits/usage/description copy, 8 real customer testimonials on the
+  homepage, and a "Buy on Shopee" link on every product that opens its
+  real Shopee listing, there is no cart or checkout on this site.
+- **What's not here:** an ingredients list for any SKU (composing one
+  would mean fabricating a safety-relevant claim, so it stays pending
+  until the client supplies a legible label); a founder photo; live
+  analytics/pixel IDs; whether the plain "Aulea Natural Soap" SKU is real.
 
-Every placeholder in the codebase is marked with `[bracketed text]` or a
-🖼️ placeholder box, nothing invented (spec C1). Regulatory reference
-material (informational only, not a build gate for this project) is in
+Every remaining placeholder is marked with `[bracketed text]` or a 🖼️
+placeholder box. Regulatory reference material (informational only, not a
+build gate for this project) is in
 [`docs/compliance-notes.md`](docs/compliance-notes.md).
 
 ## Tech stack
@@ -62,26 +60,25 @@ npm run dev
 Open [http://localhost:3000](http://localhost:3000).
 
 Copy `.env.example` to `.env.local` and fill in analytics/pixel IDs once
-ad account access is available (see `docs/intake-checklist.md`, Technical
-Access), nothing in `src/lib/analytics.tsx` fires without them.
+ad account access is available (see `docs/intake-checklist.md`), nothing
+in `src/lib/analytics.tsx` fires without them.
 
 ## Structure
 
 ```
 src/
-  app/                 Pages (App Router): /, about, products, products/[slug], cart,
-                        checkout (preview), order-confirmation (template), contact, policies
+  app/                 Pages (App Router): /, about, products, products/[slug], contact, policies
   components/          Shared UI (Header, Footer, Logo, ProductCard, ProductActions,
-                        EmailSignup, ContactForm, Button, Section, Placeholder)
-  data/products.ts     8 confirmed SKUs, real names/categories/sizes/images/descriptions,
-                        price pending
-public/images/         Real product photography + logo (product/, hero/, logo/)
-assets/logo-source/    Original logo export files, kept for reference, see its README
+                        EmailSignup, Button, Section, Placeholder, SearchOverlay, Icons)
+  data/products.ts     8 confirmed SKUs: names/categories/sizes/images/descriptions/benefits/
+                        usage (composed), real Shopee listing links, no price (Shopee is the
+                        pricing source of truth)
+public/images/         Real product photography, logo, brand photo, testimonials
+assets/logo-source/    Original logo/favicon export files, kept for reference, see its README
   lib/site-config.ts   Real business info (email, Shopee link, tagline, nav) + genuine gaps
-  lib/cart-context.tsx Client-side cart (useSyncExternalStore + localStorage)
   lib/analytics.tsx    GA4 + Meta Pixel/CAPI scaffolding (spec F5)
 docs/
-  aulea-skin-build-spec-v2.0.md   Authoritative, locked spec for this project
+  aulea-skin-build-spec-v2.0.md   Originally the locked spec, since partly superseded (see README/intake)
   aulea-skin-phase1-spec-v1.4.md  Superseded prior spec version, kept for history
   altaventures-phase1-spec.md     Generic process template, superseded for content
   intake-checklist.md             Build-ready checklist, current gate status
