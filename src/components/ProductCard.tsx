@@ -18,8 +18,12 @@ export function ProductCard({ product }: { product: Product }) {
         />
       </div>
       <div className="mt-4">
-        <h3 className="font-display text-lg text-ink">{product.name}</h3>
-        <p className="mt-1 text-sm text-ink/70">{product.shortDescription}</p>
+        <h3 className="min-h-[3.5rem] font-display text-lg leading-snug text-ink line-clamp-2">
+          {product.name}
+        </h3>
+        <p className="mt-1 min-h-[2.5rem] text-sm text-ink/70 line-clamp-2">
+          {product.shortDescription}
+        </p>
       </div>
     </Link>
   );

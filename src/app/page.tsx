@@ -83,19 +83,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Brand moment: real social-post graphic supplied by the client. */}
-      <Section>
-        <div className="relative mx-auto aspect-[4/5] max-w-md overflow-hidden rounded-md">
-          <Image
-            src="/images/brand/shelf-social-moment.webp"
-            alt="Auléa Skin products, a moment from Aulea's social content"
-            fill
-            sizes="(min-width: 768px) 400px, 90vw"
-            className="object-cover"
-          />
-        </div>
-      </Section>
-
       {/* Brand statement */}
       <Section className="text-center">
         <p className="mx-auto max-w-2xl font-display text-2xl text-ink sm:text-3xl">
@@ -201,8 +188,8 @@ export default function Home() {
           </div>
           <div className="relative aspect-[4/5] overflow-hidden rounded-md bg-white">
             <Image
-              src="/images/products/ultimate-whitening-natural-soap/secondary-1.webp"
-              alt="Aulea Skin product in everyday use"
+              src="/images/brand/shelf-social-moment.webp"
+              alt="Auléa Skin products, a moment from Aulea's social content"
               fill
               sizes="(min-width: 1024px) 50vw, 100vw"
               className="object-cover"

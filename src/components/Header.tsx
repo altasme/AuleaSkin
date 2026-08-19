@@ -20,7 +20,7 @@ export function Header() {
       <header className="sticky top-0 z-40 border-b border-ink/12 bg-cream/95 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4 sm:px-10 lg:px-16">
           <Link href="/" aria-label={siteConfig.businessName}>
-            <Logo />
+            <Logo height={44} />
           </Link>
 
           <nav className="hidden gap-8 md:flex">

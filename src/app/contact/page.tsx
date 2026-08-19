@@ -66,10 +66,6 @@ export default function ContactPage() {
               </div>
             </li>
           </ul>
-          <p className="mt-8 text-sm text-ink/70">
-            Aulea&apos;s previous social pages are being recovered, links will be added here
-            once accounts are back, rather than guessed at (spec §24).
-          </p>
         </div>
       </Section>
     </>
