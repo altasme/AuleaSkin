@@ -4,13 +4,16 @@ import { siteConfig } from "@/lib/site-config";
 
 export const metadata: Metadata = { title: "Terms of Service" };
 
+// Composed from how this site actually operates today. Confirm the
+// legal business name and registration details with the client before
+// treating this as final.
 export default function TermsPage() {
   return (
     <Section className="pt-14">
       <SectionHeading
         eyebrow="Policy"
         title="Terms of Service"
-        description="Composed from how this site actually works today; confirm legal business name and registration details with the client before treating as final."
+        description="The terms that govern your use of the Auléa Skin website."
       />
       <div className="max-w-2xl space-y-6 text-ink/70 leading-relaxed">
         <div>

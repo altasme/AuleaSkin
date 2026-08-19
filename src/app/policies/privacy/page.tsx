@@ -4,13 +4,16 @@ import { siteConfig } from "@/lib/site-config";
 
 export const metadata: Metadata = { title: "Privacy Policy" };
 
+// Composed from how this site actually operates today (no forms, no
+// checkout, Shopee-fulfilled). Legal should confirm this against Data
+// Privacy Act (RA 10173) requirements before it's treated as final.
 export default function PrivacyPage() {
   return (
     <Section className="pt-14">
       <SectionHeading
         eyebrow="Policy"
         title="Privacy Policy"
-        description="Composed from how this site actually works today; confirm against Data Privacy Act (RA 10173) requirements before treating as final."
+        description="How Auléa Skin and our partners handle information when you visit this site or shop with us on Shopee."
       />
       <div className="max-w-2xl space-y-6 text-ink/70 leading-relaxed">
         <div>
@@ -27,7 +30,7 @@ export default function PrivacyPage() {
           <p className="mt-2">
             Once configured, this site may use Google Analytics and Meta Pixel to understand
             traffic and improve the browsing experience (standard device/browsing data, not
-            personal order information). See .env.example for what&apos;s wired and pending.
+            personal order information).
           </p>
         </div>
         <div>

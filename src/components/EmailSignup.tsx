@@ -1,8 +1,6 @@
-// Spec D2 lists an email signup homepage section; spec F5 explicitly
-// forbids implying a newsletter that isn't wired ("no dead field, no
-// implied newsletter that isn't wired"). No capture destination (list /
-// store / Resend or equivalent) has been named yet, so this renders as
-// visibly disabled rather than as a form that silently goes nowhere.
+// No capture destination (list / store / Resend or equivalent) is wired
+// up yet, so this renders as visibly disabled rather than as a form
+// that silently goes nowhere.
 
 export function EmailSignup() {
   return (
@@ -24,8 +22,7 @@ export function EmailSignup() {
         </button>
       </div>
       <p className="mt-3 text-xs text-ink/70 leading-relaxed">
-        Signup isn&apos;t wired to a real list yet, spec F5 requires a named capture
-        destination before this goes live. See docs/intake-checklist.md.
+        Sign-up is launching soon, check back shortly.
       </p>
     </div>
   );

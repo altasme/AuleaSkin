@@ -25,10 +25,10 @@
 // `usage`, `suitableFor`, and `benefits` are composed marketing copy
 // (client asked for placeholders to be filled in), written from what's
 // actually known: the product name, category, and real label text.
-// `ingredientsNote` stays pending on purpose: inventing a specific
-// ingredient list isn't safe copy to fabricate (allergens, actual
-// formulation), so that one still needs the client's real ingredients
-// panel rather than composed text.
+// `ingredientsNote` is left as "coming soon" on purpose: inventing a
+// specific ingredient list isn't safe copy to fabricate (allergens,
+// actual formulation), so it still needs the client's real ingredients
+// panel before it can say more than that.
 
 export type Product = {
   slug: string;
@@ -57,8 +57,7 @@ export const products: Product[] = [
       "A broad SPF 50 sunscreen formulated with Alpha Arbutin, a brightening ingredient, as shown on the product label. Daily sun protection with a lightweight finish that fits into any routine.",
     usage:
       "Apply generously as the last step of your morning routine, after moisturizer. Reapply every 2 to 3 hours with sun exposure, or after swimming or sweating.",
-    ingredientsNote:
-      "[Full ingredient list pending, a legible ingredients panel is still needed from the client.]",
+    ingredientsNote: "Full ingredient list coming soon.",
     suitableFor: "All skin types, including sensitive skin. A daily essential for anyone spending time outdoors.",
     benefits: [
       "Broad SPF 50 sun protection",
@@ -83,8 +82,7 @@ export const products: Product[] = [
       "An organic Vitamin C serum, as labeled on the product packaging. A brightening addition to any skincare routine.",
     usage:
       "Apply 2 to 3 drops to clean, dry skin every morning before moisturizer and sunscreen. Patch test before first use.",
-    ingredientsNote:
-      "[Full ingredient list pending, a legible ingredients panel is still needed from the client.]",
+    ingredientsNote: "Full ingredient list coming soon.",
     suitableFor: "All skin types looking to brighten and even out their complexion.",
     benefits: [
       "Organic Vitamin C formula",
@@ -108,8 +106,7 @@ export const products: Product[] = [
     description:
       "Removes dirt and impurities, minimizing pores and brightening dull skin, as stated on the product label. A daily facial wash built around niacinamide.",
     usage: "Massage a small amount onto damp skin morning and night, then rinse thoroughly with lukewarm water.",
-    ingredientsNote:
-      "[Full ingredient list pending, a legible ingredients panel is still needed from the client.]",
+    ingredientsNote: "Full ingredient list coming soon.",
     suitableFor: "All skin types, including oily and combination skin.",
     benefits: [
       "Removes dirt, impurities, and excess oil",
@@ -133,8 +130,7 @@ export const products: Product[] = [
     description:
       "For firmer, smoother, and healthier-looking skin, as stated on the product label. A daily lotion built around collagen and Vitamin E.",
     usage: "Apply to clean skin morning and night, massaging gently until fully absorbed.",
-    ingredientsNote:
-      "[Full ingredient list pending, a legible ingredients panel is still needed from the client.]",
+    ingredientsNote: "Full ingredient list coming soon.",
     suitableFor: "All skin types looking for extra firmness and hydration.",
     benefits: [
       "Collagen + Vitamin E formula",
@@ -157,8 +153,7 @@ export const products: Product[] = [
     description:
       "A natural bar soap made for that coveted glass skin glow. Gentle enough for daily use, as part of a full-body routine.",
     usage: "Lather with water and massage over face and body. Rinse thoroughly. Use daily as part of your cleansing routine.",
-    ingredientsNote:
-      "[Full ingredient list pending, a legible ingredients panel is still needed from the client.]",
+    ingredientsNote: "Full ingredient list coming soon.",
     suitableFor: "All skin types looking for a gentle, everyday bar soap.",
     benefits: [
       "Natural bar soap",
@@ -182,8 +177,7 @@ export const products: Product[] = [
     description:
       "A natural bar soap formulated for whitening, as named on the product label. Aulea's bestselling soap.",
     usage: "Lather with water and massage over face and body. Rinse thoroughly. Use daily, morning and night.",
-    ingredientsNote:
-      "[Full ingredient list pending, a legible ingredients panel is still needed from the client.]",
+    ingredientsNote: "Full ingredient list coming soon.",
     suitableFor: "All skin types looking for an everyday whitening bar soap.",
     benefits: [
       "Natural bar soap formulated for whitening",
@@ -207,8 +201,7 @@ export const products: Product[] = [
     description:
       "A men's Eau de Parfum line, found in the supplied product photography and not in any earlier spec version. Scent notes and story pending client input; nothing about fragrance composition is invented here.",
     usage: "Spray onto pulse points, such as the wrists and neck, after showering for a longer-lasting scent.",
-    ingredientsNote:
-      "[Full ingredient list pending, a legible ingredients panel is still needed from the client.]",
+    ingredientsNote: "Full ingredient list coming soon.",
     suitableFor: "Fragrance, not a skincare product.",
     benefits: [
       "50 mL Eau de Parfum",
@@ -233,8 +226,7 @@ export const products: Product[] = [
     description:
       "A women's Eau de Parfum line, found in the supplied product photography and not in any earlier spec version. Scent notes and story pending client input; nothing about fragrance composition is invented here.",
     usage: "Spray onto pulse points, such as the wrists and neck, after showering for a longer-lasting scent.",
-    ingredientsNote:
-      "[Full ingredient list pending, a legible ingredients panel is still needed from the client.]",
+    ingredientsNote: "Full ingredient list coming soon.",
     suitableFor: "Fragrance, not a skincare product.",
     benefits: [
       "50 mL Eau de Parfum",

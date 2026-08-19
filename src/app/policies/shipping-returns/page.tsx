@@ -4,13 +4,16 @@ import { siteConfig } from "@/lib/site-config";
 
 export const metadata: Metadata = { title: "Shipping & Returns" };
 
+// Composed from how orders actually flow today (fulfilled via Shopee).
+// Confirm against Aulea's real fulfillment terms before treating as
+// final; see docs/compliance-notes.md for cosmetics-specific context.
 export default function ShippingReturnsPage() {
   return (
     <Section className="pt-14">
       <SectionHeading
         eyebrow="Policy"
         title="Shipping & Returns"
-        description="Composed from how orders actually flow today (via Shopee); confirm against Aulea's real fulfillment terms before treating as final, see docs/compliance-notes.md for cosmetics-specific context."
+        description="What to expect for delivery, payment, and returns when you order Auléa Skin products through Shopee."
       />
       <div className="max-w-2xl space-y-6 text-ink/70 leading-relaxed">
         <div>

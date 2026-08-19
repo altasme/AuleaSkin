@@ -12,15 +12,6 @@ export function SearchIcon({ className = "h-5 w-5" }: IconProps) {
   );
 }
 
-export function BagIcon({ className = "h-5 w-5" }: IconProps) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className={className} aria-hidden="true">
-      <path d="M6 8h12l1 13H5L6 8Z" strokeLinejoin="round" />
-      <path d="M9 8V6a3 3 0 0 1 6 0v2" strokeLinecap="round" />
-    </svg>
-  );
-}
-
 export function CloseIcon({ className = "h-5 w-5" }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className={className} aria-hidden="true">
@@ -41,8 +32,10 @@ export function MailIcon({ className = "h-5 w-5" }: IconProps) {
 export function StoreIcon({ className = "h-5 w-5" }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className={className} aria-hidden="true">
-      <path d="M6 8h12l1 13H5L6 8Z" strokeLinejoin="round" />
-      <path d="M9 8V6a3 3 0 0 1 6 0v2" strokeLinecap="round" />
+      <path d="M4 10.5V20a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-9.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M3 10.5 4.6 4.8A1 1 0 0 1 5.56 4h12.88a1 1 0 0 1 .96.8l1.6 5.7" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M3 10.5a2.25 2.25 0 0 0 4.5 0 2.25 2.25 0 0 0 4.5 0 2.25 2.25 0 0 0 4.5 0 2.25 2.25 0 0 0 4.5 0" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M10 21v-5.5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1V21" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -54,14 +47,6 @@ export function TruckIcon({ className = "h-5 w-5" }: IconProps) {
       <path d="M14 10h4l3 3v4h-7z" strokeLinejoin="round" />
       <circle cx="7.5" cy="18" r="1.5" />
       <circle cx="17.5" cy="18" r="1.5" />
-    </svg>
-  );
-}
-
-export function ShieldIcon({ className = "h-5 w-5" }: IconProps) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className={className} aria-hidden="true">
-      <path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3Z" strokeLinejoin="round" />
     </svg>
   );
 }
