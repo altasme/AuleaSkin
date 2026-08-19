@@ -7,6 +7,24 @@ locked, authoritative spec for this rebuild.
 **Status: NOT READY**, real prices, payment access, and a few other items
 below are still outstanding.
 
+## Frontend redesign, based on a supplied reference
+
+The frontend was reskinned against a set of reference screenshots
+(`Aulea__template.zip`) showing a more polished layout: announcement bar,
+header search + cart icons, badge-style product cards, category tiles,
+icon-based benefit row, and a 4-column footer. That layout and component
+language is now live across the site.
+
+The reference screenshots also contained specific prices (e.g. ₱129,
+₱349), Sale/New/Best Seller badges, three testimonial quotes, and a 6-SKU
+catalog that included the plain "Aulea Natural Soap" we'd already
+confirmed doesn't exist in the real photography. None of that content was
+adopted: prices stay `[Price pending]`, no sale/bestseller badges are
+shown (no real sales data to base them on), testimonials stay the honest
+pending-feedback panel, and the catalog stays the confirmed 8 SKUs. If any
+of those prices or testimonials are real and meant to publish, please
+confirm and we'll wire them in directly.
+
 ## Received: product & lifestyle photography + logo
 
 Real assets landed and are now live on the site (`public/images/`,

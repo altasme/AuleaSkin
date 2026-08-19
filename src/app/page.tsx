@@ -5,44 +5,67 @@ import { Placeholder } from "@/components/Placeholder";
 import { ProductCard } from "@/components/ProductCard";
 import { Section, SectionHeading } from "@/components/Section";
 import { EmailSignup } from "@/components/EmailSignup";
-import { products, categories } from "@/data/products";
+import { ArrowRightIcon, HeartIcon, SparkleIcon, TruckIcon, WalletIcon } from "@/components/Icons";
+import { products, categories, getProductsByCategory } from "@/data/products";
 import { siteConfig } from "@/lib/site-config";
 
-const routineSteps = [
-  { step: "Cleanse", slug: "niacinamide-facial-wash" },
-  { step: "Treat", slug: "organic-vitamin-c-serum" },
-  { step: "Hydrate", slug: "collagen-vitamin-e-firming-lotion" },
-  { step: "Protect", slug: "sunscreen-spf-50" },
+const categoryCopy: Record<string, string> = {
+  "Sun Care": "Daily sun protection for your routine.",
+  Serums: "Targeted treatments for brighter, healthier-looking skin.",
+  Cleansers: "Gentle daily washes to start and end the day.",
+  Lotions: "Everyday moisture for firmer, smoother skin.",
+  Soaps: "Natural bar soaps for everyday cleansing.",
+  Fragrance: "Eau de Parfum in scents for him and her.",
+};
+
+const whyAulea = [
+  {
+    icon: HeartIcon,
+    title: "Made from experience",
+    body: "Created from a personal skincare journey with sensitive skin in mind.",
+  },
+  {
+    icon: SparkleIcon,
+    title: "Thoughtful products",
+    body: "Simple, considered formulas you can build into your everyday routine.",
+  },
+  {
+    icon: WalletIcon,
+    title: "Accessible by design",
+    body: "Skincare that feels worth it, without feeling unnecessarily expensive.",
+  },
+  {
+    icon: TruckIcon,
+    title: "Easy to get",
+    body: "Nationwide delivery, COD, and multiple payment options to suit you.",
+  },
 ];
 
 export default function Home() {
   return (
     <>
-      {/* 2. Hero: Navy Deep band per spec D3, one of only two large dark
-          fills (the other is the footer). */}
-      <section className="bg-navy-deep px-6 py-20 sm:px-10 sm:py-28 lg:px-16">
-        <div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-2">
-          <div>
-            <p className="font-label text-sm tracking-[0.2em] text-gold mb-4">
-              {siteConfig.tagline}
+      {/* Hero: full-bleed split, image right, edge to edge like the ref design. */}
+      <section className="bg-cream-deep">
+        <div className="mx-auto grid max-w-7xl items-center lg:grid-cols-2">
+          <div className="px-6 py-20 sm:px-10 sm:py-28 lg:px-16">
+            <p className="text-xs font-medium uppercase tracking-[0.15em] text-navy/70 mb-4">
+              Aulea Skin &middot; Est. {siteConfig.established}
             </p>
-            <h1 className="font-display text-4xl leading-tight text-cream sm:text-5xl">
+            <h1 className="font-display text-4xl leading-tight text-ink sm:text-5xl lg:text-6xl">
               Everyday skincare, made more accessible.
             </h1>
-            <p className="mt-5 max-w-md text-cream/80 leading-relaxed">
+            <p className="mt-5 max-w-md text-ink/70 leading-relaxed">
               {siteConfig.brandPromise} Aulea Skin started from one person&apos;s search for
               skincare that felt comfortable, simple, and worth the money.
             </p>
-            <div className="mt-8 flex flex-wrap gap-4">
-              <LinkButton href="/products" variant="onDark">
-                Shop Now
-              </LinkButton>
-              <LinkButton href="/about" variant="onDarkOutline">
-                Our Story
+            <div className="mt-8 flex flex-wrap items-center gap-6">
+              <LinkButton href="/products">Shop Now</LinkButton>
+              <LinkButton href="/about" variant="ghost">
+                Discover Auléa
               </LinkButton>
             </div>
           </div>
-          <div className="relative aspect-[4/5] overflow-hidden rounded-sm">
+          <div className="relative aspect-[4/5] lg:aspect-auto lg:h-[640px]">
             <Image
               src="/images/hero/sitewide-hero.webp"
               alt="Auléa Skin product lineup"
@@ -55,20 +78,24 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 3. Brand statement */}
+      {/* Brand statement */}
       <Section className="text-center">
         <p className="mx-auto max-w-2xl font-display text-2xl text-ink sm:text-3xl">
           {siteConfig.positioningLine}
         </p>
       </Section>
 
-      {/* 4. Featured products */}
+      {/* Featured products */}
       <Section className="bg-mist">
-        <SectionHeading
-          eyebrow="Featured"
-          title="Shop Aulea"
-          description="A first look at the confirmed catalog. Merchandising (featured/best-seller flags) is pending real sales data, not assumed."
-        />
+        <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
+          <SectionHeading eyebrow="Featured" title="Shop Aulea" />
+          <Link
+            href="/products"
+            className="flex items-center gap-1 text-xs font-medium uppercase tracking-[0.1em] text-navy hover:text-navy-deep"
+          >
+            View all products <ArrowRightIcon />
+          </Link>
+        </div>
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {products.slice(0, 4).map((product) => (
             <ProductCard key={product.slug} product={product} />
@@ -76,33 +103,49 @@ export default function Home() {
         </div>
       </Section>
 
-      {/* 5. Shop by category */}
+      {/* Shop by category */}
       <Section className="bg-cream-deep">
-        <SectionHeading eyebrow="Shop By Category" title="Find what you need" />
-        <div className="grid gap-6 sm:grid-cols-3">
-          {categories.map((category) => (
-            <Link
-              key={category}
-              href="/products"
-              className="group flex items-center justify-between rounded-md bg-cream px-6 py-5 transition-colors hover:bg-white"
-            >
-              <span className="font-display text-lg text-ink">{category}</span>
-              <span className="text-navy transition-transform group-hover:translate-x-1">→</span>
-            </Link>
-          ))}
+        <SectionHeading align="center" eyebrow="Shop By Category" title="Find your ritual" />
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {categories.map((category) => {
+            const rep = getProductsByCategory(category)[0];
+            return (
+              <Link
+                key={category}
+                href={`/products?category=${encodeURIComponent(category)}`}
+                className="group relative block aspect-[4/3] overflow-hidden rounded-md"
+              >
+                {rep && (
+                  <Image
+                    src={rep.images[0]}
+                    alt={category}
+                    fill
+                    sizes="(min-width: 1024px) 33vw, 50vw"
+                    className="object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-ink/70 via-ink/10 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 p-5 text-cream">
+                  <h3 className="font-display text-lg">{category}</h3>
+                  <p className="mt-1 text-xs text-cream/80">{categoryCopy[category]}</p>
+                  <p className="mt-2 text-xs font-medium uppercase tracking-[0.1em]">Shop Now →</p>
+                </div>
+              </Link>
+            );
+          })}
         </div>
       </Section>
 
-      {/* 6. Founder / brand story */}
+      {/* Founder / brand story */}
       <Section>
         <div className="grid items-center gap-12 lg:grid-cols-2">
           <Placeholder label="Founder photo, pending" aspect="aspect-[4/5]" />
           <div>
             <p className="text-xs font-medium uppercase tracking-[0.15em] text-navy/70 mb-3">
-              Our Story
+              The Aulea Story
             </p>
             <h2 className="font-display text-3xl text-ink sm:text-4xl">
-              &ldquo;I started Aulea because of my own sensitive skin.&rdquo;
+              Born from a personal skincare journey.
             </h2>
             <p className="mt-4 text-ink/70 leading-relaxed">
               Finding skincare that felt comfortable, without costing too much, wasn&apos;t
@@ -118,59 +161,81 @@ export default function Home() {
         </div>
       </Section>
 
-      {/* 7. Product-focused editorial: Cleanse/Treat/Hydrate/Protect maps
-          to today's confirmed catalog (spec D8). */}
+      {/* The ritual: Cleanse/Treat/Hydrate/Protect */}
       <Section className="bg-mist">
-        <SectionHeading
-          eyebrow="Build Your Routine"
-          title="Cleanse → Treat → Hydrate → Protect"
-        />
-        <div className="grid gap-6 sm:grid-cols-4">
-          {routineSteps.map(({ step, slug }) => {
-            const product = products.find((p) => p.slug === slug);
-            if (!product) return null;
-            return (
-              <Link key={step} href={`/products/${product.slug}`} className="block text-center">
-                <p className="text-xs font-medium uppercase tracking-[0.1em] text-navy/70">
-                  {step}
-                </p>
-                <div className="relative mt-3 aspect-square overflow-hidden rounded-md bg-white">
-                  <Image
-                    src={product.images[0]}
-                    alt={product.name}
-                    fill
-                    sizes="(min-width: 1024px) 25vw, 50vw"
-                    className="object-cover p-3"
-                  />
-                </div>
-                <p className="mt-2 font-display text-sm text-ink">{product.name}</p>
-              </Link>
-            );
-          })}
+        <div className="grid items-center gap-12 lg:grid-cols-2">
+          <div>
+            <p className="text-xs font-medium uppercase tracking-[0.15em] text-navy/70 mb-3">
+              The Ritual
+            </p>
+            <h2 className="font-display text-3xl text-ink sm:text-4xl">
+              A few quiet minutes, every day.
+            </h2>
+            <p className="mt-4 text-ink/70 leading-relaxed">
+              Cleanse, treat, hydrate. No overwhelming steps, just a simple rhythm that lets your
+              skin feel cared for, morning and night.
+            </p>
+            <div className="mt-6">
+              <LinkButton href="/products" variant="secondary">
+                Explore The Products
+              </LinkButton>
+            </div>
+          </div>
+          <div className="relative aspect-[4/5] overflow-hidden rounded-md bg-white">
+            <Image
+              src="/images/products/ultimate-whitening-natural-soap/secondary-1.webp"
+              alt="Aulea Skin product in everyday use"
+              fill
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              className="object-cover"
+            />
+          </div>
         </div>
       </Section>
 
-      {/* 8. Promotional offer: the one extra Navy Deep band spec A2
+      {/* Promotional offer: the one extra Navy Deep band spec A2
           allows ("at most one promo band"), real and supplied (free
           shipping threshold), never an invented discount. */}
-      <section className="bg-navy-deep px-6 py-16 text-center sm:px-10 lg:px-16">
-        <p className="font-label text-sm tracking-[0.2em] text-gold mb-3">Free Shipping</p>
-        <h2 className="font-display text-3xl text-cream sm:text-4xl">
-          Free shipping on orders ₱{siteConfig.freeShippingThreshold}+
-        </h2>
-        <p className="mx-auto mt-3 max-w-md text-cream/70">
-          Nationwide via {siteConfig.couriers.join(", ")}, subject to courier arrangement.
-        </p>
+      <section className="bg-navy-deep">
+        <div className="mx-auto grid max-w-6xl items-center gap-8 px-6 py-14 sm:px-10 lg:grid-cols-2 lg:px-16">
+          <div>
+            <p className="font-label text-sm tracking-[0.2em] text-gold mb-3">
+              A Small Gift, Every Order
+            </p>
+            <h2 className="font-display text-3xl text-cream sm:text-4xl">
+              Free shipping on orders ₱{siteConfig.freeShippingThreshold}+
+            </h2>
+            <p className="mt-3 max-w-md text-cream/70">
+              Nationwide delivery available. Cash on delivery welcome where courier support
+              allows, subject to applicable courier and shipping arrangements.
+            </p>
+            <div className="mt-6">
+              <LinkButton href="/products" variant="onDark">
+                Start Shopping
+              </LinkButton>
+            </div>
+          </div>
+          <div className="relative aspect-[4/3] overflow-hidden rounded-md">
+            <Image
+              src={products[0].images[0]}
+              alt={products[0].name}
+              fill
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              className="object-cover"
+            />
+          </div>
+        </div>
       </section>
 
-      {/* 9. Testimonials */}
+      {/* Testimonials: honest empty state, no fabricated quotes (spec C3) */}
       <Section>
         <SectionHeading
-          eyebrow="Customer Love"
-          title="What customers are saying"
+          align="center"
+          eyebrow="From Our Customers"
+          title="Real feedback, in their words"
           description="Aulea's previous social pages were lost and are being recovered, so history here is limited by design. Nothing below is invented (spec C3)."
         />
-        <div className="rounded-sm border border-ink/12 bg-cream-deep p-8 text-center">
+        <div className="mx-auto max-w-xl rounded-sm border border-ink/12 bg-cream-deep p-8 text-center">
           <p className="text-ink/70 leading-relaxed">
             [Genuine customer feedback pending from the client, see docs/intake-checklist.md.
             Only real, supplied feedback (labeled &ldquo;Verified customer feedback&rdquo; where
@@ -179,52 +244,45 @@ export default function Home() {
         </div>
       </Section>
 
-      {/* 10. Why Aulea */}
+      {/* Why Aulea */}
       <Section className="bg-cream-deep">
-        <SectionHeading eyebrow="Why Aulea" title="Skincare that doesn't have to be complicated" />
-        <div className="grid gap-8 sm:grid-cols-3">
-          <div className="rounded-md bg-cream p-6">
-            <h3 className="font-display text-lg text-ink">Born from real experience</h3>
-            <p className="mt-2 text-sm text-ink/70 leading-relaxed">
-              Aulea started because the founder struggled to find products that felt comfortable
-              for sensitive, easily-irritated skin, not as a generic beauty brand.
-            </p>
-          </div>
-          <div className="rounded-md bg-cream p-6">
-            <h3 className="font-display text-lg text-ink">Accessible pricing</h3>
-            <p className="mt-2 text-sm text-ink/70 leading-relaxed">
-              Reasonably priced by design, so a good routine doesn&apos;t have to be a luxury
-              purchase.
-            </p>
-          </div>
-          <div className="rounded-md bg-cream p-6">
-            <h3 className="font-display text-lg text-ink">Simple, everyday routines</h3>
-            <p className="mt-2 text-sm text-ink/70 leading-relaxed">
-              Skincare that fits into a normal day, not an intimidating, multi-step regimen.
-            </p>
-          </div>
+        <SectionHeading align="center" eyebrow="Why Aulea" title="Skincare, made simple" />
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          {whyAulea.map(({ icon: Icon, title, body }) => (
+            <div key={title} className="text-center sm:text-left">
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-ink/15 text-navy sm:mx-0">
+                <Icon className="h-5 w-5" />
+              </div>
+              <h3 className="mt-4 font-display text-lg text-ink">{title}</h3>
+              <p className="mt-2 text-sm text-ink/70 leading-relaxed">{body}</p>
+            </div>
+          ))}
         </div>
       </Section>
 
       {/* Email signup */}
       <Section>
-        <SectionHeading eyebrow="Stay In The Loop" title="Hear about new products first" />
-        <EmailSignup />
-      </Section>
-
-      {/* 11. Final CTA: quiet treatment; large dark fills are reserved
-          for the hero, footer, and the one promo band above. */}
-      <Section>
-        <div className="rounded-sm border-t-2 border-gold bg-cream-deep px-8 py-14 text-center sm:px-16">
-          <h2 className="font-display text-3xl text-ink sm:text-4xl">
-            Start your everyday skincare routine with Aulea Skin.
-          </h2>
-          <p className="mt-3 text-ink/70">{siteConfig.contactEmail}</p>
-          <div className="mt-8">
-            <LinkButton href="/products">Shop Aulea</LinkButton>
-          </div>
+        <SectionHeading align="center" eyebrow="Stay In The Loop" title="Hear about new products first" />
+        <div className="mx-auto max-w-md">
+          <EmailSignup />
         </div>
       </Section>
+
+      {/* Final CTA: quiet treatment; large dark fills are reserved
+          for the hero, footer, and the one promo band above. */}
+      <section className="bg-navy-deep px-6 py-20 text-center sm:px-10 lg:px-16">
+        <h2 className="font-display text-3xl text-cream sm:text-4xl">
+          Take care of your skin, without overcomplicating it.
+        </h2>
+        <p className="mx-auto mt-3 max-w-md text-cream/70">
+          Explore the Aulea range and find a ritual that fits your everyday.
+        </p>
+        <div className="mt-8">
+          <LinkButton href="/products" variant="onDark">
+            Shop The Collection
+          </LinkButton>
+        </div>
+      </section>
     </>
   );
 }

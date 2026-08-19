@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { LinkButton } from "@/components/Button";
+import { BagIcon } from "@/components/Icons";
 import { Section, SectionHeading } from "@/components/Section";
 import { getProductBySlug, type Product } from "@/data/products";
 import { useCart, type CartLine } from "@/lib/cart-context";
@@ -11,17 +12,14 @@ export function CartView() {
 
   if (lines.length === 0) {
     return (
-      <Section className="pt-14">
-        <SectionHeading eyebrow="Cart" title="Your cart" />
-        <div className="max-w-xl rounded-sm border border-ink/12 bg-cream-deep p-8">
-          <p className="text-ink/70 leading-relaxed">
-            Your cart is empty.
-          </p>
-          <div className="mt-6">
-            <LinkButton href="/products" variant="secondary">
-              Continue Shopping
-            </LinkButton>
-          </div>
+      <Section className="pt-24 pb-24 text-center">
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full border border-ink/15 text-ink/50">
+          <BagIcon className="h-6 w-6" />
+        </div>
+        <h1 className="mt-6 font-display text-3xl text-ink">Your cart is empty</h1>
+        <p className="mt-2 text-ink/70">Discover skincare made for your everyday ritual.</p>
+        <div className="mt-8">
+          <LinkButton href="/products">Shop The Collection</LinkButton>
         </div>
       </Section>
     );

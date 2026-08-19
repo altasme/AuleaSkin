@@ -1,6 +1,8 @@
 import Link from "next/link";
+import { categories } from "@/data/products";
 import { siteConfig } from "@/lib/site-config";
 import { Logo } from "./Logo";
+import { MailIcon, StoreIcon, TruckIcon, WalletIcon } from "./Icons";
 
 export function Footer() {
   return (
@@ -12,15 +14,29 @@ export function Footer() {
             <p className="mt-4 text-sm text-cream/70 leading-relaxed">
               {siteConfig.shortDescription}
             </p>
+            <a
+              href={siteConfig.social.shopee}
+              className="mt-4 inline-block text-xs font-medium uppercase tracking-[0.1em] text-gold hover:text-cream"
+            >
+              Visit our Shopee store →
+            </a>
           </div>
 
           <div>
             <p className="text-xs font-medium uppercase tracking-[0.15em] text-cream/50 mb-3">Shop</p>
             <ul className="space-y-2 text-sm">
-              {siteConfig.nav.map((item) => (
-                <li key={item.href}>
-                  <Link href={item.href} className="text-cream/80 hover:text-cream">
-                    {item.label}
+              <li>
+                <Link href="/products" className="text-cream/80 hover:text-cream">
+                  All Products
+                </Link>
+              </li>
+              {categories.map((category) => (
+                <li key={category}>
+                  <Link
+                    href={`/products?category=${encodeURIComponent(category)}`}
+                    className="text-cream/80 hover:text-cream"
+                  >
+                    {category}
                   </Link>
                 </li>
               ))}
@@ -28,8 +44,18 @@ export function Footer() {
           </div>
 
           <div>
-            <p className="text-xs font-medium uppercase tracking-[0.15em] text-cream/50 mb-3">Policies</p>
+            <p className="text-xs font-medium uppercase tracking-[0.15em] text-cream/50 mb-3">About</p>
             <ul className="space-y-2 text-sm">
+              <li>
+                <Link href="/about" className="text-cream/80 hover:text-cream">
+                  Our Story
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact" className="text-cream/80 hover:text-cream">
+                  Contact
+                </Link>
+              </li>
               {siteConfig.footerPolicyLinks.map((item) => (
                 <li key={item.href}>
                   <Link href={item.href} className="text-cream/80 hover:text-cream">
@@ -41,14 +67,27 @@ export function Footer() {
           </div>
 
           <div>
-            <p className="text-xs font-medium uppercase tracking-[0.15em] text-cream/50 mb-3">Contact</p>
-            <ul className="space-y-2 text-sm text-cream/80">
-              <li>{siteConfig.contactEmail}</li>
-              <li>{siteConfig.businessType}</li>
-              <li>
-                <a href={siteConfig.social.shopee} className="hover:text-cream">
-                  Shop on Shopee ↗
-                </a>
+            <p className="text-xs font-medium uppercase tracking-[0.15em] text-cream/50 mb-3">
+              Get In Touch
+            </p>
+            <ul className="space-y-3 text-sm text-cream/80">
+              <li className="flex items-start gap-2">
+                <MailIcon className="mt-0.5 h-4 w-4 shrink-0 text-cream/50" />
+                <span>{siteConfig.contactEmail}</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <StoreIcon className="mt-0.5 h-4 w-4 shrink-0 text-cream/50" />
+                <span>{siteConfig.businessType}</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <TruckIcon className="mt-0.5 h-4 w-4 shrink-0 text-cream/50" />
+                <span>
+                  Nationwide delivery, free shipping over ₱{siteConfig.freeShippingThreshold}
+                </span>
+              </li>
+              <li className="flex items-start gap-2">
+                <WalletIcon className="mt-0.5 h-4 w-4 shrink-0 text-cream/50" />
+                <span>{siteConfig.paymentMethods.join(", ")}</span>
               </li>
             </ul>
           </div>
