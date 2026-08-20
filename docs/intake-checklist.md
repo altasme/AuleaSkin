@@ -49,7 +49,11 @@ than left pending. Done for:
 placeholder for every SKU. Inventing a specific ingredient list isn't
 safe copy to fabricate, it's a real safety/allergen claim, not a
 stylistic gap, so it still needs the client's actual ingredients panel
-rather than generated text.
+rather than generated text. The Ingredients row on the product detail
+page (`src/app/products/[slug]/page.tsx`) is hidden for now rather than
+showing that placeholder text to visitors; `ingredientsNote` stays in
+`src/data/products.ts` so the row can come back once real label data
+lands.
 
 Since this is composed copy rather than client-supplied fact, it's worth
 a client read-through before treating it as final, particularly the

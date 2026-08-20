@@ -114,14 +114,6 @@ export default async function ProductPage({
               </div>
               <div>
                 <dt className="text-xs font-medium uppercase tracking-[0.1em] text-ink/60">
-                  Ingredients
-                </dt>
-                <dd className="mt-2 text-sm leading-relaxed text-ink/70">
-                  {product.ingredientsNote}
-                </dd>
-              </div>
-              <div>
-                <dt className="text-xs font-medium uppercase tracking-[0.1em] text-ink/60">
                   Suitable for
                 </dt>
                 <dd className="mt-2 text-sm leading-relaxed text-ink/70">
