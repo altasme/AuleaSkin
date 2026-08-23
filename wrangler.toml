@@ -2,20 +2,20 @@
 # panel's API). The static site itself (next build -> out/) doesn't need
 # this file to deploy, Pages serves out/ either way; this only matters
 # for the KV-backed API routes. See docs/admin-panel.md.
+#
+# IMPORTANT, learned the hard way: Cloudflare Pages reads this file
+# during real production deploys too, not just local `wrangler pages
+# dev`. A [[kv_namespaces]] block with a placeholder id here broke every
+# production deployment's Function publish step with "Error 8000022:
+# Invalid KV namespace ID" for as long as it existed, even though the
+# real binding was correctly configured in the dashboard, the dashboard
+# binding does NOT take precedence over this file, whatever this file
+# declares wins. Do not add a [[kv_namespaces]] block back here unless
+# it has the real, current namespace id. Local dev instead passes the
+# binding on the command line (see docs/admin-panel.md, "Local
+# development"), which needs no id at all.
 
 name = "aulea-skin"
 pages_build_output_dir = "out"
 compatibility_date = "2025-01-01"
 compatibility_flags = ["nodejs_compat"]
-
-[[kv_namespaces]]
-binding = "AULEA_DATA"
-# Local dev only needs *some* id to be present, `wrangler pages dev`
-# without --remote persists to .wrangler/state locally and never
-# contacts this id. For production, replace this with the real
-# namespace id from `wrangler kv namespace create AULEA_DATA`, or bind
-# it in the Cloudflare dashboard instead (Settings > Functions > KV
-# namespace bindings) if this project deploys via git integration rather
-# than `wrangler pages deploy`, either path works, the dashboard binding
-# takes precedence for production if both exist.
-id = "REPLACE_WITH_REAL_KV_NAMESPACE_ID"

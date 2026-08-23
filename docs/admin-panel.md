@@ -111,15 +111,25 @@ as a silent side effect of this pass.
 ## Local development
 
 ```bash
-npm run build          # produces out/, the static site Functions serve alongside
-npx wrangler pages dev out
+npm run pages:dev
+# equivalent to:
+#   next build && wrangler pages dev out --kv=AULEA_DATA
 ```
 
-`wrangler pages dev` reads `wrangler.toml` for the `AULEA_DATA` KV binding
-and `.dev.vars` for the two secrets (both gitignored, `.dev.vars` needs
-creating locally, see `.dev.vars` below), and persists KV writes to
-`.wrangler/state` on disk between runs, no real Cloudflare account or
-login needed for local testing. Only real remote deployment needs that.
+The `--kv=AULEA_DATA` flag gives the Functions a local, disk-persisted
+KV binding under that name with no id needed at all, that's deliberate:
+`wrangler.toml` used to declare the binding instead (with a placeholder
+id, since local dev doesn't need a real one), but **Cloudflare Pages
+reads `wrangler.toml` during real production deploys too**, not just
+local dev as the file's own comment used to claim. That placeholder id
+broke every production deployment's Function-publish step for as long
+as it was there (`Error 8000022: Invalid KV namespace ID`), the
+dashboard-configured binding did **not** take precedence the way the
+old comment assumed, whatever `wrangler.toml` declares wins. Real
+incident, not a hypothetical, see git history around "Set
+Cache-Control" and the commit that removed the `[[kv_namespaces]]`
+block for the full account. `.dev.vars` for the two secrets, gitignored,
+needs creating locally (see below), works the same as before.
 
 Create `.dev.vars` at the repo root (not committed):
 
@@ -158,9 +168,11 @@ dev only, never required for this part.
    manual data entry needed to get started.
 
 (The `wrangler kv namespace create` CLI command does the same thing as
-step 1 and additionally prints a namespace ID, useful only if you're
-binding via `wrangler.toml` instead of the dashboard, which this project
-doesn't need to do.)
+step 1 and additionally prints a namespace ID. Don't put that id into
+`wrangler.toml`, this project's `[[kv_namespaces]]` block there broke
+production deploys once already, see "Local development" below for the
+full account. The dashboard binding above is the only one this project
+uses.)
 
 ## Products & Pricing tab
 
@@ -270,7 +282,8 @@ src/app/(site)/products/ShopView.tsx        Shop grid, live via
                                               useLiveProducts()
 src/app/(site)/HomeCatalogSections.tsx      Featured + category tiles,
                                               live via useLiveProducts()
-wrangler.toml               Local dev config (KV binding), see "Local
+wrangler.toml               Build output dir / compatibility settings only,
+                             no KV binding here on purpose, see "Local
                              development" above
 .dev.vars                   Local-only secrets, gitignored, create it
                              yourself, see "Local development" above

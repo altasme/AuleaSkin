@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "pages:dev": "next build && wrangler pages dev out",
+    "pages:dev": "next build && wrangler pages dev out --kv=AULEA_DATA",
     "functions:typecheck": "tsc --project functions/tsconfig.json"
   },
   "dependencies": {
