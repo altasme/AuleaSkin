@@ -44,10 +44,9 @@ colour deviation).
   would mean fabricating a safety-relevant claim, so it stays pending
   until the client supplies a legible label); live analytics/pixel IDs;
   whether the plain "Aulea Natural Soap" SKU is real; Shopee listing
-  links for the 2 new set SKUs; client confirmation on whether "Melasma
-  Set" can ever be used as a public product name (see
-  `docs/compliance-notes.md`, published for now as "Gentle Brightening
-  Set").
+  links for the 2 new set SKUs. "Melasma Set" is published as-is on
+  explicit client direction despite a flagged regulated-claim risk, see
+  `docs/compliance-notes.md` for that record.
 
 Every remaining placeholder is marked with `[bracketed text]` or a 🖼️
 placeholder box. Regulatory reference material (informational only, not a
@@ -76,16 +75,23 @@ in `src/lib/analytics.tsx` fires without them.
 
 ```
 src/
-  app/                 Pages (App Router): /, about, products, products/[slug], contact, policies
+  app/                 Pages (App Router), grouped under (site) for the public
+                        pages (/, about, products, products/[slug], contact, policies)
+                        so /adminpanel can sit outside that group's Header/Footer/analytics
+  app/adminpanel/       Admin panel, see docs/admin-panel.md
   components/          Shared UI (Header, Footer, Logo, ProductCard, ProductActions,
-                        EmailSignup, Button, Section, Placeholder, SearchOverlay, Icons)
-  data/products.ts     8 confirmed SKUs: names/categories/sizes/images/descriptions/benefits/
-                        usage (composed), real Shopee listing links, no price (Shopee is the
-                        pricing source of truth)
+                        EmailSignup, Button, Section, SearchOverlay, Icons)
+  data/products.ts     10 confirmed SKUs: names/categories/sizes/images/descriptions/
+                        benefits/usage (composed), real Shopee listing links for 8 of
+                        them, no price shown (Shopee is the pricing source of truth)
+  data/site-content.ts Homepage/About/Contact copy snapshot, edited by the admin panel,
+                        not yet read by the live pages, see docs/admin-panel.md
 public/images/         Real product photography, logo, brand photo, testimonials
 assets/logo-source/    Original logo/favicon export files, kept for reference, see its README
   lib/site-config.ts   Real business info (email, Shopee link, tagline, nav) + genuine gaps
   lib/analytics.tsx    GA4 + Meta Pixel/CAPI scaffolding (spec F5)
+  lib/admin-store.tsx  Admin panel's client-side data store (localStorage, no backend)
+  lib/cloudinary.ts    Unsigned Cloudinary upload helper for the admin panel
 docs/
   aulea-skin-build-spec-v2.0.md   Originally the locked spec, since partly superseded (see README/intake)
   aulea-skin-phase1-spec-v1.4.md  Superseded prior spec version, kept for history
@@ -95,6 +101,7 @@ docs/
   compliance-notes.md             PH cosmetics regulatory reference, informational only
   deployment.md                   Cloudflare Pages setup (build settings, custom domain)
   image-requirements.md           Canvas sizes, format, aspect ratio for every image slot
+  admin-panel.md                  Admin panel: login, architecture, limitations, Cloudinary setup
 ```
 
 ## Deployment

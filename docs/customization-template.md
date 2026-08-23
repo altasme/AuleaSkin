@@ -23,9 +23,9 @@ CORE PRODUCTS / SERVICES:  10 SKUs, reconciled against real product photography 
                             Ultimate Whitening Natural Soap (70 g), Essence for Men (50 mL EDP,
                             scents Paul/Cedrick, new, not in any spec version), Essence for Women
                             (50 mL EDP, scents Irish/Nathalie/Courtney, new), Glass Skin Set
-                            (4-piece bundle, added from a later upload), Gentle Brightening Set
-                            (4-piece bundle, client's own filename called this one "Melasma Set,"
-                            renamed to match its actual label text, see compliance-notes.md; no
+                            (4-piece bundle, added from a later upload), Melasma Set (4-piece
+                            bundle, published under that name on explicit client direction
+                            despite a flagged regulated-claim risk, see compliance-notes.md; no
                             Shopee link supplied yet for either set). Plain "Aulea Natural
                             Soap" dropped, no photo evidence it exists. Ingredients still pending
                             for all (see compliance-notes.md for why that one stays pending even
@@ -71,8 +71,7 @@ CLIENT MATERIALS RECEIVED: Brand kit, founder story, founder photo, real logo (l
                             free-shipping threshold, payment methods list (GCash/Maya/Bank
                             Transfer/COD, via Shopee)
 MISSING MATERIALS:         Legible ingredients-panel photos, Shopee listing links for the 2 set
-                            SKUs, client confirmation on the "Melasma Set" naming question, DNS/
-                            pixel access, see docs/intake-checklist.md
+                            SKUs, DNS/pixel access, see docs/intake-checklist.md
 ESTIMATED BUILD TIME:      4 to 6 days from Build-Ready confirmation (spec G3), not started,
                             clock has not begun
 PHASE 1 STATUS:            BUILDING (design system, brand content, catalog, and Shopee-redirect

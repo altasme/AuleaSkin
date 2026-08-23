@@ -14,16 +14,14 @@
 //   Essence for Men and Essence for Women (Eau de Parfum, 50 mL), each
 //   with named scent variants. Added as real, photographed products.
 // - Two 4-piece set SKUs added from a later client upload: Glass Skin Set
-//   and Gentle Brightening Set. The client's own filenames called the
-//   second one "Melasma Set", but nothing on its actual packaging (soap,
-//   toner, moisturizer, night cream) says "melasma" anywhere; that's a
-//   specific medical diagnosis, not a cosmetic claim, and naming the
-//   product after treating it would be a much stronger regulated claim
-//   than anything else in this catalog (see compliance-notes.md). Named
-//   from the real label text instead ("Gentle Brightening Soap"); flag
-//   back to the client before ever publishing "melasma" as a product
-//   name. `shopeeUrl` is intentionally blank for both new sets pending
-//   real listing links.
+//   and Melasma Set. Nothing on the second set's actual packaging (soap,
+//   toner, moisturizer, night cream) says "melasma", it was flagged as a
+//   regulated-claim risk (melasma is a medical diagnosis, not a cosmetic
+//   descriptor) and published as "Gentle Brightening Set" first. The
+//   client reviewed that flag and explicitly directed it be published as
+//   "Melasma Set" regardless, see compliance-notes.md for the record of
+//   that decision. `shopeeUrl` is intentionally blank for both new sets
+//   pending real listing links.
 //
 // `images` order leads with a product-only shot for every SKU where one
 // exists; model-photography shots stay in the array as supporting
@@ -55,6 +53,11 @@ export type Product = {
   images: string[];
   shopeeUrl: string;
   variants?: string[];
+  // Not shown on the site yet, Shopee is still the pricing source of
+  // truth (spec directive). Present now so the admin panel has a real
+  // field to fill in, not so it starts rendering, that's a separate
+  // decision for whenever the client is ready to show prices here.
+  price?: number | null;
 };
 
 export const products: Product[] = [
@@ -287,8 +290,8 @@ export const products: Product[] = [
     shopeeUrl: "",
   },
   {
-    slug: "gentle-brightening-set",
-    name: "Auléa Gentle Brightening Set",
+    slug: "melasma-set",
+    name: "Auléa Melasma Set",
     category: "Sets",
     size: "4-Piece Set (70 g Soap, 60 mL Toner, 2 x 15 g Creams)",
     shortDescription: "A gentle daily brightening routine in one set.",
@@ -305,9 +308,9 @@ export const products: Product[] = [
       "A convenient way to try the full line together",
     ],
     images: [
-      "/images/products/gentle-brightening-set/secondary-1.webp",
-      "/images/products/gentle-brightening-set/hero.webp",
-      "/images/products/gentle-brightening-set/secondary-2.webp",
+      "/images/products/melasma-set/secondary-1.webp",
+      "/images/products/melasma-set/hero.webp",
+      "/images/products/melasma-set/secondary-2.webp",
     ],
     shopeeUrl: "",
   },

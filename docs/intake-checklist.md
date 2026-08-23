@@ -121,18 +121,16 @@ Catalog is now **8 SKUs**, not 7.
       (60 mL), Glass Skin Day Cream SPF 30 PA++++ (15 g), Glass Skin
       Night Repair Cream (15 g). All four names come straight off the
       real label photography.
-- [x] **Auléa Gentle Brightening Set** (`gentle-brightening-set`), a
-      4-piece bundle: Gentle Brightening Soap (70 g), Exfoliating Toner
-      (60 mL), Hydrating Moisturizer with Sun Protection (15 g), Night
-      Repair Cream (15 g).
-- [ ] **The client's own filenames called the second set "Melasma
-      Set."** Nothing on its actual packaging says "melasma" anywhere,
-      that's a specific medical diagnosis, not a cosmetic claim, and
-      publishing a product as a melasma treatment would be a much
-      stronger regulated claim than anything else already flagged in
-      `compliance-notes.md`. Published under a label-accurate name
-      instead ("Gentle Brightening Set"). **Flag back to the client
-      before ever using "melasma" as a public product name.**
+- [x] **Auléa Melasma Set** (`melasma-set`), a 4-piece bundle: Gentle
+      Brightening Soap (70 g), Exfoliating Toner (60 mL), Hydrating
+      Moisturizer with Sun Protection (15 g), Night Repair Cream
+      (15 g). Nothing on the actual packaging says "melasma", that
+      name came from the client's own filename, not the label. Flagged
+      as a regulated-claim risk (melasma is a medical diagnosis, not a
+      cosmetic descriptor) and briefly published under a label-accurate
+      name instead ("Gentle Brightening Set"); the client reviewed that
+      and directed it be published as "Melasma Set" regardless, see
+      `compliance-notes.md` for the record of that decision.
 - [ ] Both sets' `shopeeUrl` is intentionally blank
       (`src/data/products.ts`), no listing link was supplied yet. The
       "Buy on Shopee" button is live but currently links nowhere, fill
@@ -154,8 +152,10 @@ Catalog is now **10 SKUs**.
 - [x] Founder photo, received and live on Home and About
       (`public/images/founder/founder.webp`)
 - [ ] Real Shopee listing links for the two new set SKUs (Glass Skin
-      Set, Gentle Brightening Set)
-- [ ] Client confirmation on the "Melasma Set" naming question above
+      Set, Melasma Set)
+- [ ] Cloudinary unsigned upload preset for the admin panel's image
+      uploader (cloud name is set, the preset itself still needs to be
+      created in the Cloudinary dashboard), see `docs/admin-panel.md`
 - [ ] Domain registrar / DNS access (or named controller)
 - [ ] Meta ad account / pixel access for spec F5 measurement
 - [ ] Email capture destination (list/store/Resend or equivalent) for the

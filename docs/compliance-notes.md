@@ -20,22 +20,25 @@ far):
 | Sunscreen with Alpha Arbutin | "SPF 50" (label says 50, spec text said 30, worth confirming which is correct) + Alpha Arbutin brightening claim |
 | Organic Vitamin C Serum | "Organic" |
 | Glass Skin Set | "Glass Skin" (result-implying name, same as the soap above) |
-| Gentle Brightening Set | "Brightening" in the product and soap name |
+| Melasma Set | "Melasma" in the product name, see below, this one's a client override |
 
 `src/data/products.ts` publishes these product names and label-sourced
 descriptions as-is. No efficacy claim is invented beyond what's already
 on the packaging.
 
-**Not published: "Melasma Set."** The client's own filenames for the
-Gentle Brightening Set called it "Melasma Set," but nothing on the
-product's actual packaging says "melasma" anywhere. Melasma is a
-specific medical diagnosis (facial hyperpigmentation), not a cosmetic
-descriptor like "whitening" or "brightening"; naming a product line
-after treating it would be a drug-claim well beyond the whitening/
-firming/brightening language already flagged above, and beyond what
-this project publishes without a real label to back it. Published as
-"Gentle Brightening Set" (from the actual soap label) instead. Confirm
-with the client before ever using "melasma" as a public-facing name.
+**"Melasma Set": published on explicit client direction, flag stands
+as a record, not a blocker.** Nothing on this set's actual packaging
+(soap, toner, moisturizer, night cream) says "melasma" anywhere, that
+word only appeared in the client's own filename. Melasma is a specific
+medical diagnosis (facial hyperpigmentation), not a cosmetic descriptor
+like "whitening" or "brightening", so naming a product after treating
+it is a materially stronger claim than the whitening/firming/
+brightening language already on this page. This was flagged to the
+client and initially published under a label-accurate name instead
+("Gentle Brightening Set"). The client reviewed that and directed it be
+published as "Melasma Set" regardless ("we don't care about FDA and
+stuff, it's what the client asked for"). Published as directed; this
+entry stays here so the tradeoff is on record, not to relitigate it.
 
 Auléa Essence for Men / Women (Eau de Parfum) carry no efficacy claim,
 just scent names.
