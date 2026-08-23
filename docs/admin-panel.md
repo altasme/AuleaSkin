@@ -109,25 +109,37 @@ ADMIN_PASSWORD=aulea@2026
 
 ## Production setup (do this once, on the real Cloudflare account)
 
-1. **Create the KV namespace**: `npx wrangler login`, then
-   `npx wrangler kv namespace create AULEA_DATA`. This prints a namespace
-   id, copy it.
-2. **Bind it to the Pages project**: Cloudflare dashboard → Workers & Pages
-   → this project → Settings → Functions → KV namespace bindings → Add
-   binding. Variable name `AULEA_DATA`, select the namespace just created.
-   (Alternatively, put the id into `wrangler.toml`'s
-   `REPLACE_WITH_REAL_KV_NAMESPACE_ID` placeholder and deploy with
-   `wrangler pages deploy`, if this project moves to a wrangler-driven
-   deploy instead of git-integrated dashboard deploys, either path binds
-   the same namespace, the dashboard takes precedence if both are set.)
-3. **Set the two secrets**: same Settings page → Environment variables →
-   Add secret, for both `ADMIN_USERNAME` and `ADMIN_PASSWORD`. Secrets,
-   not plain variables, so they're not readable back out via the
-   dashboard once set.
+**None of this needs the `wrangler` CLI, a terminal, or any compute
+environment.** It's four steps entirely in the Cloudflare dashboard, in a
+browser, since this project deploys via git integration (dashboard
+auto-deploy on push, see `docs/deployment.md`), not `wrangler pages deploy`.
+The CLI commands mentioned elsewhere in this doc are for optional local
+dev only, never required for this part.
+
+1. **Create the KV namespace**: Cloudflare dashboard → **Workers & Pages**
+   → **KV** (left sidebar) → **Create a namespace** → name it `AULEA_DATA`
+   (the name is just a label, doesn't need to match anything) → **Add**.
+2. **Bind it to the Pages project**: Workers & Pages → your Pages project
+   → **Settings** → **Functions** → **KV namespace bindings** → **Add
+   binding**. Variable name `AULEA_DATA` (this exact name matters, it's
+   what `functions/env.d.ts` expects), KV namespace: select the one just
+   created → **Save**.
+3. **Set the two secrets**: same Settings page → **Environment
+   variables** → **Add variable** → set type to **Secret** (not
+   "Text") → add `ADMIN_USERNAME` = `Auleadmin` and `ADMIN_PASSWORD` =
+   `aulea@2026` → **Save**. Secrets, not plain variables, so they're not
+   readable back out via the dashboard once set.
 4. **Redeploy** so the new binding and secrets take effect (Pages only
-   picks up binding/secret changes on the next deployment).
+   picks up binding/secret changes on the *next* deployment, not
+   retroactively): **Deployments** tab → **⋯** on the latest one →
+   **Retry deployment**, or just push any commit.
 5. Sign in at `/adminpanel`, the catalog auto-seeds on first load, no
    manual data entry needed to get started.
+
+(The `wrangler kv namespace create` CLI command does the same thing as
+step 1 and additionally prints a namespace ID, useful only if you're
+binding via `wrangler.toml` instead of the dashboard, which this project
+doesn't need to do.)
 
 ## Products & Pricing tab
 
