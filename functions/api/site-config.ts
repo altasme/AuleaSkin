@@ -3,9 +3,10 @@ import { siteConfig as defaultSiteConfig } from "../../src/lib/site-config";
 
 const KEY = "site-config";
 
-export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
-  const authError = requireAuth(request, env);
-  if (authError) return authError;
+// Public on purpose, same reasoning as products.ts: this is already
+// publicly visible business info (email, tagline, shipping terms), not a
+// secret. Only writes are admin-gated.
+export const onRequestGet: PagesFunction<Env> = async ({ env }) => {
   const siteConfig = await getOrSeed(env.AULEA_DATA, KEY, defaultSiteConfig);
   return jsonResponse(siteConfig);
 };

@@ -1,22 +1,11 @@
 import Image from "next/image";
-import Link from "next/link";
 import { LinkButton } from "@/components/Button";
-import { ProductCard } from "@/components/ProductCard";
 import { Section, SectionHeading } from "@/components/Section";
 import { EmailSignup } from "@/components/EmailSignup";
-import { ArrowRightIcon, HeartIcon, SparkleIcon, TruckIcon, WalletIcon } from "@/components/Icons";
-import { products, categories, getProductsByCategory } from "@/data/products";
+import { HeartIcon, SparkleIcon, TruckIcon, WalletIcon } from "@/components/Icons";
+import { products } from "@/data/products";
 import { siteConfig } from "@/lib/site-config";
-
-const categoryCopy: Record<string, string> = {
-  "Sun Care": "Daily sun protection for your routine.",
-  Serums: "Targeted treatments for brighter, healthier-looking skin.",
-  Cleansers: "Gentle daily washes to start and end the day.",
-  Lotions: "Everyday moisture for firmer, smoother skin.",
-  Soaps: "Natural bar soaps for everyday cleansing.",
-  Fragrance: "Eau de Parfum in scents for him and her.",
-  Sets: "Complete routines, bundled together.",
-};
+import { HomeCatalogSections } from "./HomeCatalogSections";
 
 const testimonialImages = Array.from(
   { length: 8 },
@@ -90,61 +79,7 @@ export default function Home() {
         </p>
       </Section>
 
-      {/* Featured products */}
-      <Section className="bg-mist">
-        <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
-          <SectionHeading eyebrow="Featured" title="Shop Aulea" />
-          <Link
-            href="/products"
-            className="flex items-center gap-1 text-xs font-medium uppercase tracking-[0.1em] text-navy hover:text-navy-deep"
-          >
-            View all products <ArrowRightIcon />
-          </Link>
-        </div>
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-          {products.slice(0, 4).map((product) => (
-            <ProductCard key={product.slug} product={product} />
-          ))}
-        </div>
-      </Section>
-
-      {/* Shop by category */}
-      <Section className="bg-cream-deep">
-        <SectionHeading align="center" eyebrow="Shop By Category" title="Find your ritual" />
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {categories.map((category) => {
-            const rep = getProductsByCategory(category)[0];
-            return (
-              <Link
-                key={category}
-                href={`/products?category=${encodeURIComponent(category)}`}
-                className="group relative block aspect-[4/3] overflow-hidden rounded-md"
-              >
-                {rep && (
-                  <Image
-                    src={rep.images[1] ?? rep.images[0]}
-                    alt={category}
-                    fill
-                    sizes="(min-width: 1024px) 33vw, 50vw"
-                    className="object-cover"
-                  />
-                )}
-                <div className="absolute inset-0 bg-gradient-to-t from-ink/70 via-ink/10 to-transparent transition-colors duration-300 group-hover:from-ink/80" />
-                <div className="absolute inset-x-0 bottom-0 p-5 text-cream">
-                  <h3 className="font-display text-lg">{category}</h3>
-                  <p className="mt-1 text-xs text-cream/80">{categoryCopy[category]}</p>
-                  <p className="mt-2 flex items-center gap-1 text-xs font-medium uppercase tracking-[0.1em]">
-                    Shop Now{" "}
-                    <span className="inline-block transition-transform duration-300 group-hover:translate-x-1">
-                      →
-                    </span>
-                  </p>
-                </div>
-              </Link>
-            );
-          })}
-        </div>
-      </Section>
+      <HomeCatalogSections />
 
       {/* Founder / brand story */}
       <Section>

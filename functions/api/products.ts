@@ -3,9 +3,10 @@ import { products as defaultProducts } from "../../src/data/products";
 
 const KEY = "products";
 
-export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
-  const authError = requireAuth(request, env);
-  if (authError) return authError;
+// Public on purpose: this is catalog data the storefront needs to show
+// anonymous visitors, the same information already visible on the site.
+// Only writes (below) are admin-gated.
+export const onRequestGet: PagesFunction<Env> = async ({ env }) => {
   const products = await getOrSeed(env.AULEA_DATA, KEY, defaultProducts);
   return jsonResponse(products);
 };

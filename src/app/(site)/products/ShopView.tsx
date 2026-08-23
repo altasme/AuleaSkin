@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { ProductCard } from "@/components/ProductCard";
 import { Section, SectionHeading } from "@/components/Section";
-import { categories, products } from "@/data/products";
+import { useLiveProducts } from "@/lib/use-live-products";
 
 type SortOption = "featured" | "name-asc" | "name-desc";
 
@@ -17,6 +17,10 @@ const sortOptions: { value: SortOption; label: string }[] = [
 export function ShopView() {
   const searchParams = useSearchParams();
   const initialCategory = searchParams.get("category");
+
+  const products = useLiveProducts();
+  const categories = useMemo(() => Array.from(new Set(products.map((p) => p.category))), [products]);
+
   const [activeCategory, setActiveCategory] = useState<string | null>(
     initialCategory && categories.includes(initialCategory) ? initialCategory : null
   );
@@ -27,7 +31,7 @@ export function ShopView() {
     if (sort === "name-asc") list = [...list].sort((a, b) => a.name.localeCompare(b.name));
     if (sort === "name-desc") list = [...list].sort((a, b) => b.name.localeCompare(a.name));
     return list;
-  }, [activeCategory, sort]);
+  }, [activeCategory, sort, products]);
 
   return (
     <>

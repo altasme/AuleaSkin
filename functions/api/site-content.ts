@@ -3,9 +3,10 @@ import { defaultSiteContent } from "../../src/data/site-content";
 
 const KEY = "site-content";
 
-export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
-  const authError = requireAuth(request, env);
-  if (authError) return authError;
+// Public on purpose, same reasoning as products.ts: this is homepage/
+// About/Contact copy, meant to be public once the pages that read it
+// exist. Only writes are admin-gated.
+export const onRequestGet: PagesFunction<Env> = async ({ env }) => {
   const siteContent = await getOrSeed(env.AULEA_DATA, KEY, defaultSiteContent);
   return jsonResponse(siteContent);
 };

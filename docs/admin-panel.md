@@ -3,7 +3,11 @@
 `/adminpanel`, added on client request. Lets an admin manage the product
 catalog and the site's main content blocks without touching code directly.
 Backed by a real database (Cloudflare Workers KV) as of the KV setup
-described below, edits are live for every visitor as soon as they save.
+described below. Product listings (Shop grid, homepage) read live from it
+for every visitor, no rebuild needed, see "What's actually live on the
+storefront, precisely" for exactly what that does and doesn't cover yet
+(a brand-new product's own detail page, and Business Info / Website
+Content, aren't wired to it on the public pages yet).
 
 ## Sign in
 
@@ -60,32 +64,49 @@ app (`src/data/products.ts`, `src/lib/site-config.ts`,
 catalog just works the first time the admin panel loads against a freshly
 bound namespace.
 
-### Site content: data is live, the public pages aren't wired to it yet
+### What's actually live on the storefront, precisely
 
-**Products and Business Info are fully live**: editing either in the
-panel changes what KV holds, and the admin panel (and anyone else calling
-the API) sees it immediately. `src/lib/site-config.ts`'s shape is the real
-site-settings shape, not a duplicate.
+Every `GET` on `/api/*` is **public, unauthenticated** on purpose,
+products, business info, and site content are catalog/marketing content,
+not secrets, and the storefront needs to read them without a login.
+Only `PUT` (and `/api/login`) require the admin credentials.
 
-**Homepage / About / Contact copy is real and persisted, but the public
-pages don't read it yet.** `src/data/site-content.ts` is a snapshot of the
-copy that's still hardcoded directly in the page files (`src/app/(site)/page.tsx`,
-`src/app/(site)/about/page.tsx`, `src/app/(site)/contact/page.tsx`).
-Editing it in the panel now genuinely persists to KV (and would round-trip
-correctly through the API), but those pages still render their own literal
-JSX at build time, they were never changed to fetch from KV. Making that
-fully live means either:
+**Product listings are live**: `src/app/(site)/products/ShopView.tsx`
+and the homepage's Featured/category sections
+(`src/app/(site)/HomeCatalogSections.tsx`) render the build-time catalog
+first (fast first paint, works with no JS), then fetch `/api/products`
+on mount and re-render with whatever's actually in the database, via the
+shared `useLiveProducts()` hook (`src/lib/use-live-products.ts`). Add,
+edit, or delete a product in the admin panel and it shows up in the Shop
+grid and homepage within moments, no rebuild, no redeploy. Verified: a
+product added through the panel showed up on the Shop page in a
+completely separate, logged-out browser.
 
-- fetching `site-content` from the KV API at request time, which requires
-  those pages to stop being purely static (they'd need to move off
-  `output: "export"`, at least for that route), or
-- generating the static site's copy from KV at *build* time instead of
-  request time (a build step that pulls current KV content into
-  `site-content.ts`-shaped data before `next build` runs).
+**One real gap this doesn't cover**: a brand-new product's own
+`/products/<slug>` detail page. That route is prebuilt per-product at
+`next build` time via `generateStaticParams()`
+(`src/app/(site)/products/[slug]/page.tsx`), a slug that didn't exist at
+the last build has no HTML file for it, static hosting can't generate one
+on the fly. So a new product is fully clickable and correctly shown in
+listings, but its own page 404s until the next real `next build` +
+deploy. The same gap applies to *editing* an existing product too:
+`src/app/(site)/products/[slug]/page.tsx` is a server component reading
+the static `products` import directly, not live, so a name/description/
+image edit shows up in the Shop grid and homepage immediately but not on
+that product's own detail page until the next rebuild. Only the listing
+surfaces are wired to live data so far; extending `[slug]/page.tsx`
+itself is a reasonable next step, not done yet.
 
-Either is a real, scoped follow-up, deliberately not done as a silent
-side effect of adding KV, since it changes how the public pages render.
-Flagging it here rather than doing it quietly.
+**Business Info (`site-config`) and Website Content (`site-content`,
+Homepage/About/Contact copy) are correctly saved to the database and
+readable via their public GET endpoints, but no public page fetches them
+yet.** The public pages (`src/app/(site)/page.tsx`,
+`src/app/(site)/about/page.tsx`, `src/app/(site)/contact/page.tsx`,
+`src/components/Header.tsx`, `Footer.tsx`) still render their own literal
+JSX / the build-time `siteConfig` import. Wiring these the same way the
+product listings are wired (a client-side fetch-and-overlay) is the same
+kind of scoped follow-up as the product detail page gap above, not done
+as a silent side effect of this pass.
 
 ## Local development
 
@@ -238,9 +259,17 @@ src/app/adminpanel/
 src/lib/admin-store.tsx    React context, fetches/PUTs the Functions API,
                             debounces Website Content saves
 src/lib/cloudinary.ts      Unsigned upload helper
+src/lib/use-live-products.ts  Client hook: static catalog first, swaps in
+                                live /api/products on mount, shared by
+                                ShopView and HomeCatalogSections
 src/data/site-content.ts   Homepage/About/Contact copy, seeds KV on first
-                            read, see "Site content" above for what's and
-                            isn't live yet
+                            read, see "What's actually live" above for
+                            what's and isn't live yet
+
+src/app/(site)/products/ShopView.tsx        Shop grid, live via
+                                              useLiveProducts()
+src/app/(site)/HomeCatalogSections.tsx      Featured + category tiles,
+                                              live via useLiveProducts()
 wrangler.toml               Local dev config (KV binding), see "Local
                              development" above
 .dev.vars                   Local-only secrets, gitignored, create it
