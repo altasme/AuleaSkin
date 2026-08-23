@@ -13,6 +13,17 @@
 // - Two SKUs not in any spec version showed up in photography: Auléa
 //   Essence for Men and Essence for Women (Eau de Parfum, 50 mL), each
 //   with named scent variants. Added as real, photographed products.
+// - Two 4-piece set SKUs added from a later client upload: Glass Skin Set
+//   and Gentle Brightening Set. The client's own filenames called the
+//   second one "Melasma Set", but nothing on its actual packaging (soap,
+//   toner, moisturizer, night cream) says "melasma" anywhere; that's a
+//   specific medical diagnosis, not a cosmetic claim, and naming the
+//   product after treating it would be a much stronger regulated claim
+//   than anything else in this catalog (see compliance-notes.md). Named
+//   from the real label text instead ("Gentle Brightening Soap"); flag
+//   back to the client before ever publishing "melasma" as a product
+//   name. `shopeeUrl` is intentionally blank for both new sets pending
+//   real listing links.
 //
 // `images` order leads with a product-only shot for every SKU where one
 // exists; model-photography shots stay in the array as supporting
@@ -249,6 +260,56 @@ export const products: Product[] = [
     shopeeUrl:
       "https://shopee.ph/Aulea-Fragrance-Womens-Collection-50ml-i.1889974610.40183412198?extraParams=%7B%22display_model_id%22%3A401342203764%2C%22model_selection_logic%22%3A3%7D",
     variants: ["Irish", "Nathalie", "Courtney"],
+  },
+  {
+    slug: "glass-skin-set",
+    name: "Auléa Glass Skin Set",
+    category: "Sets",
+    size: "4-Piece Set (70 g Soap, 60 mL Toner, 2 x 15 g Creams)",
+    shortDescription: "The full Glass Skin routine in one set.",
+    description:
+      "The complete Glass Skin routine in one set, as labeled on the packaging: Glass Skin Brightening Soap (70 g), Glass Skin Hydrating Toner (60 mL), Glass Skin Day Cream SPF 30 PA++++ (15 g), and Glass Skin Night Repair Cream (15 g). A simple way to try the full line together.",
+    usage:
+      "Cleanse with the Brightening Soap, follow with the Hydrating Toner, then apply the Day Cream SPF 30 PA++++ in the morning or the Night Repair Cream before bed.",
+    ingredientsNote:
+      "[Full ingredient list pending, a legible ingredients panel is still needed from the client.]",
+    suitableFor: "All skin types looking for a complete glass-skin routine in one set.",
+    benefits: [
+      "Complete 4-step routine: cleanse, tone, day, and night",
+      "Day Cream includes SPF 30 PA++++ sun protection",
+      "A convenient way to try the full Glass Skin line together",
+    ],
+    images: [
+      "/images/products/glass-skin-set/secondary-1.webp",
+      "/images/products/glass-skin-set/hero.webp",
+      "/images/products/glass-skin-set/secondary-2.webp",
+    ],
+    shopeeUrl: "",
+  },
+  {
+    slug: "gentle-brightening-set",
+    name: "Auléa Gentle Brightening Set",
+    category: "Sets",
+    size: "4-Piece Set (70 g Soap, 60 mL Toner, 2 x 15 g Creams)",
+    shortDescription: "A gentle daily brightening routine in one set.",
+    description:
+      "A gentle brightening routine in one set, as labeled on the packaging: Gentle Brightening Soap (70 g), Exfoliating Toner (60 mL), Hydrating Moisturizer with Sun Protection (15 g), and Night Repair Cream (15 g). A simple way to try the full line together.",
+    usage:
+      "Cleanse with the Gentle Brightening Soap, follow with the Exfoliating Toner, then apply the Hydrating Moisturizer with Sun Protection in the morning or the Night Repair Cream before bed.",
+    ingredientsNote:
+      "[Full ingredient list pending, a legible ingredients panel is still needed from the client.]",
+    suitableFor: "All skin types looking for a gentle daily brightening routine in one set.",
+    benefits: [
+      "Complete 4-step routine: cleanse, tone, day, and night",
+      "Moisturizer includes sun protection for daytime use",
+      "A convenient way to try the full line together",
+    ],
+    images: [
+      "/images/products/gentle-brightening-set/secondary-1.webp",
+      "/images/products/gentle-brightening-set/hero.webp",
+      "/images/products/gentle-brightening-set/secondary-2.webp",
+    ],
+    shopeeUrl: "",
   },
 ];
 

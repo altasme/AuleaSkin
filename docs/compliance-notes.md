@@ -19,10 +19,23 @@ far):
 | Niacinamide Facial Wash | "Removes dirt & impurities, minimizing pores and brightening dull skin" |
 | Sunscreen with Alpha Arbutin | "SPF 50" (label says 50, spec text said 30, worth confirming which is correct) + Alpha Arbutin brightening claim |
 | Organic Vitamin C Serum | "Organic" |
+| Glass Skin Set | "Glass Skin" (result-implying name, same as the soap above) |
+| Gentle Brightening Set | "Brightening" in the product and soap name |
 
 `src/data/products.ts` publishes these product names and label-sourced
 descriptions as-is. No efficacy claim is invented beyond what's already
 on the packaging.
+
+**Not published: "Melasma Set."** The client's own filenames for the
+Gentle Brightening Set called it "Melasma Set," but nothing on the
+product's actual packaging says "melasma" anywhere. Melasma is a
+specific medical diagnosis (facial hyperpigmentation), not a cosmetic
+descriptor like "whitening" or "brightening"; naming a product line
+after treating it would be a drug-claim well beyond the whitening/
+firming/brightening language already flagged above, and beyond what
+this project publishes without a real label to back it. Published as
+"Gentle Brightening Set" (from the actual soap label) instead. Confirm
+with the client before ever using "melasma" as a public-facing name.
 
 Auléa Essence for Men / Women (Eau de Parfum) carry no efficacy claim,
 just scent names.

@@ -13,15 +13,18 @@ experimental rose/sage palette from a prior session are also superseded.
 
 Real assets have landed: the colour/type system, founder story (written
 first-person on Home + About), the real logo, a real founder photo, a
-sitewide hero photo, product photography for 6 of the catalog's 8 SKUs, 8
-real customer testimonial graphics, and real Shopee listing links for all
-8 SKUs. What's still genuinely missing: legible ingredient-panel photos
-(needed before publishing any ingredient list, see
-`docs/compliance-notes.md`) and DNS/pixel access. See
+sitewide hero photo, product photography for 8 of the catalog's 10 SKUs
+(including the 2 set SKUs, both added from a later upload), 8 real
+customer testimonial graphics, and real Shopee listing links for the
+original 8 SKUs. What's still genuinely missing: legible
+ingredient-panel photos (needed before publishing any ingredient list,
+see `docs/compliance-notes.md`), Shopee listing links for the 2 new set
+SKUs, and DNS/pixel access. See
 [`docs/intake-checklist.md`](docs/intake-checklist.md) for the full list,
 including what the real photography and client directives changed along
 the way (sunscreen is SPF 50 not SPF 30, two Essence SKUs found in
-photography, purchase model, composed copy, colour deviation).
+photography, two set SKUs added later, purchase model, composed copy,
+colour deviation).
 
 - **What's here:** the design system with colours matched to a
   client-supplied reference and sampled directly from it (Navy `#102048` /
@@ -31,15 +34,20 @@ photography, purchase model, composed copy, colour deviation).
   v2.0 PART A), Fraunces/Bebas Neue/Mulish typography, the real logo
   (`public/images/logo/`, source in `assets/logo-source/`), real product
   photography wired into every product card/gallery, the real first-person
-  founder story with a real founder photo, the confirmed 8-SKU catalog
+  founder story with a real founder photo, the confirmed 10-SKU catalog
   with composed benefits/usage/description copy, 8 real customer
   testimonials on the homepage, and a "Buy on Shopee" link on every
-  product that opens its real Shopee listing, there is no cart or
-  checkout on this site.
+  product that opens its real Shopee listing (the two new set SKUs have
+  that link in place but pointed at a blank URL, no listing exists yet),
+  there is no cart or checkout on this site.
 - **What's not here:** an ingredients list for any SKU (composing one
   would mean fabricating a safety-relevant claim, so it stays pending
   until the client supplies a legible label); live analytics/pixel IDs;
-  whether the plain "Aulea Natural Soap" SKU is real.
+  whether the plain "Aulea Natural Soap" SKU is real; Shopee listing
+  links for the 2 new set SKUs; client confirmation on whether "Melasma
+  Set" can ever be used as a public product name (see
+  `docs/compliance-notes.md`, published for now as "Gentle Brightening
+  Set").
 
 Every remaining placeholder is marked with `[bracketed text]` or a 🖼️
 placeholder box. Regulatory reference material (informational only, not a

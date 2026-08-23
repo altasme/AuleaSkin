@@ -15,14 +15,18 @@ PRIMARY CONVERSION:        Purchase (Browse -> Buy on Shopee -> completes on Sho
                             directive supersedes spec §2's own-checkout plan)
 SECONDARY CONVERSION:      Email signup (not yet wired, no destination named, spec F5)
 TRAFFIC SOURCES:           Paid social (Meta), plus existing Shopee audience
-CORE PRODUCTS / SERVICES:  8 SKUs, reconciled against real product photography (supersedes spec
+CORE PRODUCTS / SERVICES:  10 SKUs, reconciled against real product photography (supersedes spec
                             B6's text list, see docs/intake-checklist.md): Sunscreen SPF 50 with
                             Alpha Arbutin (30 mL, label says 50, spec text said 30), Organic
                             Vitamin C Serum (15 mL), Niacinamide Facial Wash (60 mL), Collagen +
                             Vitamin E Firming Lotion (100 mL), Glass Skin Natural Soap (70 g),
                             Ultimate Whitening Natural Soap (70 g), Essence for Men (50 mL EDP,
                             scents Paul/Cedrick, new, not in any spec version), Essence for Women
-                            (50 mL EDP, scents Irish/Nathalie/Courtney, new). Plain "Aulea Natural
+                            (50 mL EDP, scents Irish/Nathalie/Courtney, new), Glass Skin Set
+                            (4-piece bundle, added from a later upload), Gentle Brightening Set
+                            (4-piece bundle, client's own filename called this one "Melasma Set,"
+                            renamed to match its actual label text, see compliance-notes.md; no
+                            Shopee link supplied yet for either set). Plain "Aulea Natural
                             Soap" dropped, no photo evidence it exists. Ingredients still pending
                             for all (see compliance-notes.md for why that one stays pending even
                             though usage/benefits were composed); no price shown on this site,
@@ -60,18 +64,20 @@ BRAND DIRECTION:           Updated to match a client-supplied reference design
                             final per spec A4). Logo: RECEIVED and live (full lockup + icon),
                             used as supplied per spec B2, see assets/logo-source/README.md.
 CLIENT MATERIALS RECEIVED: Brand kit, founder story, founder photo, real logo (lockup + icon +
-                            favicon source), sitewide hero photo, product photography for 6 of 8
-                            SKUs, a real brand photo, 8 real customer testimonial graphics, real
-                            Shopee listing links for all 8 SKUs, contact email, Shopee store link,
-                            courier list, free-shipping threshold, payment methods list
-                            (GCash/Maya/Bank Transfer/COD, via Shopee)
-MISSING MATERIALS:         Legible ingredients-panel photos, DNS/pixel access, see
-                            docs/intake-checklist.md
+                            favicon source), sitewide hero photo, product photography for 6 of the
+                            original 8 SKUs plus both set SKUs (8 of 10 total), a real brand photo,
+                            8 real customer testimonial graphics, real Shopee listing links for the
+                            original 8 SKUs, contact email, Shopee store link, courier list,
+                            free-shipping threshold, payment methods list (GCash/Maya/Bank
+                            Transfer/COD, via Shopee)
+MISSING MATERIALS:         Legible ingredients-panel photos, Shopee listing links for the 2 set
+                            SKUs, client confirmation on the "Melasma Set" naming question, DNS/
+                            pixel access, see docs/intake-checklist.md
 ESTIMATED BUILD TIME:      4 to 6 days from Build-Ready confirmation (spec G3), not started,
                             clock has not begun
 PHASE 1 STATUS:            BUILDING (design system, brand content, catalog, and Shopee-redirect
-                            purchase flow in place; blocked on ingredients photos + founder photo
-                            + DNS/pixel access before launch-ready)
+                            purchase flow in place; blocked on ingredients photos + Shopee links
+                            for the 2 set SKUs + DNS/pixel access before launch-ready)
 PHASE 2 OPPORTUNITIES:     Not yet scoped, admin/back-office (spec E5), an actual own-checkout
                             payment/order backend if the client later wants to move off Shopee,
                             customer accounts, loyalty, advanced SEO

@@ -114,6 +114,36 @@ This photography changed what the catalog actually is, vs. the spec text:
 
 Catalog is now **8 SKUs**, not 7.
 
+## Two set SKUs added from a later photography upload
+
+- [x] **Auléa Glass Skin Set** (`glass-skin-set`), a 4-piece bundle:
+      Glass Skin Brightening Soap (70 g), Glass Skin Hydrating Toner
+      (60 mL), Glass Skin Day Cream SPF 30 PA++++ (15 g), Glass Skin
+      Night Repair Cream (15 g). All four names come straight off the
+      real label photography.
+- [x] **Auléa Gentle Brightening Set** (`gentle-brightening-set`), a
+      4-piece bundle: Gentle Brightening Soap (70 g), Exfoliating Toner
+      (60 mL), Hydrating Moisturizer with Sun Protection (15 g), Night
+      Repair Cream (15 g).
+- [ ] **The client's own filenames called the second set "Melasma
+      Set."** Nothing on its actual packaging says "melasma" anywhere,
+      that's a specific medical diagnosis, not a cosmetic claim, and
+      publishing a product as a melasma treatment would be a much
+      stronger regulated claim than anything else already flagged in
+      `compliance-notes.md`. Published under a label-accurate name
+      instead ("Gentle Brightening Set"). **Flag back to the client
+      before ever using "melasma" as a public product name.**
+- [ ] Both sets' `shopeeUrl` is intentionally blank
+      (`src/data/products.ts`), no listing link was supplied yet. The
+      "Buy on Shopee" button is live but currently links nowhere, fill
+      in before launch.
+- [ ] `benefits`, `description`, `usage`, and `suitableFor` for both
+      sets are composed copy, same basis and same client
+      read-through caveat as the rest of the composed catalog copy
+      above.
+
+Catalog is now **10 SKUs**.
+
 ## Still outstanding
 
 - [ ] Legible **ingredients label photos**, the supplied photography shows
@@ -123,6 +153,9 @@ Catalog is now **8 SKUs**, not 7.
 - [ ] Whether plain "Aulea Natural Soap" is a real SKU
 - [x] Founder photo, received and live on Home and About
       (`public/images/founder/founder.webp`)
+- [ ] Real Shopee listing links for the two new set SKUs (Glass Skin
+      Set, Gentle Brightening Set)
+- [ ] Client confirmation on the "Melasma Set" naming question above
 - [ ] Domain registrar / DNS access (or named controller)
 - [ ] Meta ad account / pixel access for spec F5 measurement
 - [ ] Email capture destination (list/store/Resend or equivalent) for the

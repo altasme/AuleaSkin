@@ -15,6 +15,7 @@ const categoryCopy: Record<string, string> = {
   Lotions: "Everyday moisture for firmer, smoother skin.",
   Soaps: "Natural bar soaps for everyday cleansing.",
   Fragrance: "Eau de Parfum in scents for him and her.",
+  Sets: "Complete routines, bundled together.",
 };
 
 const testimonialImages = Array.from(
