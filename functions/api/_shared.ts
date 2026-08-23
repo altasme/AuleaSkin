@@ -47,8 +47,14 @@ export async function getOrSeed<T>(kv: KVNamespace, key: string, seed: T): Promi
   return seed;
 }
 
+// No-store on every response: this data changes whenever the admin
+// saves something, and both browsers and Cloudflare's edge will cache a
+// plain GET response unless told not to, a stale cached copy here means
+// "I added a product and it didn't show up" even though the database is
+// already correct. Real bug found from a live report, not a guess.
 export function jsonResponse(data: unknown, init?: ResponseInit): Response {
   const headers = new Headers(init?.headers);
   headers.set("content-type", "application/json");
+  headers.set("cache-control", "no-store");
   return new Response(JSON.stringify(data), { ...init, headers });
 }

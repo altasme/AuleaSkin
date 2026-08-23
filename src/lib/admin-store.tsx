@@ -76,7 +76,7 @@ const SAVE_DEBOUNCE_MS = 800;
 class UnauthorizedError extends Error {}
 
 async function apiGet<T>(path: string): Promise<T> {
-  const res = await fetch(path, { headers: { ...authHeader() } });
+  const res = await fetch(path, { headers: { ...authHeader() }, cache: "no-store" });
   if (res.status === 401) throw new UnauthorizedError();
   if (!res.ok) throw new Error(`Failed to load ${path} (${res.status})`);
   return res.json();

@@ -15,7 +15,7 @@ export function useLiveProducts(): Product[] {
 
   useEffect(() => {
     let cancelled = false;
-    fetch("/api/products")
+    fetch("/api/products", { cache: "no-store" })
       .then((res) => (res.ok ? res.json() : Promise.reject(new Error(String(res.status)))))
       .then((data: Product[]) => {
         if (!cancelled && Array.isArray(data)) setProducts(data);
