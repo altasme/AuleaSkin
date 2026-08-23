@@ -1,0 +1,21 @@
+# Cloudflare Pages config for the Functions under functions/ (the admin
+# panel's API). The static site itself (next build -> out/) doesn't need
+# this file to deploy, Pages serves out/ either way; this only matters
+# for the KV-backed API routes. See docs/admin-panel.md.
+
+name = "aulea-skin"
+pages_build_output_dir = "out"
+compatibility_date = "2025-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+[[kv_namespaces]]
+binding = "AULEA_DATA"
+# Local dev only needs *some* id to be present, `wrangler pages dev`
+# without --remote persists to .wrangler/state locally and never
+# contacts this id. For production, replace this with the real
+# namespace id from `wrangler kv namespace create AULEA_DATA`, or bind
+# it in the Cloudflare dashboard instead (Settings > Functions > KV
+# namespace bindings) if this project deploys via git integration rather
+# than `wrangler pages deploy`, either path works, the dashboard binding
+# takes precedence for production if both exist.
+id = "REPLACE_WITH_REAL_KV_NAMESPACE_ID"

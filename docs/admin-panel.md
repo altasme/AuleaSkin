@@ -2,68 +2,132 @@
 
 `/adminpanel`, added on client request. Lets an admin manage the product
 catalog and the site's main content blocks without touching code directly.
+Backed by a real database (Cloudflare Workers KV) as of the KV setup
+described below, edits are live for every visitor as soon as they save.
 
 ## Sign in
 
 - Username: `Auleadmin`
 - Password: `aulea@2026`
 
-Hardcoded in `src/app/adminpanel/auth.ts`, per the client's own request.
+Checked server-side now (`functions/api/login.ts`, via `functions/api/_shared.ts`'s
+`requireAuth`), against the `ADMIN_USERNAME` / `ADMIN_PASSWORD` secrets set
+on the Cloudflare Pages project, not against anything shipped in the
+client bundle. This is a real gate: a visitor without the password cannot
+read or write the admin API, full stop.
 
-**This is not real security.** The site is a static export with no server
-(`next.config.ts`, `output: "export"`), so there is nowhere to check a
-password except inside the same JavaScript bundle every visitor already
-has. Anyone who opens devtools can read these values or skip the gate
-entirely. It keeps the page off casual, stumbled-upon links, not off a
-determined visitor. If that's not acceptable once this is live, put a real
-gate in front of the route instead (Cloudflare Access, HTTP basic auth at
-the CDN/edge, or a real login backed by an actual server), rather than
-trying to harden the client-side check, that ceiling can't be raised from
-inside a static bundle.
+It's still a single shared credential pair, not per-user accounts, HTTP
+Basic Auth checked on every request rather than session tokens. That's an
+intentional, appropriate simplification for one shared admin login, not a
+corner cut, adding session/token infrastructure here would be complexity
+without adding real access control for this use case.
 
-## What "no database yet" actually means here
+## Architecture: Cloudflare Pages Functions + Workers KV
 
-There is no database and no backend. `/adminpanel` is a fully client-side
-React app that:
+The public site still builds as a static export exactly as before
+(`next.config.ts`, `output: "export"`, unchanged, see `docs/deployment.md`).
+Only the admin panel's data layer changed. Cloudflare Pages supports a
+`functions/` directory at the repo root that deploys as edge API routes
+**alongside** the static build, on the same domain, no separate hosting
+project or URL:
 
-1. Loads the site's current hardcoded data (`src/data/products.ts`,
-   `src/lib/site-config.ts`, `src/data/site-content.ts`) as its starting
-   point.
-2. Lets the admin edit it in memory.
-3. Mirrors every edit to that browser's `localStorage`
-   (`src/lib/admin-store.tsx`), so it survives a page reload.
+```
+functions/
+  env.d.ts        Env type (the KV binding + the two secrets)
+  tsconfig.json   Separate from the root tsconfig, Workers runtime types
+                  differ from the Next.js app's DOM types, kept out of
+                  `next build`'s TypeScript pass (see root tsconfig.json's
+                  exclude) so the two don't collide
+  api/
+    _shared.ts    requireAuth() + getOrSeed() + jsonResponse() helpers
+    login.ts      POST, used once at sign-in to verify credentials
+    products.ts   GET / PUT the full products array
+    site-config.ts    GET / PUT the Business Info object
+    site-content.ts   GET / PUT the Homepage/About/Contact copy object
+```
 
-That's the entire persistence story. **An edit made in the admin panel
-does not change what a customer sees on the live site**, and it doesn't
-sync to any other browser, device, or visitor either. There's no backend
-for it to sync to. This is a deliberate, honest limitation, not a bug:
-building a panel that looked like it saved live changes when it
-structurally can't would be worse than one that's upfront about what it
-does.
+Data lives in one KV namespace (binding name `AULEA_DATA`) as three JSON
+values, keyed `products`, `site-config`, `site-content`. That's it, no
+relational schema, this is genuinely "text data only" at catalog scale
+(~10-20 products, a handful of copy blocks), a few JSON blobs is the
+right amount of structure, not an undersized one.
 
-The intended workflow, until real persistence exists:
+**Auto-seeding**: KV starts empty. The first authenticated read of a key
+that doesn't exist yet seeds it from the value currently hardcoded in the
+app (`src/data/products.ts`, `src/lib/site-config.ts`,
+`src/data/site-content.ts`) and writes that back to KV
+(`getOrSeed` in `functions/api/_shared.ts`). No manual seeding step, the
+catalog just works the first time the admin panel loads against a freshly
+bound namespace.
 
-1. Admin edits products or site content in the panel.
-2. Admin opens the **Export & Sync** tab and copies the JSON for whatever
-   changed.
-3. That JSON goes to a developer (or the admin edits the matching source
-   file directly, if comfortable in code): `src/data/products.ts`,
-   `src/lib/site-config.ts`, or `src/data/site-content.ts` (the last one is
-   currently a content snapshot for the panel to edit, not yet read by the
-   live pages, see "Site content, not yet live" below).
-4. The developer commits it and redeploys. Only then does it reach real
-   visitors.
+### Site content: data is live, the public pages aren't wired to it yet
 
-### Getting to real persistence later
+**Products and Business Info are fully live**: editing either in the
+panel changes what KV holds, and the admin panel (and anyone else calling
+the API) sees it immediately. `src/lib/site-config.ts`'s shape is the real
+site-settings shape, not a duplicate.
 
-Whenever this needs to become a real live-editing CMS, that requires
-picking a real backend (a database + an API layer this static export
-doesn't have room for today), which also means moving off pure static
-export for at least the admin route (or the whole site) toward a runtime
-that can serve dynamic reads/writes, e.g. Next's Node runtime, a small API
-on Cloudflare Workers/D1, or a headless CMS. That's a real architecture
-change, not a tweak to this panel, and is worth scoping as its own piece
-of work rather than backing into it.
+**Homepage / About / Contact copy is real and persisted, but the public
+pages don't read it yet.** `src/data/site-content.ts` is a snapshot of the
+copy that's still hardcoded directly in the page files (`src/app/(site)/page.tsx`,
+`src/app/(site)/about/page.tsx`, `src/app/(site)/contact/page.tsx`).
+Editing it in the panel now genuinely persists to KV (and would round-trip
+correctly through the API), but those pages still render their own literal
+JSX at build time, they were never changed to fetch from KV. Making that
+fully live means either:
+
+- fetching `site-content` from the KV API at request time, which requires
+  those pages to stop being purely static (they'd need to move off
+  `output: "export"`, at least for that route), or
+- generating the static site's copy from KV at *build* time instead of
+  request time (a build step that pulls current KV content into
+  `site-content.ts`-shaped data before `next build` runs).
+
+Either is a real, scoped follow-up, deliberately not done as a silent
+side effect of adding KV, since it changes how the public pages render.
+Flagging it here rather than doing it quietly.
+
+## Local development
+
+```bash
+npm run build          # produces out/, the static site Functions serve alongside
+npx wrangler pages dev out
+```
+
+`wrangler pages dev` reads `wrangler.toml` for the `AULEA_DATA` KV binding
+and `.dev.vars` for the two secrets (both gitignored, `.dev.vars` needs
+creating locally, see `.dev.vars` below), and persists KV writes to
+`.wrangler/state` on disk between runs, no real Cloudflare account or
+login needed for local testing. Only real remote deployment needs that.
+
+Create `.dev.vars` at the repo root (not committed):
+
+```
+ADMIN_USERNAME=Auleadmin
+ADMIN_PASSWORD=aulea@2026
+```
+
+## Production setup (do this once, on the real Cloudflare account)
+
+1. **Create the KV namespace**: `npx wrangler login`, then
+   `npx wrangler kv namespace create AULEA_DATA`. This prints a namespace
+   id, copy it.
+2. **Bind it to the Pages project**: Cloudflare dashboard → Workers & Pages
+   → this project → Settings → Functions → KV namespace bindings → Add
+   binding. Variable name `AULEA_DATA`, select the namespace just created.
+   (Alternatively, put the id into `wrangler.toml`'s
+   `REPLACE_WITH_REAL_KV_NAMESPACE_ID` placeholder and deploy with
+   `wrangler pages deploy`, if this project moves to a wrangler-driven
+   deploy instead of git-integrated dashboard deploys, either path binds
+   the same namespace, the dashboard takes precedence if both are set.)
+3. **Set the two secrets**: same Settings page → Environment variables →
+   Add secret, for both `ADMIN_USERNAME` and `ADMIN_PASSWORD`. Secrets,
+   not plain variables, so they're not readable back out via the
+   dashboard once set.
+4. **Redeploy** so the new binding and secrets take effect (Pages only
+   picks up binding/secret changes on the next deployment).
+5. Sign in at `/adminpanel`, the catalog auto-seeds on first load, no
+   manual data entry needed to get started.
 
 ## Products & Pricing tab
 
@@ -76,6 +140,11 @@ rendered anywhere on the live site yet, Shopee stays the pricing source of
 truth per the client's standing purchase-model directive (see
 `docs/intake-checklist.md`); it's just ready for whenever that changes.
 
+Every add/edit/delete PUTs the full products array to `/api/products`
+immediately, these are already discrete, deliberate actions (a form
+submit, a confirmed delete), not continuous typing, so there's no reason
+to debounce them the way Website Content fields are (see below).
+
 ### Product images
 
 Each product takes three images: two square (1:1) and one portrait (4:5),
@@ -84,7 +153,7 @@ convention the *existing* photographed catalog uses (one 4:3 landscape
 lead image + up to two 1:1 secondaries, see `docs/image-requirements.md`),
 which is why: a product added or edited here stores its images in the
 order **[square, square, portrait]**, not `[landscape, square, square]`.
-The live product detail page's gallery (`src/app/products/[slug]/page.tsx`)
+The live product detail page's gallery (`src/app/(site)/products/[slug]/page.tsx`)
 still renders the first image large in a 4:3 frame and the rest as
 squares, it hasn't been changed to match the new shape. If a set of admin
 images from here is applied to a live product, whoever applies it should
@@ -93,8 +162,7 @@ component, the panel doesn't attempt that layout decision on its own.
 
 Images upload straight to Cloudinary from the browser (see "Image uploads
 (Cloudinary)" below). An aspect-ratio mismatch shows a warning but never
-blocks the upload, there's no server here to enforce anything harder than
-that.
+blocks the upload.
 
 ## Website Content tab
 
@@ -113,39 +181,23 @@ it doesn't turn into a wall of unlabeled text fields:
 - **Contact Page**: heading and intro text (contact details themselves
   come from Business Info, not duplicated here).
 
-### Site content, not yet live
-
-**Business Info edits *are* editing the same data type the live site
-uses** (`src/lib/site-config.ts`'s shape), that part of the panel is a
-real editor for real site settings, exported as-is.
-
-**Homepage / About / Contact edits are different**: `src/data/site-content.ts`
-is a new file created specifically for this panel, a snapshot of the
-copy that's currently hardcoded directly in the page files
-(`src/app/page.tsx`, `src/app/about/page.tsx`, `src/app/contact/page.tsx`).
-Editing it in the panel does not change those pages, because those pages
-don't read from it, they still render their own hardcoded JSX. Making
-this fully live (pages reading from `site-content.ts` instead of literal
-JSX) is a reasonable next step, deliberately not done as a silent side
-effect of building this panel, since it touches every one of those pages.
-Flagging it here rather than doing it quietly.
-
-This is not withheld to be difficult, it's the direct consequence of
-"hardcoded, no database yet" plus a static-export site with no backend:
-nothing running anywhere can accept a write from a browser and make it
-appear for other visitors.
+Every field in this tab saves on a debounce (~800ms after the admin stops
+typing), not on every keystroke, that would mean a network request per
+character. `src/lib/admin-store.tsx` updates local state immediately (so
+typing feels normal) and fires the actual `PUT` after the pause.
 
 ## Image uploads (Cloudinary)
 
 Cloud name (from the client): `o300ubug`
 
-Because this site has no server, uploads are **unsigned**: the browser
-posts the file straight to Cloudinary's REST endpoint with the cloud name
-and a preset name, nothing else. The API key the client also supplied
-isn't used anywhere in this code, an API key alone can't authorize an
-unsigned upload (that's the point of "unsigned"), and a key without its
-secret can't do a signed one either, there's no server here to hold a
-secret safely regardless.
+Because this site has no server *for images* (Cloudinary handles those,
+not KV, "our database will be text data only" was the client's own
+framing), uploads are **unsigned**: the browser posts the file straight to
+Cloudinary's REST endpoint with the cloud name and a preset name, nothing
+else. The API key the client also supplied isn't used anywhere in this
+code, an API key alone can't authorize an unsigned upload (that's the
+point of "unsigned"), and a key without its secret can't do a signed one
+either.
 
 **Setup still needed**: create an upload preset in the Cloudinary console
 (Settings → Upload → Upload presets → Add upload preset), set its Signing
@@ -157,18 +209,28 @@ tab (a banner) and on each image slot (an error under the upload button).
 ## Files
 
 ```
+functions/                Cloudflare Pages Functions, the admin API, see
+                           "Architecture" above
 src/app/adminpanel/
-  page.tsx              Route entry, noindex metadata
-  AdminApp.tsx           Auth gate + tab shell
-  auth.ts                 Hardcoded username/password, see caveats above
-  LoginGate.tsx           Sign-in form
-  ProductsPanel.tsx        Product list, add/edit/delete
-  ProductForm.tsx           Add/edit form, all fields + image slots
-  ImageSlot.tsx              Cloudinary upload control per image
-  SiteContentPanel.tsx    Business Info / Homepage / About / Contact editor
-  ExportPanel.tsx         Copy-out JSON + reset
+  page.tsx                 Route entry, noindex metadata
+  AdminApp.tsx               Auth gate + tab shell + save-status banner
+  auth.ts                     sessionStorage helpers, no credentials live
+                               here anymore, see "Sign in" above
+  LoginGate.tsx               Sign-in form, POSTs to /api/login
+  ProductsPanel.tsx            Product list, add/edit/delete
+  ProductForm.tsx               Add/edit form, all fields + image slots
+  ImageSlot.tsx                  Cloudinary upload control per image
+  SiteContentPanel.tsx        Business Info / Homepage / About / Contact editor
+  ExportPanel.tsx             Backup (copy JSON) + restore original defaults
 
-src/lib/admin-store.tsx  React context + localStorage persistence
-src/lib/cloudinary.ts    Unsigned upload helper
-src/data/site-content.ts Homepage/About/Contact copy snapshot (panel-only)
+src/lib/admin-store.tsx    React context, fetches/PUTs the Functions API,
+                            debounces Website Content saves
+src/lib/cloudinary.ts      Unsigned upload helper
+src/data/site-content.ts   Homepage/About/Contact copy, seeds KV on first
+                            read, see "Site content" above for what's and
+                            isn't live yet
+wrangler.toml               Local dev config (KV binding), see "Local
+                             development" above
+.dev.vars                   Local-only secrets, gitignored, create it
+                             yourself, see "Local development" above
 ```

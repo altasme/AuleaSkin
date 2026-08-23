@@ -156,6 +156,12 @@ Catalog is now **10 SKUs**.
 - [ ] Cloudinary unsigned upload preset for the admin panel's image
       uploader (cloud name is set, the preset itself still needs to be
       created in the Cloudinary dashboard), see `docs/admin-panel.md`
+- [ ] Cloudflare KV namespace for the admin panel's database, needs
+      creating and binding on the real Cloudflare account (I don't have
+      access to it from this session), plus setting the
+      `ADMIN_USERNAME` / `ADMIN_PASSWORD` secrets on the Pages project,
+      see `docs/admin-panel.md`'s "Production setup". Works already in
+      local dev without this.
 - [ ] Domain registrar / DNS access (or named controller)
 - [ ] Meta ad account / pixel access for spec F5 measurement
 - [ ] Email capture destination (list/store/Resend or equivalent) for the

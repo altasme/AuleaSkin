@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "pages:dev": "next build && wrangler pages dev out",
+    "functions:typecheck": "tsc --project functions/tsconfig.json"
   },
   "dependencies": {
     "next": "16.3.1",
@@ -14,6 +16,7 @@
     "react-dom": "19.2.8"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^5.20260823.1",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
@@ -21,6 +24,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.3.1",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wrangler": "^4.125.0"
   }
 }

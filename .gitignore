@@ -37,6 +37,10 @@ yarn-error.log*
 # vercel
 .vercel
 
+# wrangler (Cloudflare Pages Functions local dev, see docs/admin-panel.md)
+/.wrangler/
+.dev.vars*
+
 # local-only tooling, not part of the shipped site
 /.claude/
 

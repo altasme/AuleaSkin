@@ -1,24 +1,23 @@
 "use client";
 
-// Client-side data store for the admin panel (src/app/adminpanel). There
-// is no database and no server on this static-export site (see
-// next.config.ts), so "saving" here means: keep the edit in React state,
-// mirror it to this browser's localStorage so it survives a reload, and
-// nothing more. It does not reach the live site or any other visitor's
-// browser. See docs/admin-panel.md for the full explanation and the
-// intended workflow (edit here, then Export, then a developer applies it
-// to the codebase).
+// Client-side data store for the admin panel (src/app/adminpanel).
+// Reads and writes go straight to the Cloudflare Pages Functions API
+// under functions/api/ (KV-backed, see docs/admin-panel.md), there's no
+// local caching layer, the API is the source of truth. An edit here is
+// live for every visitor as soon as the PUT request succeeds.
+//
+// Business Info / Homepage / About / Contact fields update local state
+// immediately on every keystroke (so typing feels normal) but the actual
+// network PUT is debounced, otherwise every keystroke would fire its own
+// request. Products save immediately on each add/edit/delete instead,
+// those are already discrete, deliberate actions, not continuous typing.
 
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { products as defaultProducts, type Product } from "@/data/products";
 import { siteConfig as defaultSiteConfig } from "@/lib/site-config";
 import { defaultSiteContent, type SiteContent } from "@/data/site-content";
+import { authHeader } from "@/app/adminpanel/auth";
 
-// Hand-written, not derived from `typeof defaultSiteConfig`: that object
-// is declared `as const` in site-config.ts, so its inferred type has
-// string-literal fields (e.g. businessName: "Aulea Skin", not string),
-// which would make every input's onChange a type error the moment it
-// tried to assign a different value.
 export type MutableSiteConfig = {
   businessName: string;
   wordmark: string;
@@ -49,193 +48,249 @@ export type MutableSiteConfig = {
   secondaryCta: string;
 };
 
-const STORAGE_KEY = "aulea-admin-store-v1";
-
-type StoredShape = {
+type State = {
   products: Product[];
   siteConfig: MutableSiteConfig;
   siteContent: SiteContent;
-  savedAt: string | null;
+  isLoading: boolean;
+  loadError: string | null;
+  saveError: string | null;
+  isSaving: boolean;
+  lastSavedAt: string | null;
 };
 
-function cloneDefaults(): StoredShape {
-  return {
-    products: JSON.parse(JSON.stringify(defaultProducts)),
-    siteConfig: JSON.parse(JSON.stringify(defaultSiteConfig)),
-    siteContent: JSON.parse(JSON.stringify(defaultSiteContent)),
-    savedAt: null,
-  };
-}
-
-type AdminStore = StoredShape & {
+type AdminStore = State & {
   isHydrated: boolean;
-  addProduct: (product: Product) => void;
-  updateProduct: (slug: string, product: Product) => void;
-  deleteProduct: (slug: string) => void;
+  addProduct: (product: Product) => Promise<void>;
+  updateProduct: (slug: string, product: Product) => Promise<void>;
+  deleteProduct: (slug: string) => Promise<void>;
   updateSiteConfig: (patch: Partial<MutableSiteConfig>) => void;
   updateSiteContent: (patch: Partial<SiteContent>) => void;
-  resetProducts: () => void;
-  resetSiteConfig: () => void;
-  resetSiteContent: () => void;
-  resetAll: () => void;
+  restoreDefaults: () => Promise<void>;
 };
 
 const AdminStoreContext = createContext<AdminStore | null>(null);
 
-export function AdminStoreProvider({ children }: { children: React.ReactNode }) {
-  const [state, setState] = useState<StoredShape>(cloneDefaults);
-  const [isHydrated, setIsHydrated] = useState(false);
+const SAVE_DEBOUNCE_MS = 800;
+
+class UnauthorizedError extends Error {}
+
+async function apiGet<T>(path: string): Promise<T> {
+  const res = await fetch(path, { headers: { ...authHeader() } });
+  if (res.status === 401) throw new UnauthorizedError();
+  if (!res.ok) throw new Error(`Failed to load ${path} (${res.status})`);
+  return res.json();
+}
+
+async function apiPut(path: string, body: unknown): Promise<void> {
+  const res = await fetch(path, {
+    method: "PUT",
+    headers: { "content-type": "application/json", ...authHeader() },
+    body: JSON.stringify(body),
+  });
+  if (res.status === 401) throw new UnauthorizedError();
+  if (!res.ok) throw new Error(`Failed to save ${path} (${res.status})`);
+}
+
+export function AdminStoreProvider({
+  children,
+  onUnauthorized,
+}: {
+  children: React.ReactNode;
+  onUnauthorized: () => void;
+}) {
+  const [state, setState] = useState<State>({
+    products: [],
+    siteConfig: defaultSiteConfig as unknown as MutableSiteConfig,
+    siteContent: defaultSiteContent,
+    isLoading: true,
+    loadError: null,
+    saveError: null,
+    isSaving: false,
+    lastSavedAt: null,
+  });
+
+  const handleUnauthorized = useCallback(() => onUnauthorized(), [onUnauthorized]);
+
+  // Guards against the debounced site-config/site-content effects firing
+  // for a state change that came FROM the server (initial load, or
+  // restoreDefaults), rather than from the admin actually typing
+  // something. Starts true so the first load doesn't re-PUT what it just
+  // fetched.
+  const skipNextConfigSave = useRef(true);
+  const skipNextContentSave = useRef(true);
+  const configSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const contentSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    // localStorage doesn't exist during the static prerender (no `window`
-    // on the server), so this read has to happen post-mount, it can't be
-    // a lazy useState initializer without crashing the build.
-    try {
-      const raw = window.localStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        const parsed = JSON.parse(raw) as StoredShape;
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setState({
-          products: parsed.products ?? cloneDefaults().products,
-          siteConfig: { ...cloneDefaults().siteConfig, ...parsed.siteConfig },
-          siteContent: { ...cloneDefaults().siteContent, ...parsed.siteContent },
-          savedAt: parsed.savedAt ?? null,
-        });
+    let cancelled = false;
+    (async () => {
+      try {
+        const [products, siteConfig, siteContent] = await Promise.all([
+          apiGet<Product[]>("/api/products"),
+          apiGet<MutableSiteConfig>("/api/site-config"),
+          apiGet<SiteContent>("/api/site-content"),
+        ]);
+        if (cancelled) return;
+        setState((prev) => ({ ...prev, products, siteConfig, siteContent, isLoading: false }));
+      } catch (err) {
+        if (cancelled) return;
+        if (err instanceof UnauthorizedError) return handleUnauthorized();
+        setState((prev) => ({
+          ...prev,
+          isLoading: false,
+          loadError: err instanceof Error ? err.message : "Failed to load admin data.",
+        }));
       }
-    } catch {
-      // Corrupt or unavailable localStorage, fall back to defaults silently.
-    }
-    setIsHydrated(true);
-  }, []);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [handleUnauthorized]);
 
-  const persist = useCallback((next: StoredShape) => {
-    setState(next);
-    try {
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-    } catch {
-      // Storage full or unavailable (private browsing). Edits still work
-      // for this page load, they just won't survive a reload.
-    }
-  }, []);
+  const persistProducts = useCallback(
+    async (next: Product[]) => {
+      setState((prev) => ({ ...prev, isSaving: true, saveError: null }));
+      try {
+        await apiPut("/api/products", next);
+        setState((prev) => ({ ...prev, isSaving: false, lastSavedAt: new Date().toISOString() }));
+      } catch (err) {
+        if (err instanceof UnauthorizedError) return handleUnauthorized();
+        setState((prev) => ({
+          ...prev,
+          isSaving: false,
+          saveError: err instanceof Error ? err.message : "Save failed.",
+        }));
+      }
+    },
+    [handleUnauthorized]
+  );
 
   const addProduct = useCallback(
-    (product: Product) => {
-      setState((prev) => {
-        const next = { ...prev, products: [...prev.products, product], savedAt: new Date().toISOString() };
-        persist(next);
-        return next;
-      });
+    async (product: Product) => {
+      const next = [...state.products, product];
+      setState((prev) => ({ ...prev, products: next }));
+      await persistProducts(next);
     },
-    [persist]
+    [state.products, persistProducts]
   );
 
   const updateProduct = useCallback(
-    (slug: string, product: Product) => {
-      setState((prev) => {
-        const next = {
-          ...prev,
-          products: prev.products.map((p) => (p.slug === slug ? product : p)),
-          savedAt: new Date().toISOString(),
-        };
-        persist(next);
-        return next;
-      });
+    async (slug: string, product: Product) => {
+      const next = state.products.map((p) => (p.slug === slug ? product : p));
+      setState((prev) => ({ ...prev, products: next }));
+      await persistProducts(next);
     },
-    [persist]
+    [state.products, persistProducts]
   );
 
   const deleteProduct = useCallback(
-    (slug: string) => {
-      setState((prev) => {
-        const next = {
-          ...prev,
-          products: prev.products.filter((p) => p.slug !== slug),
-          savedAt: new Date().toISOString(),
-        };
-        persist(next);
-        return next;
-      });
+    async (slug: string) => {
+      const next = state.products.filter((p) => p.slug !== slug);
+      setState((prev) => ({ ...prev, products: next }));
+      await persistProducts(next);
     },
-    [persist]
+    [state.products, persistProducts]
   );
 
-  const updateSiteConfig = useCallback(
-    (patch: Partial<MutableSiteConfig>) => {
-      setState((prev) => {
-        const next = { ...prev, siteConfig: { ...prev.siteConfig, ...patch }, savedAt: new Date().toISOString() };
-        persist(next);
-        return next;
-      });
-    },
-    [persist]
-  );
+  const updateSiteConfig = useCallback((patch: Partial<MutableSiteConfig>) => {
+    setState((prev) => ({ ...prev, siteConfig: { ...prev.siteConfig, ...patch } }));
+  }, []);
 
-  const updateSiteContent = useCallback(
-    (patch: Partial<SiteContent>) => {
-      setState((prev) => {
-        const next = { ...prev, siteContent: { ...prev.siteContent, ...patch }, savedAt: new Date().toISOString() };
-        persist(next);
-        return next;
-      });
-    },
-    [persist]
-  );
+  const updateSiteContent = useCallback((patch: Partial<SiteContent>) => {
+    setState((prev) => ({ ...prev, siteContent: { ...prev.siteContent, ...patch } }));
+  }, []);
 
-  const resetProducts = useCallback(() => {
-    setState((prev) => {
-      const next = { ...prev, products: cloneDefaults().products, savedAt: new Date().toISOString() };
-      persist(next);
-      return next;
-    });
-  }, [persist]);
+  // Debounced network PUTs, fire ~800ms after the admin stops typing.
+  useEffect(() => {
+    if (state.isLoading) return;
+    if (skipNextConfigSave.current) {
+      skipNextConfigSave.current = false;
+      return;
+    }
+    if (configSaveTimer.current) clearTimeout(configSaveTimer.current);
+    configSaveTimer.current = setTimeout(() => {
+      setState((prev) => ({ ...prev, isSaving: true, saveError: null }));
+      apiPut("/api/site-config", state.siteConfig)
+        .then(() => setState((prev) => ({ ...prev, isSaving: false, lastSavedAt: new Date().toISOString() })))
+        .catch((err) => {
+          if (err instanceof UnauthorizedError) return handleUnauthorized();
+          setState((prev) => ({
+            ...prev,
+            isSaving: false,
+            saveError: err instanceof Error ? err.message : "Save failed.",
+          }));
+        });
+    }, SAVE_DEBOUNCE_MS);
+    return () => {
+      if (configSaveTimer.current) clearTimeout(configSaveTimer.current);
+    };
+  }, [state.siteConfig, state.isLoading, handleUnauthorized]);
 
-  const resetSiteConfig = useCallback(() => {
-    setState((prev) => {
-      const next = { ...prev, siteConfig: cloneDefaults().siteConfig, savedAt: new Date().toISOString() };
-      persist(next);
-      return next;
-    });
-  }, [persist]);
+  useEffect(() => {
+    if (state.isLoading) return;
+    if (skipNextContentSave.current) {
+      skipNextContentSave.current = false;
+      return;
+    }
+    if (contentSaveTimer.current) clearTimeout(contentSaveTimer.current);
+    contentSaveTimer.current = setTimeout(() => {
+      setState((prev) => ({ ...prev, isSaving: true, saveError: null }));
+      apiPut("/api/site-content", state.siteContent)
+        .then(() => setState((prev) => ({ ...prev, isSaving: false, lastSavedAt: new Date().toISOString() })))
+        .catch((err) => {
+          if (err instanceof UnauthorizedError) return handleUnauthorized();
+          setState((prev) => ({
+            ...prev,
+            isSaving: false,
+            saveError: err instanceof Error ? err.message : "Save failed.",
+          }));
+        });
+    }, SAVE_DEBOUNCE_MS);
+    return () => {
+      if (contentSaveTimer.current) clearTimeout(contentSaveTimer.current);
+    };
+  }, [state.siteContent, state.isLoading, handleUnauthorized]);
 
-  const resetSiteContent = useCallback(() => {
-    setState((prev) => {
-      const next = { ...prev, siteContent: cloneDefaults().siteContent, savedAt: new Date().toISOString() };
-      persist(next);
-      return next;
-    });
-  }, [persist]);
+  const restoreDefaults = useCallback(async () => {
+    const freshProducts: Product[] = JSON.parse(JSON.stringify(defaultProducts));
+    const freshConfig: MutableSiteConfig = JSON.parse(JSON.stringify(defaultSiteConfig));
+    const freshContent: SiteContent = JSON.parse(JSON.stringify(defaultSiteContent));
 
-  const resetAll = useCallback(() => {
-    persist(cloneDefaults());
-  }, [persist]);
+    skipNextConfigSave.current = true;
+    skipNextContentSave.current = true;
+    setState((prev) => ({ ...prev, products: freshProducts, siteConfig: freshConfig, siteContent: freshContent }));
+
+    setState((prev) => ({ ...prev, isSaving: true, saveError: null }));
+    try {
+      await Promise.all([
+        apiPut("/api/products", freshProducts),
+        apiPut("/api/site-config", freshConfig),
+        apiPut("/api/site-content", freshContent),
+      ]);
+      setState((prev) => ({ ...prev, isSaving: false, lastSavedAt: new Date().toISOString() }));
+    } catch (err) {
+      if (err instanceof UnauthorizedError) return handleUnauthorized();
+      setState((prev) => ({
+        ...prev,
+        isSaving: false,
+        saveError: err instanceof Error ? err.message : "Restore failed.",
+      }));
+    }
+  }, [handleUnauthorized]);
 
   const value = useMemo<AdminStore>(
     () => ({
       ...state,
-      isHydrated,
+      isHydrated: !state.isLoading,
       addProduct,
       updateProduct,
       deleteProduct,
       updateSiteConfig,
       updateSiteContent,
-      resetProducts,
-      resetSiteConfig,
-      resetSiteContent,
-      resetAll,
+      restoreDefaults,
     }),
-    [
-      state,
-      isHydrated,
-      addProduct,
-      updateProduct,
-      deleteProduct,
-      updateSiteConfig,
-      updateSiteContent,
-      resetProducts,
-      resetSiteConfig,
-      resetSiteContent,
-      resetAll,
-    ]
+    [state, addProduct, updateProduct, deleteProduct, updateSiteConfig, updateSiteContent, restoreDefaults]
   );
 
   return <AdminStoreContext.Provider value={value}>{children}</AdminStoreContext.Provider>;

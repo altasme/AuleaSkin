@@ -1,26 +1,40 @@
 "use client";
 
 import { useState } from "react";
-import { ADMIN_PASSWORD, ADMIN_SESSION_KEY, ADMIN_USERNAME } from "./auth";
+import { ADMIN_SESSION_KEY } from "./auth";
 
 export function LoginGate({ onSuccess }: { onSuccess: () => void }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [checking, setChecking] = useState(false);
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+    setError(null);
+    setChecking(true);
+
+    const encoded = btoa(`${username}:${password}`);
+    try {
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: { Authorization: `Basic ${encoded}` },
+      });
+      if (!res.ok) {
+        setError("Incorrect username or password.");
+        return;
+      }
       try {
-        window.sessionStorage.setItem(ADMIN_SESSION_KEY, "1");
+        window.sessionStorage.setItem(ADMIN_SESSION_KEY, encoded);
       } catch {
         // Session storage unavailable, admin stays logged in for this
-        // render only, that's fine for a client-only gate.
+        // render only, that's fine, it just won't survive a reload.
       }
-      setError(null);
       onSuccess();
-    } else {
-      setError("Incorrect username or password.");
+    } catch {
+      setError("Couldn't reach the server. Check your connection and try again.");
+    } finally {
+      setChecking(false);
     }
   }
 
@@ -60,14 +74,15 @@ export function LoginGate({ onSuccess }: { onSuccess: () => void }) {
           {error && <p className="text-sm text-red-600">{error}</p>}
           <button
             type="submit"
-            className="w-full rounded-md bg-navy px-4 py-2 text-sm font-medium text-cream transition-colors hover:bg-navy-deep"
+            disabled={checking}
+            className="w-full rounded-md bg-navy px-4 py-2 text-sm font-medium text-cream transition-colors hover:bg-navy-deep disabled:opacity-60"
           >
-            Sign in
+            {checking ? "Checking…" : "Sign in"}
           </button>
         </form>
         <p className="mt-6 text-xs leading-relaxed text-gray-400">
-          This is a client-side login only, there is no server on this site yet to check it
-          properly. Don&apos;t treat this as real security, see docs/admin-panel.md.
+          Checked against the real admin credentials on the server (functions/api/login.ts), not
+          just in this page&apos;s JavaScript. See docs/admin-panel.md.
         </p>
       </div>
     </div>

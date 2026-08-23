@@ -74,6 +74,9 @@ in `src/lib/analytics.tsx` fires without them.
 ## Structure
 
 ```
+functions/api/        Cloudflare Pages Functions, the admin panel's KV-backed
+                       API (products/site-config/site-content/login), deploys
+                       alongside the static site, see docs/admin-panel.md
 src/
   app/                 Pages (App Router), grouped under (site) for the public
                         pages (/, about, products, products/[slug], contact, policies)
@@ -84,14 +87,16 @@ src/
   data/products.ts     10 confirmed SKUs: names/categories/sizes/images/descriptions/
                         benefits/usage (composed), real Shopee listing links for 8 of
                         them, no price shown (Shopee is the pricing source of truth)
-  data/site-content.ts Homepage/About/Contact copy snapshot, edited by the admin panel,
+  data/site-content.ts Homepage/About/Contact copy, admin-editable and KV-backed,
                         not yet read by the live pages, see docs/admin-panel.md
 public/images/         Real product photography, logo, brand photo, testimonials
 assets/logo-source/    Original logo/favicon export files, kept for reference, see its README
   lib/site-config.ts   Real business info (email, Shopee link, tagline, nav) + genuine gaps
   lib/analytics.tsx    GA4 + Meta Pixel/CAPI scaffolding (spec F5)
-  lib/admin-store.tsx  Admin panel's client-side data store (localStorage, no backend)
+  lib/admin-store.tsx  Admin panel's data store, fetches/saves via functions/api/
   lib/cloudinary.ts    Unsigned Cloudinary upload helper for the admin panel
+wrangler.toml          Local dev config for functions/ (KV binding), see docs/admin-panel.md
+.dev.vars              Local-only admin secrets for wrangler, gitignored, create it yourself
 docs/
   aulea-skin-build-spec-v2.0.md   Originally the locked spec, since partly superseded (see README/intake)
   aulea-skin-phase1-spec-v1.4.md  Superseded prior spec version, kept for history
@@ -99,9 +104,9 @@ docs/
   intake-checklist.md             Build-ready checklist, current gate status
   customization-template.md       Filled-in project template
   compliance-notes.md             PH cosmetics regulatory reference, informational only
-  deployment.md                   Cloudflare Pages setup (build settings, custom domain)
+  deployment.md                   Cloudflare Pages setup (build settings, custom domain, Functions/KV)
   image-requirements.md           Canvas sizes, format, aspect ratio for every image slot
-  admin-panel.md                  Admin panel: login, architecture, limitations, Cloudinary setup
+  admin-panel.md                  Admin panel: login, KV architecture, production setup, Cloudinary
 ```
 
 ## Deployment
