@@ -226,6 +226,31 @@ immediately, these are already discrete, deliberate actions (a form
 submit, a confirmed delete), not continuous typing, so there's no reason
 to debounce them the way Website Content fields are (see below).
 
+### Category field
+
+A dropdown, not free text: `Cleansers`, `Fragrance`, `Lotions`, `Serums`,
+`Sets`, `Soaps`, `Sun Care`, plus any category already used by a product
+in the live catalog, so a previously-added custom category is selectable
+again rather than needing to be retyped. That base set is exactly the
+categories already live on the storefront (`src/data/products.ts`), on
+purpose: the Shop page's filter chips are whatever distinct category
+strings the live products actually have, so a near-duplicate spelling
+("Soap" next to nine products' "Soaps") would show as two separate chips
+instead of one. **+ Add custom category…** switches to a plain text input
+for anything genuinely new, that becomes a real new Shop filter category
+immediately. See `CategoryField` in `ProductForm.tsx`.
+
+### Product limit (Free plan)
+
+`FREE_PLAN_PRODUCT_LIMIT` in `ProductsPanel.tsx` is a hard UI cap of 15
+products: the Add button disables and an inline banner explains why once
+the catalog is at 15, pointing at the Account menu (see below) for the
+upgrade pitch. This is advisory only, nothing on the API/KV side enforces
+it, there's no concept of a "plan" in `functions/api/products.ts`. An
+admin who somehow already has more than 15 (a future limit change, or
+data imported outside this panel) can still edit or delete existing
+products, only adding a new one past the cap is blocked.
+
 ### Product images
 
 Each product takes three images: two square (1:1) and one portrait (4:5),
@@ -305,6 +330,34 @@ Until both are set, the panel shows a clear inline message instead of
 failing silently, both on the products tab (a banner) and on each image
 slot (an error under the upload button).
 
+## Account menu
+
+A dropdown from the header ("Free plan" button, `AccountMenu.tsx`), not a
+real multi-user account system, there's still one shared admin login (see
+"Sign in" above). It exists for two things the client's own Free-plan
+flyer calls for:
+
+- The upgrade pitch: advanced database structure, an order management
+  system, promotions/discounts, and unlimited products (past the
+  15-product cap above), each with a one-line reason, plus a link out to
+  `https://altasme.com` to actually start that conversation.
+- A direct link to the Website Service Agreement
+  (`https://altasme.com/WSA-free`).
+
+There's no backend concept of plans or entitlements behind this, it's
+informational, matching the product limit's own "advisory, not enforced"
+nature.
+
+## Backup and reset
+
+Removed. The panel no longer has an Export/Backup tab or a "restore
+original defaults" action (`restoreDefaults` is gone from
+`src/lib/admin-store.tsx`). If a JSON backup or a reset-to-shipped-defaults
+capability is needed again later, `functions/api/products.ts`,
+`site-config.ts`, and `site-content.ts` are already public `GET`
+endpoints, an admin can fetch and save each one's JSON directly, or the
+feature can be rebuilt as its own tab.
+
 ## Files
 
 ```
@@ -316,11 +369,17 @@ src/app/adminpanel/
   auth.ts                     sessionStorage helpers, no credentials live
                                here anymore, see "Sign in" above
   LoginGate.tsx               Sign-in form, POSTs to /api/login
-  ProductsPanel.tsx            Product list, add/edit/delete
-  ProductForm.tsx               Add/edit form, all fields + image slots
+  AccountMenu.tsx              Free-plan upgrade pitch + WSA link, see
+                                "Account menu" above
+  ProductsPanel.tsx            Product list, add/edit/delete, 15-product
+                                limit banner
+  ProductForm.tsx               Add/edit form, all fields + image slots +
+                                 category dropdown
   ImageSlot.tsx                  Cloudinary upload control per image
   SiteContentPanel.tsx        Business Info / Homepage / About / Contact editor
-  ExportPanel.tsx             Backup (copy JSON) + restore original defaults
+  ui.tsx                      Shared input/label/button classes, every tab
+                               draws from this instead of each declaring
+                               its own near-identical styles
 
 src/lib/admin-store.tsx    React context, fetches/PUTs the Functions API,
                             debounces Website Content saves

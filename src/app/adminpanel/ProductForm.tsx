@@ -1,8 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import type { Product } from "@/data/products";
+import { useAdminStore } from "@/lib/admin-store";
 import { ImageSlot } from "./ImageSlot";
+import { Field, buttonPrimary, buttonSecondary, inputClass, selectClass } from "./ui";
 
 type Props = {
   initialProduct: Product | null;
@@ -10,6 +12,16 @@ type Props = {
   onSave: (product: Product) => void;
   onCancel: () => void;
 };
+
+// The categories already live on the storefront (see src/data/products.ts).
+// Kept as the dropdown's base set, not the client's shorter verbal list
+// from the request that added this field, because the Shop page derives
+// its filter chips from whatever string each product's category actually
+// is: a product saved as "Soap" next to nine saved as "Soaps" would split
+// into two near-identical filter chips instead of one. "Add custom
+// category" below covers anything genuinely new.
+const BASE_CATEGORIES = ["Cleansers", "Fragrance", "Lotions", "Serums", "Sets", "Soaps", "Sun Care"];
+const CUSTOM_OPTION = "__custom__";
 
 function slugify(name: string) {
   return name
@@ -37,25 +49,68 @@ function emptyProduct(): Product {
   };
 }
 
-const inputClass =
-  "mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:border-navy focus:ring-1 focus:ring-navy";
-const labelClass = "block text-xs font-medium uppercase tracking-wide text-gray-600";
+function CategoryField({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const { products } = useAdminStore();
+  const options = useMemo(() => {
+    const set = new Set(BASE_CATEGORIES);
+    for (const p of products) if (p.category) set.add(p.category);
+    return Array.from(set).sort((a, b) => a.localeCompare(b));
+  }, [products]);
+  const [customMode, setCustomMode] = useState(() => value !== "" && !BASE_CATEGORIES.includes(value));
 
-function Field({
-  label,
-  children,
-  hint,
-}: {
-  label: string;
-  children: React.ReactNode;
-  hint?: string;
-}) {
+  if (customMode) {
+    return (
+      <Field label="Category" hint="This becomes a new filter category on the Shop page.">
+        <div className="flex gap-2">
+          <input
+            className={`${inputClass} flex-1`}
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            placeholder="New category name"
+            autoFocus
+            required
+          />
+          <button
+            type="button"
+            onClick={() => {
+              setCustomMode(false);
+              onChange("");
+            }}
+            className={buttonSecondary}
+          >
+            Choose existing
+          </button>
+        </div>
+      </Field>
+    );
+  }
+
   return (
-    <div>
-      <label className={labelClass}>{label}</label>
-      {children}
-      {hint && <p className="mt-1 text-xs text-gray-400">{hint}</p>}
-    </div>
+    <Field label="Category">
+      <select
+        className={selectClass}
+        value={options.includes(value) ? value : ""}
+        onChange={(e) => {
+          if (e.target.value === CUSTOM_OPTION) {
+            setCustomMode(true);
+            onChange("");
+          } else {
+            onChange(e.target.value);
+          }
+        }}
+        required
+      >
+        <option value="" disabled>
+          Select a category
+        </option>
+        {options.map((c) => (
+          <option key={c} value={c}>
+            {c}
+          </option>
+        ))}
+        <option value={CUSTOM_OPTION}>+ Add custom category…</option>
+      </select>
+    </Field>
   );
 }
 
@@ -149,15 +204,7 @@ export function ProductForm({ initialProduct, existingSlugs, onSave, onCancel }:
               required
             />
           </Field>
-          <Field label="Category">
-            <input
-              className={inputClass}
-              value={product.category}
-              onChange={(e) => update("category", e.target.value)}
-              placeholder="e.g. Serums, Sets, Soaps"
-              required
-            />
-          </Field>
+          <CategoryField value={product.category} onChange={(v) => update("category", v)} />
           <Field label="Size">
             <input
               className={inputClass}
@@ -269,18 +316,14 @@ export function ProductForm({ initialProduct, existingSlugs, onSave, onCancel }:
               <button
                 type="button"
                 onClick={() => removeBenefit(i)}
-                className="shrink-0 rounded-md border border-gray-300 px-3 text-sm text-gray-500 hover:border-red-400 hover:text-red-600"
+                className="shrink-0 rounded-md border border-gray-300 px-3 text-sm text-gray-500 transition-colors hover:border-red-400 hover:text-red-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy focus-visible:ring-offset-2"
                 aria-label="Remove benefit"
               >
                 &times;
               </button>
             </div>
           ))}
-          <button
-            type="button"
-            onClick={addBenefit}
-            className="text-sm font-medium text-navy hover:text-navy-deep"
-          >
+          <button type="button" onClick={addBenefit} className={buttonSecondary}>
             + Add benefit
           </button>
         </div>
@@ -301,17 +344,10 @@ export function ProductForm({ initialProduct, existingSlugs, onSave, onCancel }:
       {error && <p className="text-sm text-red-600">{error}</p>}
 
       <div className="flex gap-3 border-t border-gray-200 pt-6">
-        <button
-          type="submit"
-          className="rounded-md bg-navy px-5 py-2 text-sm font-medium text-cream hover:bg-navy-deep"
-        >
+        <button type="submit" className={buttonPrimary}>
           {isEditing ? "Save changes" : "Add product"}
         </button>
-        <button
-          type="button"
-          onClick={onCancel}
-          className="rounded-md border border-gray-300 px-5 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50"
-        >
+        <button type="button" onClick={onCancel} className={buttonSecondary}>
           Cancel
         </button>
       </div>

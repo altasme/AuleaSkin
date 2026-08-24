@@ -7,9 +7,9 @@ import { ADMIN_SESSION_KEY, getStoredCredentials } from "./auth";
 import { LoginGate } from "./LoginGate";
 import { ProductsPanel } from "./ProductsPanel";
 import { SiteContentPanel } from "./SiteContentPanel";
-import { ExportPanel } from "./ExportPanel";
+import { AccountMenu } from "./AccountMenu";
 
-type Tab = "products" | "content" | "export";
+type Tab = "products" | "content";
 
 export function AdminApp() {
   const [authed, setAuthed] = useState<boolean | null>(null);
@@ -73,14 +73,19 @@ function AdminShell({ onLogout }: { onLogout: () => void }) {
       <header className="border-b border-gray-200 bg-white">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
           <div>
-            <p className="font-label text-xs tracking-[0.15em] text-navy/70">AULÉA SKIN</p>
-            <h1 className="font-display text-xl text-ink">Admin Panel</h1>
+            <p className="text-xs font-semibold tracking-[0.15em] text-navy/70">AULÉA SKIN</p>
+            <h1 className="text-xl font-semibold text-ink">Admin Panel</h1>
           </div>
           <div className="flex items-center gap-4">
             <span className="text-xs text-gray-400">
               {isSaving ? "Saving…" : lastSavedAt ? `Saved ${new Date(lastSavedAt).toLocaleTimeString()}` : ""}
             </span>
-            <button type="button" onClick={onLogout} className="text-sm font-medium text-gray-500 hover:text-navy">
+            <AccountMenu />
+            <button
+              type="button"
+              onClick={onLogout}
+              className="rounded-md px-2 py-1.5 text-sm font-medium text-gray-500 transition-colors hover:text-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy focus-visible:ring-offset-2"
+            >
               Sign out
             </button>
           </div>
@@ -91,9 +96,6 @@ function AdminShell({ onLogout }: { onLogout: () => void }) {
           </TabButton>
           <TabButton active={tab === "content"} onClick={() => setTab("content")}>
             Website Content
-          </TabButton>
-          <TabButton active={tab === "export"} onClick={() => setTab("export")}>
-            Backup &amp; Reset
           </TabButton>
         </div>
       </header>
@@ -124,7 +126,6 @@ function AdminShell({ onLogout }: { onLogout: () => void }) {
           <>
             {tab === "products" && <ProductsPanel />}
             {tab === "content" && <SiteContentPanel />}
-            {tab === "export" && <ExportPanel />}
           </>
         )}
       </main>
@@ -145,7 +146,7 @@ function TabButton({
     <button
       type="button"
       onClick={onClick}
-      className={`border-b-2 px-4 py-3 text-sm font-medium transition-colors ${
+      className={`border-b-2 px-4 py-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy focus-visible:ring-offset-2 ${
         active ? "border-navy text-navy" : "border-transparent text-gray-500 hover:text-navy"
       }`}
     >

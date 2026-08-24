@@ -13,7 +13,7 @@
 // those are already discrete, deliberate actions, not continuous typing.
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
-import { products as defaultProducts, type Product } from "@/data/products";
+import type { Product } from "@/data/products";
 import { siteConfig as defaultSiteConfig } from "@/lib/site-config";
 import { defaultSiteContent, type SiteContent } from "@/data/site-content";
 import { authHeader } from "@/app/adminpanel/auth";
@@ -66,7 +66,6 @@ type AdminStore = State & {
   deleteProduct: (slug: string) => Promise<void>;
   updateSiteConfig: (patch: Partial<MutableSiteConfig>) => void;
   updateSiteContent: (patch: Partial<SiteContent>) => void;
-  restoreDefaults: () => Promise<void>;
 };
 
 const AdminStoreContext = createContext<AdminStore | null>(null);
@@ -252,33 +251,6 @@ export function AdminStoreProvider({
     };
   }, [state.siteContent, state.isLoading, handleUnauthorized]);
 
-  const restoreDefaults = useCallback(async () => {
-    const freshProducts: Product[] = JSON.parse(JSON.stringify(defaultProducts));
-    const freshConfig: MutableSiteConfig = JSON.parse(JSON.stringify(defaultSiteConfig));
-    const freshContent: SiteContent = JSON.parse(JSON.stringify(defaultSiteContent));
-
-    skipNextConfigSave.current = true;
-    skipNextContentSave.current = true;
-    setState((prev) => ({ ...prev, products: freshProducts, siteConfig: freshConfig, siteContent: freshContent }));
-
-    setState((prev) => ({ ...prev, isSaving: true, saveError: null }));
-    try {
-      await Promise.all([
-        apiPut("/api/products", freshProducts),
-        apiPut("/api/site-config", freshConfig),
-        apiPut("/api/site-content", freshContent),
-      ]);
-      setState((prev) => ({ ...prev, isSaving: false, lastSavedAt: new Date().toISOString() }));
-    } catch (err) {
-      if (err instanceof UnauthorizedError) return handleUnauthorized();
-      setState((prev) => ({
-        ...prev,
-        isSaving: false,
-        saveError: err instanceof Error ? err.message : "Restore failed.",
-      }));
-    }
-  }, [handleUnauthorized]);
-
   const value = useMemo<AdminStore>(
     () => ({
       ...state,
@@ -288,9 +260,8 @@ export function AdminStoreProvider({
       deleteProduct,
       updateSiteConfig,
       updateSiteContent,
-      restoreDefaults,
     }),
-    [state, addProduct, updateProduct, deleteProduct, updateSiteConfig, updateSiteContent, restoreDefaults]
+    [state, addProduct, updateProduct, deleteProduct, updateSiteConfig, updateSiteContent]
   );
 
   return <AdminStoreContext.Provider value={value}>{children}</AdminStoreContext.Provider>;

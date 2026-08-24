@@ -3,20 +3,7 @@
 import { useState } from "react";
 import { useAdminStore } from "@/lib/admin-store";
 import type { SiteContent } from "@/data/site-content";
-
-const inputClass =
-  "mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:border-navy focus:ring-1 focus:ring-navy";
-const labelClass = "block text-xs font-medium uppercase tracking-wide text-gray-600";
-
-function Field({ label, hint, children }: { label: string; hint?: string; children: React.ReactNode }) {
-  return (
-    <div>
-      <label className={labelClass}>{label}</label>
-      {children}
-      {hint && <p className="mt-1 text-xs text-gray-400">{hint}</p>}
-    </div>
-  );
-}
+import { Field, inputClass } from "./ui";
 
 type Section = "business" | "homepage" | "about" | "contact";
 
@@ -51,7 +38,7 @@ export function SiteContentPanel() {
 
   return (
     <div>
-      <h2 className="font-display text-2xl text-ink">Website Content</h2>
+      <h2 className="text-xl font-semibold text-ink">Website Content</h2>
       <p className="mt-1 max-w-2xl text-sm text-gray-500">
         Everything below is grouped by where it appears on the live site. Pick a section, edit its
         fields, changes save automatically as you type.
@@ -63,7 +50,7 @@ export function SiteContentPanel() {
             key={s.id}
             type="button"
             onClick={() => setActive(s.id)}
-            className={`rounded-full border px-4 py-2 text-xs font-medium uppercase tracking-wide transition-colors ${
+            className={`rounded-full border px-4 py-2 text-xs font-medium uppercase tracking-wide transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy focus-visible:ring-offset-2 ${
               active === s.id
                 ? "border-navy bg-navy text-cream"
                 : "border-gray-300 text-gray-600 hover:border-navy/40"

@@ -90,7 +90,7 @@ export function ImageSlot({ label, aspectRatio, value, onChange }: Props) {
         <button
           type="button"
           onClick={() => onChange("")}
-          className="mt-1 text-xs text-gray-400 underline hover:text-red-600"
+          className="mt-1 rounded text-xs text-gray-400 underline transition-colors hover:text-red-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy focus-visible:ring-offset-1"
         >
           Remove image
         </button>
