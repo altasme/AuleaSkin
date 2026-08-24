@@ -141,20 +141,24 @@ client island inside the otherwise-static `Footer.tsx`, using
 `useLiveSocialLinks()` (`src/lib/use-live-social-links.ts`) to fetch
 `/api/site-config` on mount, same static-shell-then-overlay pattern as
 `useLiveProducts()`. Edit any of those four fields in the admin panel and
-the footer picks it up with no rebuild. A field only renders as a link if
-it's non-empty and doesn't start with `[` (this codebase's existing
-"pending" convention, see `contactPhone`/`address`/`hours` above), not by
-requiring a literal `http(s)://` prefix, a first real attempt found that
-the hard way: an admin typing `IG.com` with no protocol got silently
-hidden rather than shown, since a plain text field is not going to get
-typed with a protocol prefix by a non-technical admin. `toHref()` in
-`SocialLinks.tsx` adds `https://` automatically when the saved value
-doesn't already have a scheme, so the link actually navigates off-site
-instead of being parsed as a path relative to the current page.
-Instagram, TikTok, and Facebook shipped as the placeholder "recovering,
-not yet relinked" text (`src/lib/site-config.ts`, real social pages were
-lost per spec B2), so by default only the Shopee link shows, that's
-correct, not a bug, until real values replace that placeholder text.
+the footer picks it up with no rebuild.
+
+**All four icons/links always show, by client direction** (an earlier
+pass hid a still-placeholder one entirely; the client asked for it
+visible regardless). What differs is only whether it's a *working* link:
+`isRealValue()` in `SocialLinks.tsx` treats anything non-empty that
+doesn't start with `[` (this codebase's existing "pending" convention,
+see `contactPhone`/`address`/`hours` above) as real, not by requiring a
+literal `http(s)://` prefix, a first attempt found that the hard way: an
+admin typing `IG.com` with no protocol got silently hidden, since a
+plain text field is never going to get typed with a protocol prefix by a
+non-technical admin. `toHref()` adds `https://` automatically when the
+saved value has no scheme. A field that's still the shipped placeholder
+text ("recovering, not yet relinked", `src/lib/site-config.ts`, real
+social pages were lost per spec B2) renders its icon dimmed and inert
+(no `href`) instead of hidden or linking to literal placeholder text as
+a broken URL, once a real value replaces it, that icon lights up and
+becomes clickable, no code change needed.
 
 ## Local development
 

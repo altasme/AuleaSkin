@@ -22,13 +22,15 @@ function toHref(value: string) {
   return /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
 }
 
-// Business Info's social fields are real free-text inputs in the admin
-// panel (Instagram/TikTok/Facebook, alongside the Shopee URL that was
-// already here), several still hold the placeholder "social pages lost,
-// being recovered" copy from launch rather than a real link, see
-// src/lib/site-config.ts. Only rendering real values keeps a
-// not-yet-relinked placeholder from showing up as a dead icon link on
-// the live footer.
+// Client wants the icons showing on the storefront regardless of whether
+// a real link is behind them yet, not hidden until Instagram/TikTok/
+// Facebook are relinked (see spec B2, those pages were lost and are
+// still being recovered as of src/lib/site-config.ts). So every icon
+// always renders. What differs is only whether it's a working link: a
+// real value gets a real href, a still-placeholder value renders as an
+// inert icon (dimmed, no navigation) rather than a link to literal
+// placeholder text like "https://[recovering, not yet relinked]", which
+// would just be a broken URL, worse than not being clickable yet.
 export function SocialLinks() {
   const social = useLiveSocialLinks();
 
@@ -36,11 +38,11 @@ export function SocialLinks() {
     { key: "instagram", value: social.instagram, label: "Instagram", Icon: InstagramIcon },
     { key: "tiktok", value: social.tiktok, label: "TikTok", Icon: TiktokIcon },
     { key: "facebook", value: social.facebook, label: "Facebook", Icon: FacebookIcon },
-  ].filter((link) => isRealValue(link.value));
+  ];
 
   return (
     <>
-      {isRealValue(social.shopee) && (
+      {isRealValue(social.shopee) ? (
         <a
           href={toHref(social.shopee)}
           target="_blank"
@@ -49,10 +51,14 @@ export function SocialLinks() {
         >
           Visit our Shopee store →
         </a>
+      ) : (
+        <span className="mt-4 inline-block text-xs font-medium uppercase tracking-[0.1em] text-gold/50">
+          Visit our Shopee store →
+        </span>
       )}
-      {iconLinks.length > 0 && (
-        <div className="mt-4 flex gap-3">
-          {iconLinks.map(({ key, value, label, Icon }) => (
+      <div className="mt-4 flex gap-3">
+        {iconLinks.map(({ key, value, label, Icon }) =>
+          isRealValue(value) ? (
             <a
               key={key}
               href={toHref(value)}
@@ -63,9 +69,18 @@ export function SocialLinks() {
             >
               <Icon className="h-5 w-5" />
             </a>
-          ))}
-        </div>
-      )}
+          ) : (
+            <span
+              key={key}
+              aria-label={`${label} (link coming soon)`}
+              title={`${label} link coming soon`}
+              className="text-cream/30"
+            >
+              <Icon className="h-5 w-5" />
+            </span>
+          )
+        )}
+      </div>
     </>
   );
 }
