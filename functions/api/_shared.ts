@@ -28,11 +28,16 @@ export function requireAuth(request: Request, env: Env): Response | null {
   return null;
 }
 
+// Deliberately no WWW-Authenticate header here. That header is what
+// tells a browser "pop up your own native username/password box" for
+// this response, standard behavior for real HTTP Basic Auth, but this
+// project uses Basic Auth only as a wire format under a custom login
+// form (LoginGate.tsx), not real browser-native auth. Including that
+// header made the browser's own login prompt fight with the site's own
+// form. Without it, a 401 is just a plain JSON error the client code
+// handles, no browser UI involved.
 function unauthorized(): Response {
-  return jsonResponse(
-    { error: "Unauthorized" },
-    { status: 401, headers: { "WWW-Authenticate": 'Basic realm="Aulea Admin"' } }
-  );
+  return jsonResponse({ error: "Unauthorized" }, { status: 401 });
 }
 
 // KV starts empty. The first authenticated read of a key seeds it from
