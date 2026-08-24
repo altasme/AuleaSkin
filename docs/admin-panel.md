@@ -3,11 +3,11 @@
 `/adminpanel`, added on client request. Lets an admin manage the product
 catalog and the site's main content blocks without touching code directly.
 Backed by a real database (Cloudflare Workers KV) as of the KV setup
-described below. Product listings (Shop grid, homepage) read live from it
-for every visitor, no rebuild needed, see "What's actually live on the
-storefront, precisely" for exactly what that does and doesn't cover yet
-(a brand-new product's own detail page, and Business Info / Website
-Content, aren't wired to it on the public pages yet).
+described below. Product listings (Shop grid, homepage) and every
+product's own detail page read live from it for every visitor, no
+rebuild needed, see "What's actually live on the storefront, precisely"
+for exactly what that does and doesn't cover yet (Business Info / Website
+Content aren't wired to it on the public pages yet).
 
 ## Sign in
 
@@ -48,7 +48,7 @@ project or URL:
 
 ```
 functions/
-  env.d.ts        Env type (the KV binding + the two secrets)
+  env.d.ts        Env type (the KV binding, the ASSETS binding, the two secrets)
   tsconfig.json   Separate from the root tsconfig, Workers runtime types
                   differ from the Next.js app's DOM types, kept out of
                   `next build`'s TypeScript pass (see root tsconfig.json's
@@ -59,6 +59,9 @@ functions/
     products.ts   GET / PUT the full products array
     site-config.ts    GET / PUT the Business Info object
     site-content.ts   GET / PUT the Homepage/About/Contact copy object
+  products/
+    [slug].ts     GET fallback for a product slug with no static page yet,
+                  see "New products before the next rebuild" below
 ```
 
 Data lives in one KV namespace (binding name `AULEA_DATA`) as three JSON
@@ -93,20 +96,32 @@ grid and homepage within moments, no rebuild, no redeploy. Verified: a
 product added through the panel showed up on the Shop page in a
 completely separate, logged-out browser.
 
-**One real gap this doesn't cover**: a brand-new product's own
-`/products/<slug>` detail page. That route is prebuilt per-product at
-`next build` time via `generateStaticParams()`
-(`src/app/(site)/products/[slug]/page.tsx`), a slug that didn't exist at
-the last build has no HTML file for it, static hosting can't generate one
-on the fly. So a new product is fully clickable and correctly shown in
-listings, but its own page 404s until the next real `next build` +
-deploy. The same gap applies to *editing* an existing product too:
-`src/app/(site)/products/[slug]/page.tsx` is a server component reading
-the static `products` import directly, not live, so a name/description/
-image edit shows up in the Shop grid and homepage immediately but not on
-that product's own detail page until the next rebuild. Only the listing
-surfaces are wired to live data so far; extending `[slug]/page.tsx`
-itself is a reasonable next step, not done yet.
+**New products before the next rebuild**: `/products/<slug>` is prebuilt
+per-product at `next build` time via `generateStaticParams()`
+(`src/app/(site)/products/[slug]/page.tsx`), so a slug that didn't exist
+at the last build has no HTML file for it, static hosting can't generate
+one on the fly. Rather than a hard 404, `functions/products/[slug].ts`
+catches exactly that case: it checks Cloudflare's static asset store for
+the requested slug first (existing products keep loading their real
+prebuilt page, untouched, byte for byte), and only when that's a genuine
+miss does it serve a generic prebuilt shell page
+(`src/app/(site)/product-fallback/page.tsx`) that reads the real slug
+back out of the browser's URL and fetches the matching product live from
+`/api/products`, rendering it with the same `ProductDetailView` component
+the real static pages use. So a brand-new product's own page works
+immediately, no rebuild needed, just with a brief client-side fetch
+instead of being present in the initial HTML (and its `<title>`/OG tags
+stay generic until the next real rebuild, those are baked in server-side
+and this shell can't set them before it knows which product it is).
+
+One related, still-real gap: *editing* an already-existing product. Its
+static page keeps reading the build-time `products` import directly
+(`getProductBySlug` in `src/data/products.ts`), not live, so a name/
+description/image edit shows up in the Shop grid and homepage immediately
+but not on that product's own detail page until the next rebuild, only a
+wholly new slug (with no static page to conflict with) hits the fallback
+above. Extending the static page itself to self-correct with live data
+after mount would close this too, a reasonable next step, not done yet.
 
 **Business Info (`site-config`) and Website Content (`site-content`,
 Homepage/About/Contact copy) are correctly saved to the database and

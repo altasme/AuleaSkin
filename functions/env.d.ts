@@ -17,4 +17,9 @@ interface Env {
   // client, that's the whole point of moving auth server-side.
   ADMIN_USERNAME: string;
   ADMIN_PASSWORD: string;
+
+  // Cloudflare Pages provides this automatically to every Function, no
+  // dashboard setup needed, it fetches this project's own deployed
+  // static assets (see functions/products/[slug].ts).
+  ASSETS: Fetcher;
 }
