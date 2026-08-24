@@ -115,8 +115,14 @@ export function ProductForm({ initialProduct, existingSlugs, onSave, onCancel }:
 
     const cleanedBenefits = product.benefits.map((b) => b.trim()).filter(Boolean);
     const cleanedImages = product.images.map((img) => img.trim());
+    const cleanedVariants = (product.variants ?? []).map((v) => v.trim()).filter(Boolean);
 
-    onSave({ ...product, benefits: cleanedBenefits, images: cleanedImages });
+    onSave({
+      ...product,
+      benefits: cleanedBenefits,
+      images: cleanedImages,
+      variants: cleanedVariants.length > 0 ? cleanedVariants : undefined,
+    });
   }
 
   return (

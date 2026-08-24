@@ -46,7 +46,7 @@ export function ProductDetailView({
             </p>
             <h1 className="mt-2 font-display text-3xl text-ink sm:text-4xl">{product.name}</h1>
 
-            {product.variants && (
+            {product.variants && product.variants.length > 0 && (
               <div className="mt-4">
                 <p className="text-xs font-medium uppercase tracking-[0.1em] text-ink/70 mb-2">
                   Available scents
