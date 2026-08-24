@@ -49,7 +49,7 @@ export function ProductDetailView({
             {product.variants && product.variants.length > 0 && (
               <div className="mt-4">
                 <p className="text-xs font-medium uppercase tracking-[0.1em] text-ink/70 mb-2">
-                  Available scents
+                  Available options
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {product.variants.map((variant) => (
@@ -62,7 +62,7 @@ export function ProductDetailView({
                   ))}
                 </div>
                 <p className="mt-2 text-xs text-ink/70">
-                  Pick your scent when you buy on Shopee.
+                  Pick your option when you buy on Shopee.
                 </p>
               </div>
             )}

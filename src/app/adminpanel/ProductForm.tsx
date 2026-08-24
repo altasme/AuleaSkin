@@ -234,7 +234,10 @@ export function ProductForm({ initialProduct, existingSlugs, onSave, onCancel }:
               onChange={(e) => update("ingredientsNote", e.target.value)}
             />
           </Field>
-          <Field label="Variants" hint="Comma-separated, e.g. scent or shade names. Leave blank if none.">
+          <Field
+            label="Variants"
+            hint="Comma-separated names of the distinct options a customer picks between when buying (e.g. scent, shade, or size names). Leave blank if this product doesn't have that kind of choice, anything entered here shows live on the product page as an 'Available options' list."
+          >
             <input
               className={inputClass}
               value={(product.variants ?? []).join(", ")}
