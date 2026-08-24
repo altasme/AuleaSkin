@@ -142,13 +142,19 @@ client island inside the otherwise-static `Footer.tsx`, using
 `/api/site-config` on mount, same static-shell-then-overlay pattern as
 `useLiveProducts()`. Edit any of those four fields in the admin panel and
 the footer picks it up with no rebuild. A field only renders as a link if
-its value actually looks like a URL (`http://` or `https://`); Instagram,
-TikTok, and Facebook shipped as the placeholder "recovering, not yet
-relinked" text (`src/lib/site-config.ts`, real social pages were lost per
-spec B2), so by default only the Shopee link shows, that's not a bug,
-it's the fallback correctly refusing to render a dead link out of
-placeholder text. Once real URLs are entered, all four show, icons for
-the first three and the existing text link for Shopee.
+it's non-empty and doesn't start with `[` (this codebase's existing
+"pending" convention, see `contactPhone`/`address`/`hours` above), not by
+requiring a literal `http(s)://` prefix, a first real attempt found that
+the hard way: an admin typing `IG.com` with no protocol got silently
+hidden rather than shown, since a plain text field is not going to get
+typed with a protocol prefix by a non-technical admin. `toHref()` in
+`SocialLinks.tsx` adds `https://` automatically when the saved value
+doesn't already have a scheme, so the link actually navigates off-site
+instead of being parsed as a path relative to the current page.
+Instagram, TikTok, and Facebook shipped as the placeholder "recovering,
+not yet relinked" text (`src/lib/site-config.ts`, real social pages were
+lost per spec B2), so by default only the Shopee link shows, that's
+correct, not a bug, until real values replace that placeholder text.
 
 ## Local development
 
