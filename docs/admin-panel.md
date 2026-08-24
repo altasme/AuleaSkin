@@ -270,6 +270,7 @@ typing feels normal) and fires the actual `PUT` after the pause.
 ## Image uploads (Cloudinary)
 
 Cloud name (from the client): `o300ubug`
+Unsigned upload preset: `auleaskin`
 
 Because this site has no server *for images* (Cloudinary handles those,
 not KV, "our database will be text data only" was the client's own
@@ -280,12 +281,29 @@ code, an API key alone can't authorize an unsigned upload (that's the
 point of "unsigned"), and a key without its secret can't do a signed one
 either.
 
-**Setup still needed**: create an upload preset in the Cloudinary console
-(Settings → Upload → Upload presets → Add upload preset), set its Signing
-Mode to **Unsigned**, then put its name in `.env.local` as
-`NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET`. Until that exists, the panel shows
-a clear inline message instead of failing silently, both on the products
-tab (a banner) and on each image slot (an error under the upload button).
+**Both values are `NEXT_PUBLIC_*` vars, baked into the static output at
+`next build` time** (see `src/lib/cloudinary.ts`), not read at request
+time the way the KV binding and admin secrets are. That means:
+
+- **Local dev**: put them in `.env.local` (gitignored, not committed):
+  ```
+  NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=o300ubug
+  NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET=auleaskin
+  ```
+- **Production**: Cloudflare dashboard → Workers & Pages → your Pages
+  project → **Settings** → **Environment variables** → add both as
+  plain **Text** variables (not Secret, these aren't sensitive, an
+  unsigned preset name is meant to be public, it's what authorizes
+  browser uploads with no key at all) → **Save**, then redeploy
+  (**Deployments** → **⋯** on the latest → **Retry deployment**, or push
+  a commit). Same "only takes effect on the next deployment" rule as the
+  KV binding and secrets in "Production setup" above, this is a separate
+  environment-variables step from those, not something that setup
+  already covered.
+
+Until both are set, the panel shows a clear inline message instead of
+failing silently, both on the products tab (a banner) and on each image
+slot (an error under the upload button).
 
 ## Files
 
