@@ -7,15 +7,21 @@
 # during real production deploys too, not just local `wrangler pages
 # dev`. A [[kv_namespaces]] block with a placeholder id here broke every
 # production deployment's Function publish step with "Error 8000022:
-# Invalid KV namespace ID" for as long as it existed, even though the
-# real binding was correctly configured in the dashboard, the dashboard
-# binding does NOT take precedence over this file, whatever this file
-# declares wins. Do not add a [[kv_namespaces]] block back here unless
-# it has the real, current namespace id. Local dev instead passes the
-# binding on the command line (see docs/admin-panel.md, "Local
-# development"), which needs no id at all.
+# Invalid KV namespace ID" for as long as it existed. It was then removed
+# entirely on the (wrong) assumption that the dashboard's own KV binding
+# UI would take over, but this project's dashboard binding UI is itself
+# locked to this file once it exists ("bindings are managed via
+# wrangler.toml"), so removing the block didn't fall back to the
+# dashboard, it just left the project with no AULEA_DATA binding at all,
+# causing every /api/* call to 500. This file is the only place this
+# project's KV binding can be declared, full stop. If you ever need to
+# change the namespace, update the id below, don't delete the block.
 
 name = "aulea-skin"
 pages_build_output_dir = "out"
 compatibility_date = "2025-01-01"
 compatibility_flags = ["nodejs_compat"]
+
+[[kv_namespaces]]
+binding = "AULEA_DATA"
+id = "40f5e87c1a4b47bb8d564e8ec01d2ab2"

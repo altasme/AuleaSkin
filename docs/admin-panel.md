@@ -128,19 +128,10 @@ npm run pages:dev
 ```
 
 The `--kv=AULEA_DATA` flag gives the Functions a local, disk-persisted
-KV binding under that name with no id needed at all, that's deliberate:
-`wrangler.toml` used to declare the binding instead (with a placeholder
-id, since local dev doesn't need a real one), but **Cloudflare Pages
-reads `wrangler.toml` during real production deploys too**, not just
-local dev as the file's own comment used to claim. That placeholder id
-broke every production deployment's Function-publish step for as long
-as it was there (`Error 8000022: Invalid KV namespace ID`), the
-dashboard-configured binding did **not** take precedence the way the
-old comment assumed, whatever `wrangler.toml` declares wins. Real
-incident, not a hypothetical, see git history around "Set
-Cache-Control" and the commit that removed the `[[kv_namespaces]]`
-block for the full account. `.dev.vars` for the two secrets, gitignored,
-needs creating locally (see below), works the same as before.
+KV binding under that name, separate from the real namespace `wrangler.toml`
+points production at, so local testing never touches production data.
+`.dev.vars` for the two secrets, gitignored, needs creating locally (see
+below).
 
 Create `.dev.vars` at the repo root (not committed):
 
@@ -151,26 +142,47 @@ ADMIN_PASSWORD=aulea@2026
 
 ## Production setup (do this once, on the real Cloudflare account)
 
-**None of this needs the `wrangler` CLI, a terminal, or any compute
-environment.** It's four steps entirely in the Cloudflare dashboard, in a
-browser, since this project deploys via git integration (dashboard
-auto-deploy on push, see `docs/deployment.md`), not `wrangler pages deploy`.
-The CLI commands mentioned elsewhere in this doc are for optional local
-dev only, never required for this part.
+**The KV binding itself is declared in `wrangler.toml`, not the
+dashboard.** This took two real incidents to pin down, worth recording
+precisely so nobody re-breaks it a third way:
+
+- First, `wrangler.toml` shipped with a `[[kv_namespaces]]` block using a
+  placeholder id. Cloudflare Pages reads this file on every real
+  production deploy, not just local dev, so the placeholder broke every
+  Function-publish step (`Error 8000022: Invalid KV namespace ID`).
+- That block was then removed entirely, on the assumption the dashboard's
+  own KV-binding UI would take over. It didn't: for this project, once
+  `wrangler.toml` exists, the dashboard's binding UI just says "bindings
+  are managed via wrangler.toml" and won't accept one. Removing the block
+  left the project with **no** `AULEA_DATA` binding anywhere, which is
+  what turned into every `/api/*` call 500ing.
+
+So the only correct state is a `[[kv_namespaces]]` block with the real,
+current namespace id, which is what's committed now:
+
+```toml
+[[kv_namespaces]]
+binding = "AULEA_DATA"
+id = "<the real namespace id>"
+```
+
+Steps to set this up from scratch (all dashboard, no `wrangler` CLI
+needed to *get* the id, just to know where to put it):
 
 1. **Create the KV namespace**: Cloudflare dashboard → **Workers & Pages**
    → **KV** (left sidebar) → **Create a namespace** → name it `AULEA_DATA`
    (the name is just a label, doesn't need to match anything) → **Add**.
-2. **Bind it to the Pages project**: Workers & Pages → your Pages project
-   → **Settings** → **Functions** → **KV namespace bindings** → **Add
-   binding**. Variable name `AULEA_DATA` (this exact name matters, it's
-   what `functions/env.d.ts` expects), KV namespace: select the one just
-   created → **Save**.
-3. **Set the two secrets**: same Settings page → **Environment
-   variables** → **Add variable** → set type to **Secret** (not
-   "Text") → add `ADMIN_USERNAME` = `Auleadmin` and `ADMIN_PASSWORD` =
-   `aulea@2026` → **Save**. Secrets, not plain variables, so they're not
-   readable back out via the dashboard once set.
+2. **Copy its Namespace ID**: click into the namespace just created, copy
+   the ID shown there (a 32-character hex string) → put it in
+   `wrangler.toml` as above → commit and push. This *is* the binding step;
+   there is no separate dashboard step for it on this project.
+3. **Set the two secrets**: Workers & Pages → your Pages project →
+   **Settings** → **Environment variables** → **Add variable** → set
+   type to **Secret** (not "Text") → add `ADMIN_USERNAME` = `Auleadmin`
+   and `ADMIN_PASSWORD` = `aulea@2026` → **Save**. Secrets, not plain
+   variables, so they're not readable back out via the dashboard once
+   set, if in doubt just re-enter and re-save both rather than trying to
+   check them.
 4. **Redeploy** so the new binding and secrets take effect (Pages only
    picks up binding/secret changes on the *next* deployment, not
    retroactively): **Deployments** tab → **⋯** on the latest one →
@@ -178,12 +190,10 @@ dev only, never required for this part.
 5. Sign in at `/adminpanel`, the catalog auto-seeds on first load, no
    manual data entry needed to get started.
 
-(The `wrangler kv namespace create` CLI command does the same thing as
-step 1 and additionally prints a namespace ID. Don't put that id into
-`wrangler.toml`, this project's `[[kv_namespaces]]` block there broke
-production deploys once already, see "Local development" below for the
-full account. The dashboard binding above is the only one this project
-uses.)
+If the namespace is ever recreated or swapped, update the `id` in
+`wrangler.toml` and redeploy, don't delete the block, an empty/missing
+block is the no-binding-at-all state that caused the second incident
+above.
 
 ## Products & Pricing tab
 
