@@ -77,3 +77,16 @@ time, set them as Cloudflare Pages **build-time** environment variables
 are available, then trigger a rebuild. `META_CAPI_ACCESS_TOKEN` is
 server-side only and has no effect in a static export, CAPI calls need a
 server, which this deployment doesn't have yet.
+
+**`NEXT_PUBLIC_SITE_URL` needs a full URL, scheme included** (e.g.
+`https://aulea.altasme.com`, not just `aulea.altasme.com`). A bare-domain
+value once set on the real Pages project broke `next build` outright:
+`src/app/layout.tsx` passed it straight to `new URL()` for
+`metadataBase`, which throws on a schemeless string, so **every**
+deployment after that failed before producing anything, Cloudflare's
+dashboard just showed no deployment available with no obvious cause
+pointing at this variable. `src/lib/site-url.ts` now normalizes it (adds
+`https://` if missing, strips a trailing slash) before layout.tsx,
+robots.ts, or sitemap.ts ever see it, so this specific failure mode can't
+recur regardless of how the value gets typed into the dashboard, but the
+variable is still worth setting correctly the first time.

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Fraunces, Bebas_Neue, Mulish } from "next/font/google";
 import "./globals.css";
 import { siteConfig } from "@/lib/site-config";
+import { getSiteUrl } from "@/lib/site-url";
 
 // Body / UI / prices / forms (spec PART A4): the brand faces are display-
 // only and must never carry paragraph copy. Mulish is the named fallback.
@@ -27,7 +28,7 @@ const labelFont = Bebas_Neue({
   subsets: ["latin"],
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://example.com";
+const siteUrl = getSiteUrl();
 const title = `${siteConfig.businessName}: ${siteConfig.tagline}`;
 
 export const metadata: Metadata = {
