@@ -26,6 +26,17 @@ intentional, appropriate simplification for one shared admin login, not a
 corner cut, adding session/token infrastructure here would be complexity
 without adding real access control for this use case.
 
+**"Incorrect username or password" with the right credentials** means the
+`ADMIN_USERNAME` / `ADMIN_PASSWORD` **secrets were never set (or don't
+match) on the Cloudflare Pages project**, not a bug in the form. The old
+localStorage-only prototype checked the password entirely client-side, so
+it worked with no dashboard setup at all; this server-checked version
+doesn't, and moving to it doesn't retroactively create those two secrets on
+the Pages project, that's a manual one-time dashboard step ("Production
+setup" step 3 below). Since secrets can't be read back out once saved,
+don't try to "check" them, just re-enter and re-save both, then redeploy
+(step 4) — Pages only picks up secret changes on the *next* deployment.
+
 ## Architecture: Cloudflare Pages Functions + Workers KV
 
 The public site still builds as a static export exactly as before
