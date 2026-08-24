@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { siteConfig } from "@/lib/site-config";
+import { useLiveSiteConfig } from "@/lib/use-live-site-config";
 import { Logo } from "./Logo";
 import { SearchIcon } from "./Icons";
 import { SearchOverlay } from "./SearchOverlay";
 
 export function Header() {
+  const siteConfig = useLiveSiteConfig();
   const [open, setOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
 

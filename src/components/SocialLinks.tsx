@@ -1,6 +1,6 @@
 "use client";
 
-import { useLiveSocialLinks } from "@/lib/use-live-social-links";
+import type { SiteConfig } from "@/lib/site-config";
 import { FacebookIcon, InstagramIcon, TiktokIcon } from "./Icons";
 
 // Bracket-wrapped is this codebase's existing convention for "not real
@@ -22,6 +22,11 @@ function toHref(value: string) {
   return /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
 }
 
+// Takes `social` as a prop rather than fetching its own copy: Footer.tsx
+// already reads the live siteConfig once via useLiveSiteConfig() for
+// everything else in the footer, this reuses that same fetch instead of
+// duplicating it.
+//
 // Client wants the icons showing on the storefront regardless of whether
 // a real link is behind them yet, not hidden until Instagram/TikTok/
 // Facebook are relinked (see spec B2, those pages were lost and are
@@ -31,9 +36,7 @@ function toHref(value: string) {
 // inert icon (dimmed, no navigation) rather than a link to literal
 // placeholder text like "https://[recovering, not yet relinked]", which
 // would just be a broken URL, worse than not being clickable yet.
-export function SocialLinks() {
-  const social = useLiveSocialLinks();
-
+export function SocialLinks({ social }: { social: SiteConfig["social"] }) {
   const iconLinks = [
     { key: "instagram", value: social.instagram, label: "Instagram", Icon: InstagramIcon },
     { key: "tiktok", value: social.tiktok, label: "TikTok", Icon: TiktokIcon },

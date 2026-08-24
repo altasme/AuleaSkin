@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { ProductDetailView } from "@/components/ProductDetailView";
-import type { Product } from "@/data/products";
+import { getRelatedProducts, type Product } from "@/data/products";
 
 // Static fallback for a product slug that didn't exist at the last build,
 // so it has no page of its own under out/products/. Cloudflare Pages
@@ -38,14 +38,7 @@ export default function ProductFallback() {
           return;
         }
         document.title = product.name;
-        const sameCategory = allProducts.filter(
-          (p) => p.slug !== product.slug && p.category === product.category
-        );
-        const related = (
-          sameCategory.length > 0
-            ? sameCategory
-            : allProducts.filter((p) => p.slug !== product.slug)
-        ).slice(0, 3);
+        const related = getRelatedProducts(product, allProducts);
         setState({ status: "found", product, related });
       })
       .catch(() => {

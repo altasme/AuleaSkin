@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ProductDetailView } from "@/components/ProductDetailView";
+import { LiveProductDetail } from "@/components/LiveProductDetail";
 import { getProductBySlug, products } from "@/data/products";
 
 export function generateStaticParams() {
@@ -26,10 +26,5 @@ export default async function ProductPage({
   const product = getProductBySlug(slug);
   if (!product) notFound();
 
-  const sameCategory = products.filter(
-    (p) => p.slug !== product.slug && p.category === product.category
-  );
-  const related = (sameCategory.length > 0 ? sameCategory : products.filter((p) => p.slug !== product.slug)).slice(0, 3);
-
-  return <ProductDetailView product={product} related={related} />;
+  return <LiveProductDetail slug={slug} initialProduct={product} />;
 }

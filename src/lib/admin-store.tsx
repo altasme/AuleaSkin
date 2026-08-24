@@ -14,43 +14,13 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import type { Product } from "@/data/products";
-import { siteConfig as defaultSiteConfig } from "@/lib/site-config";
+import { siteConfig as defaultSiteConfig, type SiteConfig } from "@/lib/site-config";
 import { defaultSiteContent, type SiteContent } from "@/data/site-content";
 import { authHeader } from "@/app/adminpanel/auth";
 
-export type MutableSiteConfig = {
-  businessName: string;
-  wordmark: string;
-  tagline: string;
-  positioningLine: string;
-  shortDescription: string;
-  brandPromise: string;
-  legalName: string;
-  established: string;
-  businessType: string;
-  contactEmail: string;
-  contactPhone: string;
-  address: string;
-  hours: string;
-  social: {
-    instagram: string;
-    tiktok: string;
-    facebook: string;
-    shopee: string;
-  };
-  checkoutModel: string;
-  freeShippingThreshold: number;
-  couriers: string[];
-  paymentMethods: string[];
-  nav: { label: string; href: string }[];
-  footerPolicyLinks: { label: string; href: string }[];
-  primaryCta: string;
-  secondaryCta: string;
-};
-
 type State = {
   products: Product[];
-  siteConfig: MutableSiteConfig;
+  siteConfig: SiteConfig;
   siteContent: SiteContent;
   isLoading: boolean;
   loadError: string | null;
@@ -64,7 +34,7 @@ type AdminStore = State & {
   addProduct: (product: Product) => Promise<void>;
   updateProduct: (slug: string, product: Product) => Promise<void>;
   deleteProduct: (slug: string) => Promise<void>;
-  updateSiteConfig: (patch: Partial<MutableSiteConfig>) => void;
+  updateSiteConfig: (patch: Partial<SiteConfig>) => void;
   updateSiteContent: (patch: Partial<SiteContent>) => void;
 };
 
@@ -100,7 +70,7 @@ export function AdminStoreProvider({
 }) {
   const [state, setState] = useState<State>({
     products: [],
-    siteConfig: defaultSiteConfig as unknown as MutableSiteConfig,
+    siteConfig: defaultSiteConfig as unknown as SiteConfig,
     siteContent: defaultSiteContent,
     isLoading: true,
     loadError: null,
@@ -127,7 +97,7 @@ export function AdminStoreProvider({
       try {
         const [products, siteConfig, siteContent] = await Promise.all([
           apiGet<Product[]>("/api/products"),
-          apiGet<MutableSiteConfig>("/api/site-config"),
+          apiGet<SiteConfig>("/api/site-config"),
           apiGet<SiteContent>("/api/site-content"),
         ]);
         if (cancelled) return;
@@ -192,7 +162,7 @@ export function AdminStoreProvider({
     [state.products, persistProducts]
   );
 
-  const updateSiteConfig = useCallback((patch: Partial<MutableSiteConfig>) => {
+  const updateSiteConfig = useCallback((patch: Partial<SiteConfig>) => {
     setState((prev) => ({ ...prev, siteConfig: { ...prev.siteConfig, ...patch } }));
   }, []);
 

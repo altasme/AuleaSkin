@@ -114,34 +114,56 @@ instead of being present in the initial HTML (and its `<title>`/OG tags
 stay generic until the next real rebuild, those are baked in server-side
 and this shell can't set them before it knows which product it is).
 
-One related, still-real gap: *editing* an already-existing product. Its
-static page keeps reading the build-time `products` import directly
-(`getProductBySlug` in `src/data/products.ts`), not live, so a name/
-description/image edit shows up in the Shop grid and homepage immediately
-but not on that product's own detail page until the next rebuild, only a
-wholly new slug (with no static page to conflict with) hits the fallback
-above. Extending the static page itself to self-correct with live data
-after mount would close this too, a reasonable next step, not done yet.
+**Editing an existing product is also live now**, closing what used to
+be the one real gap here: `src/app/(site)/products/[slug]/page.tsx`
+still statically pre-renders every known product for a fast first paint,
+but now hands off to `LiveProductDetail.tsx`
+(`src/components/LiveProductDetail.tsx`), which reads the same
+`useLiveProducts()` hook the Shop grid and homepage already used and
+looks the current slug up in that live array once it resolves,
+overriding the static version in place. `initialProduct` is passed in
+only as a defensive fallback for the (should-never-happen) case of a
+product deleted from the database after this page's own build. A brand
+new product still goes through the separate fallback path documented
+above (no static page exists for it at all yet), an *edited* existing
+one now updates on its own page the same way it already did in listings,
+no rebuild. `generateMetadata` still runs at build time, though, so an
+edited product's `<title>` tag and any per-product OG data stay whatever
+they were at the last build until the next one, only the visible content
+is live.
 
-**Business Info (`site-config`) and Website Content (`site-content`,
-Homepage/About/Contact copy) are correctly saved to the database and
-readable via their public GET endpoints, but almost no public page
-fetches them yet.** The public pages (`src/app/(site)/page.tsx`,
-`src/app/(site)/about/page.tsx`, `src/app/(site)/contact/page.tsx`,
-`src/components/Header.tsx`) still render their own literal JSX / the
-build-time `siteConfig` import. Wiring these the same way the product
-listings are wired (a client-side fetch-and-overlay) is the same kind of
-scoped follow-up as the product detail page gap above, not done as a
-silent side effect of this pass.
+**Business Info (`site-config`) and Website Content (`site-content`) are
+live everywhere they're used, not just products.** Two shared hooks,
+`useLiveSiteConfig()` (`src/lib/use-live-site-config.ts`) and
+`useLiveSiteContent()` (`src/lib/use-live-site-content.ts`), follow the
+same static-default-then-overlay pattern as `useLiveProducts()`: render
+the build-time value first, swap in whatever `/api/site-config` or
+`/api/site-content` actually returns once that resolves. Every consumer
+reads through one of these two hooks instead of the static imports:
+`Header.tsx` and `Footer.tsx` (nav, contact details, shipping banner,
+policy links, social links), the homepage, About, and Contact pages, the
+three policy pages (shipping/returns, terms, privacy), and
+`ProductDetailView.tsx` itself (the free-shipping/courier line on every
+product page). A page that needs a real `<title>` (About, Contact, the
+policy pages) keeps a thin server `page.tsx` exporting `metadata`, which
+renders a client `*Content.tsx` component holding the actual live-wired
+markup, since a Client Component can't export `metadata` itself; the
+homepage had no distinct title to preserve, so it converted directly.
 
-**One exception, and it's live**: the footer's social links (Instagram,
-TikTok, Facebook, Shopee, all under Business Info → Social links in the
-admin panel) render through `src/components/SocialLinks.tsx`, a small
-client island inside the otherwise-static `Footer.tsx`, using
-`useLiveSocialLinks()` (`src/lib/use-live-social-links.ts`) to fetch
-`/api/site-config` on mount, same static-shell-then-overlay pattern as
-`useLiveProducts()`. Edit any of those four fields in the admin panel and
-the footer picks it up with no rebuild.
+Two things still don't read live, both deliberate, not overlooked:
+category *links* in the footer and product filters stay build-time (live
+category text was tried once already and explicitly reverted, "wrong
+prompt", not something to redo as a side effect here), and each
+product's individual `storyParagraphs`-style rich formatting (bold
+inline emphasis in the About page's founder story, previously hardcoded
+JSX) is now plain text pulled from the live field instead, since a plain
+admin textarea has nowhere to carry inline markup.
+
+**Social links specifically**: Instagram, TikTok, Facebook, Shopee, all
+under Business Info → Social links in the admin panel, render through
+`src/components/SocialLinks.tsx`, which now takes `social` as a prop
+from `Footer.tsx`'s own `useLiveSiteConfig()` call rather than fetching
+its own separate copy.
 
 **All four icons/links always show, by client direction** (an earlier
 pass hid a still-placeholder one entirely; the client asked for it
@@ -410,17 +432,34 @@ src/app/adminpanel/
 src/lib/admin-store.tsx    React context, fetches/PUTs the Functions API,
                             debounces Website Content saves
 src/lib/cloudinary.ts      Unsigned upload helper
-src/lib/use-live-products.ts  Client hook: static catalog first, swaps in
-                                live /api/products on mount, shared by
-                                ShopView and HomeCatalogSections
+src/lib/use-live-products.ts     Client hook: static catalog first, swaps
+                                   in live /api/products on mount, shared
+                                   by ShopView, HomeCatalogSections, and
+                                   LiveProductDetail
+src/lib/use-live-site-config.ts  Same pattern for Business Info
+                                   (/api/site-config), shared by Header,
+                                   Footer, ProductDetailView, the
+                                   homepage/About/Contact/policy pages
+src/lib/use-live-site-content.ts Same pattern for Website Content
+                                   (/api/site-content), shared by the
+                                   homepage, About, and Contact pages
 src/data/site-content.ts   Homepage/About/Contact copy, seeds KV on first
-                            read, see "What's actually live" above for
-                            what's and isn't live yet
+                            read, now the real live source those pages
+                            read from, not a parallel unused copy
 
 src/app/(site)/products/ShopView.tsx        Shop grid, live via
                                               useLiveProducts()
 src/app/(site)/HomeCatalogSections.tsx      Featured + category tiles,
                                               live via useLiveProducts()
+                                              and useLiveSiteContent()
+src/components/LiveProductDetail.tsx        Existing product's own page,
+                                              live via useLiveProducts(),
+                                              see "What's actually live"
+src/data/products.ts: getRelatedProducts()  Shared "related products"
+                                              logic, used by the static
+                                              product page, the live
+                                              fallback, and
+                                              LiveProductDetail
 wrangler.toml               Build output dir / compatibility settings only,
                              no KV binding here on purpose, see "Local
                              development" above

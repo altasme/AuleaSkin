@@ -50,3 +50,42 @@ export const siteConfig = {
   primaryCta: "Shop Now",
   secondaryCta: "Learn More",
 } as const;
+
+// The `as const` above makes `siteConfig` itself deeply readonly with
+// narrow literal types (checkoutModel as the literal "shopee", etc.),
+// exactly right for compile-time safety on the static default. Live data
+// coming back from /api/site-config is just parsed JSON, plain mutable
+// values with no literal narrowing, so both the admin panel's edit forms
+// and the public site's live hook need this looser, explicit shape
+// instead. One definition, shared by both: src/lib/admin-store.tsx
+// (writes) and src/lib/use-live-site-config.ts (reads) both import this
+// rather than each declaring their own copy.
+export type SiteConfig = {
+  businessName: string;
+  wordmark: string;
+  tagline: string;
+  positioningLine: string;
+  shortDescription: string;
+  brandPromise: string;
+  legalName: string;
+  established: string;
+  businessType: string;
+  contactEmail: string;
+  contactPhone: string;
+  address: string;
+  hours: string;
+  social: {
+    instagram: string;
+    tiktok: string;
+    facebook: string;
+    shopee: string;
+  };
+  checkoutModel: string;
+  freeShippingThreshold: number;
+  couriers: string[];
+  paymentMethods: string[];
+  nav: { label: string; href: string }[];
+  footerPolicyLinks: { label: string; href: string }[];
+  primaryCta: string;
+  secondaryCta: string;
+};

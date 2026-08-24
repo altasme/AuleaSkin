@@ -1,11 +1,19 @@
+"use client";
+
 import Link from "next/link";
 import { categories } from "@/data/products";
-import { siteConfig } from "@/lib/site-config";
+import { useLiveSiteConfig } from "@/lib/use-live-site-config";
 import { Logo } from "./Logo";
 import { MailIcon, StoreIcon, TruckIcon, WalletIcon } from "./Icons";
 import { SocialLinks } from "./SocialLinks";
 
+// Category links stay the static, build-time list on purpose, live-wiring
+// them was tried and explicitly reverted earlier ("wrong prompt"), not
+// something to redo as a side effect of this pass. Everything else below
+// that comes from Business Info now reads live via useLiveSiteConfig.
 export function Footer() {
+  const siteConfig = useLiveSiteConfig();
+
   return (
     <footer className="border-t border-ink/12 bg-navy-deep text-cream">
       <div className="mx-auto max-w-6xl px-6 py-14 sm:px-10 lg:px-16">
@@ -15,7 +23,7 @@ export function Footer() {
             <p className="mt-4 text-sm text-cream/70 leading-relaxed">
               {siteConfig.shortDescription}
             </p>
-            <SocialLinks />
+            <SocialLinks social={siteConfig.social} />
           </div>
 
           <div>

@@ -325,3 +325,15 @@ export function getProductBySlug(slug: string) {
 export function getProductsByCategory(category: string) {
   return products.filter((p) => p.category === category);
 }
+
+// Same-category products first, falling back to any other product if
+// this one has no category-mates, capped at 3. Shared by the static
+// product page, the live fallback shell for brand-new products, and
+// LiveProductDetail's live-overlay for existing ones, so "related
+// products" logic lives in exactly one place instead of three near-
+// identical copies.
+export function getRelatedProducts(product: Product, allProducts: Product[], limit = 3) {
+  const sameCategory = allProducts.filter((p) => p.slug !== product.slug && p.category === product.category);
+  const pool = sameCategory.length > 0 ? sameCategory : allProducts.filter((p) => p.slug !== product.slug);
+  return pool.slice(0, limit);
+}

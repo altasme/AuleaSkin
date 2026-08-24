@@ -1,10 +1,13 @@
+"use client";
+
 import Image from "next/image";
 import { LinkButton } from "@/components/Button";
 import { Section, SectionHeading } from "@/components/Section";
 import { EmailSignup } from "@/components/EmailSignup";
 import { HeartIcon, SparkleIcon, TruckIcon, WalletIcon } from "@/components/Icons";
 import { products } from "@/data/products";
-import { siteConfig } from "@/lib/site-config";
+import { useLiveSiteConfig } from "@/lib/use-live-site-config";
+import { useLiveSiteContent } from "@/lib/use-live-site-content";
 import { HomeCatalogSections } from "./HomeCatalogSections";
 
 const testimonialImages = Array.from(
@@ -12,30 +15,17 @@ const testimonialImages = Array.from(
   (_, i) => `/images/testimonials/review-${i + 1}.webp`
 );
 
-const whyAulea = [
-  {
-    icon: HeartIcon,
-    title: "Made from experience",
-    body: "Created from a personal skincare journey with sensitive skin in mind.",
-  },
-  {
-    icon: SparkleIcon,
-    title: "Thoughtful products",
-    body: "Simple, considered formulas you can build into your everyday routine.",
-  },
-  {
-    icon: WalletIcon,
-    title: "Accessible by design",
-    body: "Skincare that feels worth it, without feeling unnecessarily expensive.",
-  },
-  {
-    icon: TruckIcon,
-    title: "Easy to get",
-    body: "Nationwide delivery, COD, and multiple payment options to suit you.",
-  },
-];
+// Card icons aren't part of Website Content (nothing to serialize a React
+// component through KV/JSON), only title/body are editable, see
+// docs/admin-panel.md. Matched to siteContent.homepage.whyAuleaCards by
+// position, that array is a fixed 4 cards in the admin panel (edit in
+// place, no add/remove), not a dynamic list.
+const whyAuleaIcons = [HeartIcon, SparkleIcon, WalletIcon, TruckIcon];
 
 export default function Home() {
+  const siteConfig = useLiveSiteConfig();
+  const { homepage } = useLiveSiteContent();
+
   return (
     <>
       {/* Hero: full-bleed split, image right, edge to edge like the ref design. */}
@@ -46,11 +36,10 @@ export default function Home() {
               Aulea Skin &middot; Est. {siteConfig.established}
             </p>
             <h1 className="font-display text-4xl leading-tight text-ink sm:text-5xl lg:text-6xl">
-              Everyday skincare, made more accessible.
+              {homepage.heroHeading}
             </h1>
             <p className="mt-5 max-w-md text-ink/70 leading-relaxed">
-              {siteConfig.brandPromise} Aulea Skin started from one person&apos;s search for
-              skincare that felt comfortable, simple, and worth the money.
+              {siteConfig.brandPromise} {homepage.heroSubtext}
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-6">
               <LinkButton href="/products">Shop Now</LinkButton>
@@ -95,16 +84,10 @@ export default function Home() {
           </div>
           <div>
             <p className="text-xs font-medium uppercase tracking-[0.15em] text-navy/70 mb-3">
-              The Aulea Story
+              {homepage.founderEyebrow}
             </p>
-            <h2 className="font-display text-3xl text-ink sm:text-4xl">
-              Born from a personal skincare journey.
-            </h2>
-            <p className="mt-4 text-ink/70 leading-relaxed">
-              Finding skincare that felt comfortable, without costing too much, wasn&apos;t
-              easy. That gap is why Aulea exists: accessible, reasonably priced products that
-              fit an everyday routine without feeling complicated.
-            </p>
+            <h2 className="font-display text-3xl text-ink sm:text-4xl">{homepage.founderHeading}</h2>
+            <p className="mt-4 text-ink/70 leading-relaxed">{homepage.founderBody}</p>
             <div className="mt-6">
               <LinkButton href="/about" variant="secondary">
                 Read Our Story
@@ -119,15 +102,10 @@ export default function Home() {
         <div className="grid items-center gap-12 lg:grid-cols-2">
           <div>
             <p className="text-xs font-medium uppercase tracking-[0.15em] text-navy/70 mb-3">
-              The Ritual
+              {homepage.ritualEyebrow}
             </p>
-            <h2 className="font-display text-3xl text-ink sm:text-4xl">
-              A few quiet minutes, every day.
-            </h2>
-            <p className="mt-4 text-ink/70 leading-relaxed">
-              Cleanse, treat, hydrate. No overwhelming steps, just a simple rhythm that lets your
-              skin feel cared for, morning and night.
-            </p>
+            <h2 className="font-display text-3xl text-ink sm:text-4xl">{homepage.ritualHeading}</h2>
+            <p className="mt-4 text-ink/70 leading-relaxed">{homepage.ritualBody}</p>
             <div className="mt-6">
               <LinkButton href="/products" variant="secondary">
                 Explore The Products
@@ -152,16 +130,11 @@ export default function Home() {
       <section className="bg-navy-deep">
         <div className="mx-auto grid max-w-6xl items-center gap-8 px-6 py-14 sm:px-10 lg:grid-cols-2 lg:px-16">
           <div>
-            <p className="font-label text-sm tracking-[0.2em] text-gold mb-3">
-              A Small Gift, Every Order
-            </p>
+            <p className="font-label text-sm tracking-[0.2em] text-gold mb-3">{homepage.promoEyebrow}</p>
             <h2 className="font-display text-3xl text-cream sm:text-4xl">
               Free shipping on orders ₱{siteConfig.freeShippingThreshold}+
             </h2>
-            <p className="mt-3 max-w-md text-cream/70">
-              Nationwide delivery available. Cash on delivery welcome where courier support
-              allows, subject to applicable courier and shipping arrangements.
-            </p>
+            <p className="mt-3 max-w-md text-cream/70">{homepage.promoBody}</p>
             <div className="mt-6">
               <LinkButton href="/products" variant="onDark">
                 Start Shopping
@@ -185,8 +158,8 @@ export default function Home() {
         <SectionHeading
           align="center"
           eyebrow="From Our Customers"
-          title="Real feedback, in their words"
-          description="Genuine reviews shared by Aulea customers."
+          title={homepage.testimonialsHeading}
+          description={homepage.testimonialsDescription}
         />
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
           {testimonialImages.map((src, i) => (
@@ -205,17 +178,20 @@ export default function Home() {
 
       {/* Why Aulea */}
       <Section className="bg-cream-deep">
-        <SectionHeading align="center" eyebrow="Why Aulea" title="Skincare, made simple" />
+        <SectionHeading align="center" eyebrow="Why Aulea" title={homepage.whyAuleaHeading} />
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-          {whyAulea.map(({ icon: Icon, title, body }) => (
-            <div key={title} className="text-center sm:text-left">
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-ink/15 text-navy sm:mx-0">
-                <Icon className="h-5 w-5" />
+          {homepage.whyAuleaCards.map((card, i) => {
+            const Icon = whyAuleaIcons[i];
+            return (
+              <div key={card.title} className="text-center sm:text-left">
+                <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-ink/15 text-navy sm:mx-0">
+                  {Icon && <Icon className="h-5 w-5" />}
+                </div>
+                <h3 className="mt-4 font-display text-lg text-ink">{card.title}</h3>
+                <p className="mt-2 text-sm text-ink/70 leading-relaxed">{card.body}</p>
               </div>
-              <h3 className="mt-4 font-display text-lg text-ink">{title}</h3>
-              <p className="mt-2 text-sm text-ink/70 leading-relaxed">{body}</p>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </Section>
 
@@ -230,12 +206,8 @@ export default function Home() {
       {/* Final CTA: quiet treatment; large dark fills are reserved
           for the hero, footer, and the one promo band above. */}
       <section className="bg-navy-deep px-6 py-20 text-center sm:px-10 lg:px-16">
-        <h2 className="font-display text-3xl text-cream sm:text-4xl">
-          Take care of your skin, without overcomplicating it.
-        </h2>
-        <p className="mx-auto mt-3 max-w-md text-cream/70">
-          Explore the Aulea range and find a ritual that fits your everyday.
-        </p>
+        <h2 className="font-display text-3xl text-cream sm:text-4xl">{homepage.finalCtaHeading}</h2>
+        <p className="mx-auto mt-3 max-w-md text-cream/70">{homepage.finalCtaBody}</p>
         <div className="mt-8">
           <LinkButton href="/products" variant="onDark">
             Shop The Collection

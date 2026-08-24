@@ -6,24 +6,18 @@ import { ProductCard } from "@/components/ProductCard";
 import { Section, SectionHeading } from "@/components/Section";
 import { ArrowRightIcon } from "@/components/Icons";
 import { useLiveProducts } from "@/lib/use-live-products";
-
-const categoryCopy: Record<string, string> = {
-  "Sun Care": "Daily sun protection for your routine.",
-  Serums: "Targeted treatments for brighter, healthier-looking skin.",
-  Cleansers: "Gentle daily washes to start and end the day.",
-  Lotions: "Everyday moisture for firmer, smoother skin.",
-  Soaps: "Natural bar soaps for everyday cleansing.",
-  Fragrance: "Eau de Parfum in scents for him and her.",
-  Sets: "Complete routines, bundled together.",
-};
+import { useLiveSiteContent } from "@/lib/use-live-site-content";
 
 // Featured products and category tiles both need the live catalog (a
 // product added in the admin panel should show up here without a full
 // site rebuild), so they're pulled out of the otherwise-static homepage
 // into their own client component. See use-live-products.ts and
-// docs/admin-panel.md, "Storefront now reads live data".
+// docs/admin-panel.md, "Storefront now reads live data". Category tile
+// copy is editable too (Website Content → Homepage → Category tiles),
+// reads live via useLiveSiteContent rather than a hardcoded local dict.
 export function HomeCatalogSections() {
   const products = useLiveProducts();
+  const { homepage } = useLiveSiteContent();
   const categories = Array.from(new Set(products.map((p) => p.category)));
 
   return (
@@ -72,7 +66,7 @@ export function HomeCatalogSections() {
                 <div className="absolute inset-x-0 bottom-0 p-5 text-cream">
                   <h3 className="font-display text-lg">{category}</h3>
                   <p className="mt-1 text-xs text-cream/80">
-                    {categoryCopy[category] ?? "Shop this category."}
+                    {homepage.categoryCopy[category] ?? "Shop this category."}
                   </p>
                   <p className="mt-2 flex items-center gap-1 text-xs font-medium uppercase tracking-[0.1em]">
                     Shop Now{" "}

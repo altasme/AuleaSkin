@@ -1,14 +1,18 @@
+"use client";
+
 import Image from "next/image";
 import { ProductActions } from "@/components/ProductActions";
 import { ProductCard } from "@/components/ProductCard";
 import { Section } from "@/components/Section";
-import { siteConfig } from "@/lib/site-config";
+import { useLiveSiteConfig } from "@/lib/use-live-site-config";
 import type { Product } from "@/data/products";
 
 // The actual product-detail rendering, factored out of
 // src/app/(site)/products/[slug]/page.tsx so the same markup can be
 // reused by the live fallback shell (products/_live) for a product added
-// after the last build, see functions/products/[slug].ts.
+// after the last build, see functions/products/[slug].ts. Client
+// component so the free-shipping threshold and courier list read live
+// from Business Info here too, not just the rest of the site.
 export function ProductDetailView({
   product,
   related,
@@ -16,6 +20,7 @@ export function ProductDetailView({
   product: Product;
   related: Product[];
 }) {
+  const siteConfig = useLiveSiteConfig();
   return (
     <>
       <Section className="pt-14">
