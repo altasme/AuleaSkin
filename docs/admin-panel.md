@@ -1,0 +1,468 @@
+# Admin Panel
+
+`/adminpanel`, added on client request. Lets an admin manage the product
+catalog and the site's main content blocks without touching code directly.
+Backed by a real database (Cloudflare Workers KV) as of the KV setup
+described below. Product listings (Shop grid, homepage) and every
+product's own detail page read live from it for every visitor, no
+rebuild needed, see "What's actually live on the storefront, precisely"
+for exactly what that does and doesn't cover yet (Business Info / Website
+Content aren't wired to it on the public pages yet).
+
+## Sign in
+
+- Username: `Auleadmin`
+- Password: `aulea@2026`
+
+Checked server-side now (`functions/api/login.ts`, via `functions/api/_shared.ts`'s
+`requireAuth`), against the `ADMIN_USERNAME` / `ADMIN_PASSWORD` secrets set
+on the Cloudflare Pages project, not against anything shipped in the
+client bundle. This is a real gate: a visitor without the password cannot
+read or write the admin API, full stop.
+
+It's still a single shared credential pair, not per-user accounts, HTTP
+Basic Auth checked on every request rather than session tokens. That's an
+intentional, appropriate simplification for one shared admin login, not a
+corner cut, adding session/token infrastructure here would be complexity
+without adding real access control for this use case.
+
+**"Incorrect username or password" with the right credentials** means the
+`ADMIN_USERNAME` / `ADMIN_PASSWORD` **secrets were never set (or don't
+match) on the Cloudflare Pages project**, not a bug in the form. The old
+localStorage-only prototype checked the password entirely client-side, so
+it worked with no dashboard setup at all; this server-checked version
+doesn't, and moving to it doesn't retroactively create those two secrets on
+the Pages project, that's a manual one-time dashboard step ("Production
+setup" step 3 below). Since secrets can't be read back out once saved,
+don't try to "check" them, just re-enter and re-save both, then redeploy
+(step 4) — Pages only picks up secret changes on the *next* deployment.
+
+## Architecture: Cloudflare Pages Functions + Workers KV
+
+The public site still builds as a static export exactly as before
+(`next.config.ts`, `output: "export"`, unchanged, see `docs/deployment.md`).
+Only the admin panel's data layer changed. Cloudflare Pages supports a
+`functions/` directory at the repo root that deploys as edge API routes
+**alongside** the static build, on the same domain, no separate hosting
+project or URL:
+
+```
+functions/
+  env.d.ts        Env type (the KV binding, the ASSETS binding, the two secrets)
+  tsconfig.json   Separate from the root tsconfig, Workers runtime types
+                  differ from the Next.js app's DOM types, kept out of
+                  `next build`'s TypeScript pass (see root tsconfig.json's
+                  exclude) so the two don't collide
+  api/
+    _shared.ts    requireAuth() + getOrSeed() + jsonResponse() helpers
+    login.ts      POST, used once at sign-in to verify credentials
+    products.ts   GET / PUT the full products array
+    site-config.ts    GET / PUT the Business Info object
+    site-content.ts   GET / PUT the Homepage/About/Contact copy object
+  products/
+    [slug].ts     GET fallback for a product slug with no static page yet,
+                  see "New products before the next rebuild" below
+```
+
+Data lives in one KV namespace (binding name `AULEA_DATA`) as three JSON
+values, keyed `products`, `site-config`, `site-content`. That's it, no
+relational schema, this is genuinely "text data only" at catalog scale
+(~10-20 products, a handful of copy blocks), a few JSON blobs is the
+right amount of structure, not an undersized one.
+
+**Auto-seeding**: KV starts empty. The first authenticated read of a key
+that doesn't exist yet seeds it from the value currently hardcoded in the
+app (`src/data/products.ts`, `src/lib/site-config.ts`,
+`src/data/site-content.ts`) and writes that back to KV
+(`getOrSeed` in `functions/api/_shared.ts`). No manual seeding step, the
+catalog just works the first time the admin panel loads against a freshly
+bound namespace.
+
+### What's actually live on the storefront, precisely
+
+Every `GET` on `/api/*` is **public, unauthenticated** on purpose,
+products, business info, and site content are catalog/marketing content,
+not secrets, and the storefront needs to read them without a login.
+Only `PUT` (and `/api/login`) require the admin credentials.
+
+**Product listings are live**: `src/app/(site)/products/ShopView.tsx`
+and the homepage's Featured/category sections
+(`src/app/(site)/HomeCatalogSections.tsx`) render the build-time catalog
+first (fast first paint, works with no JS), then fetch `/api/products`
+on mount and re-render with whatever's actually in the database, via the
+shared `useLiveProducts()` hook (`src/lib/use-live-products.ts`). Add,
+edit, or delete a product in the admin panel and it shows up in the Shop
+grid and homepage within moments, no rebuild, no redeploy. Verified: a
+product added through the panel showed up on the Shop page in a
+completely separate, logged-out browser.
+
+**New products before the next rebuild**: `/products/<slug>` is prebuilt
+per-product at `next build` time via `generateStaticParams()`
+(`src/app/(site)/products/[slug]/page.tsx`), so a slug that didn't exist
+at the last build has no HTML file for it, static hosting can't generate
+one on the fly. Rather than a hard 404, `functions/products/[slug].ts`
+catches exactly that case: it checks Cloudflare's static asset store for
+the requested slug first (existing products keep loading their real
+prebuilt page, untouched, byte for byte), and only when that's a genuine
+miss does it serve a generic prebuilt shell page
+(`src/app/(site)/product-fallback/page.tsx`) that reads the real slug
+back out of the browser's URL and fetches the matching product live from
+`/api/products`, rendering it with the same `ProductDetailView` component
+the real static pages use. So a brand-new product's own page works
+immediately, no rebuild needed, just with a brief client-side fetch
+instead of being present in the initial HTML (and its `<title>`/OG tags
+stay generic until the next real rebuild, those are baked in server-side
+and this shell can't set them before it knows which product it is).
+
+**Editing an existing product is also live now**, closing what used to
+be the one real gap here: `src/app/(site)/products/[slug]/page.tsx`
+still statically pre-renders every known product for a fast first paint,
+but now hands off to `LiveProductDetail.tsx`
+(`src/components/LiveProductDetail.tsx`), which reads the same
+`useLiveProducts()` hook the Shop grid and homepage already used and
+looks the current slug up in that live array once it resolves,
+overriding the static version in place. `initialProduct` is passed in
+only as a defensive fallback for the (should-never-happen) case of a
+product deleted from the database after this page's own build. A brand
+new product still goes through the separate fallback path documented
+above (no static page exists for it at all yet), an *edited* existing
+one now updates on its own page the same way it already did in listings,
+no rebuild. `generateMetadata` still runs at build time, though, so an
+edited product's `<title>` tag and any per-product OG data stay whatever
+they were at the last build until the next one, only the visible content
+is live.
+
+**Business Info (`site-config`) and Website Content (`site-content`) are
+live everywhere they're used, not just products.** Two shared hooks,
+`useLiveSiteConfig()` (`src/lib/use-live-site-config.ts`) and
+`useLiveSiteContent()` (`src/lib/use-live-site-content.ts`), follow the
+same static-default-then-overlay pattern as `useLiveProducts()`: render
+the build-time value first, swap in whatever `/api/site-config` or
+`/api/site-content` actually returns once that resolves. Every consumer
+reads through one of these two hooks instead of the static imports:
+`Header.tsx` and `Footer.tsx` (nav, contact details, shipping banner,
+policy links, social links), the homepage, About, and Contact pages, the
+three policy pages (shipping/returns, terms, privacy), and
+`ProductDetailView.tsx` itself (the free-shipping/courier line on every
+product page). A page that needs a real `<title>` (About, Contact, the
+policy pages) keeps a thin server `page.tsx` exporting `metadata`, which
+renders a client `*Content.tsx` component holding the actual live-wired
+markup, since a Client Component can't export `metadata` itself; the
+homepage had no distinct title to preserve, so it converted directly.
+
+Two things still don't read live, both deliberate, not overlooked:
+category *links* in the footer and product filters stay build-time (live
+category text was tried once already and explicitly reverted, "wrong
+prompt", not something to redo as a side effect here), and each
+product's individual `storyParagraphs`-style rich formatting (bold
+inline emphasis in the About page's founder story, previously hardcoded
+JSX) is now plain text pulled from the live field instead, since a plain
+admin textarea has nowhere to carry inline markup.
+
+**Social links specifically**: Instagram, TikTok, Facebook, Shopee, all
+under Business Info → Social links in the admin panel, render through
+`src/components/SocialLinks.tsx`, which now takes `social` as a prop
+from `Footer.tsx`'s own `useLiveSiteConfig()` call rather than fetching
+its own separate copy.
+
+**All four icons/links always show, by client direction** (an earlier
+pass hid a still-placeholder one entirely; the client asked for it
+visible regardless). What differs is only whether it's a *working* link:
+`isRealValue()` in `SocialLinks.tsx` treats anything non-empty that
+doesn't start with `[` (this codebase's existing "pending" convention,
+see `contactPhone`/`address`/`hours` above) as real, not by requiring a
+literal `http(s)://` prefix, a first attempt found that the hard way: an
+admin typing `IG.com` with no protocol got silently hidden, since a
+plain text field is never going to get typed with a protocol prefix by a
+non-technical admin. `toHref()` adds `https://` automatically when the
+saved value has no scheme. A field that's still the shipped placeholder
+text ("recovering, not yet relinked", `src/lib/site-config.ts`, real
+social pages were lost per spec B2) renders its icon dimmed and inert
+(no `href`) instead of hidden or linking to literal placeholder text as
+a broken URL, once a real value replaces it, that icon lights up and
+becomes clickable, no code change needed.
+
+## Local development
+
+```bash
+npm run pages:dev
+# equivalent to:
+#   next build && wrangler pages dev out --kv=AULEA_DATA
+```
+
+The `--kv=AULEA_DATA` flag gives the Functions a local, disk-persisted
+KV binding under that name, separate from the real namespace `wrangler.toml`
+points production at, so local testing never touches production data.
+`.dev.vars` for the two secrets, gitignored, needs creating locally (see
+below).
+
+Create `.dev.vars` at the repo root (not committed):
+
+```
+ADMIN_USERNAME=Auleadmin
+ADMIN_PASSWORD=aulea@2026
+```
+
+## Production setup (do this once, on the real Cloudflare account)
+
+**The KV binding itself is declared in `wrangler.toml`, not the
+dashboard.** This took two real incidents to pin down, worth recording
+precisely so nobody re-breaks it a third way:
+
+- First, `wrangler.toml` shipped with a `[[kv_namespaces]]` block using a
+  placeholder id. Cloudflare Pages reads this file on every real
+  production deploy, not just local dev, so the placeholder broke every
+  Function-publish step (`Error 8000022: Invalid KV namespace ID`).
+- That block was then removed entirely, on the assumption the dashboard's
+  own KV-binding UI would take over. It didn't: for this project, once
+  `wrangler.toml` exists, the dashboard's binding UI just says "bindings
+  are managed via wrangler.toml" and won't accept one. Removing the block
+  left the project with **no** `AULEA_DATA` binding anywhere, which is
+  what turned into every `/api/*` call 500ing.
+
+So the only correct state is a `[[kv_namespaces]]` block with the real,
+current namespace id, which is what's committed now:
+
+```toml
+[[kv_namespaces]]
+binding = "AULEA_DATA"
+id = "<the real namespace id>"
+```
+
+Steps to set this up from scratch (all dashboard, no `wrangler` CLI
+needed to *get* the id, just to know where to put it):
+
+1. **Create the KV namespace**: Cloudflare dashboard → **Workers & Pages**
+   → **KV** (left sidebar) → **Create a namespace** → name it `AULEA_DATA`
+   (the name is just a label, doesn't need to match anything) → **Add**.
+2. **Copy its Namespace ID**: click into the namespace just created, copy
+   the ID shown there (a 32-character hex string) → put it in
+   `wrangler.toml` as above → commit and push. This *is* the binding step;
+   there is no separate dashboard step for it on this project.
+3. **Set the two secrets**: Workers & Pages → your Pages project →
+   **Settings** → **Environment variables** → **Add variable** → set
+   type to **Secret** (not "Text") → add `ADMIN_USERNAME` = `Auleadmin`
+   and `ADMIN_PASSWORD` = `aulea@2026` → **Save**. Secrets, not plain
+   variables, so they're not readable back out via the dashboard once
+   set, if in doubt just re-enter and re-save both rather than trying to
+   check them.
+4. **Redeploy** so the new binding and secrets take effect (Pages only
+   picks up binding/secret changes on the *next* deployment, not
+   retroactively): **Deployments** tab → **⋯** on the latest one →
+   **Retry deployment**, or just push any commit.
+5. Sign in at `/adminpanel`, the catalog auto-seeds on first load, no
+   manual data entry needed to get started.
+
+If the namespace is ever recreated or swapped, update the `id` in
+`wrangler.toml` and redeploy, don't delete the block, an empty/missing
+block is the no-binding-at-all state that caused the second incident
+above.
+
+## Products & Pricing tab
+
+Full add / edit / delete for the product catalog, matching every field
+`src/data/products.ts` actually has: name, slug, category, size, short
+description, full description, benefits (add/remove any number), how to
+use, suitable for, ingredients note, variants, Buy on Shopee URL, and a
+**price field** (PHP). Price is captured and stored but intentionally not
+rendered anywhere on the live site yet, Shopee stays the pricing source of
+truth per the client's standing purchase-model directive (see
+`docs/intake-checklist.md`); it's just ready for whenever that changes.
+
+Every add/edit/delete PUTs the full products array to `/api/products`
+immediately, these are already discrete, deliberate actions (a form
+submit, a confirmed delete), not continuous typing, so there's no reason
+to debounce them the way Website Content fields are (see below).
+
+### Category field
+
+A dropdown, not free text: `Cleansers`, `Fragrance`, `Lotions`, `Serums`,
+`Sets`, `Soaps`, `Sun Care`, plus any category already used by a product
+in the live catalog, so a previously-added custom category is selectable
+again rather than needing to be retyped. That base set is exactly the
+categories already live on the storefront (`src/data/products.ts`), on
+purpose: the Shop page's filter chips are whatever distinct category
+strings the live products actually have, so a near-duplicate spelling
+("Soap" next to nine products' "Soaps") would show as two separate chips
+instead of one. **+ Add custom category…** switches to a plain text input
+for anything genuinely new, that becomes a real new Shop filter category
+immediately. See `CategoryField` in `ProductForm.tsx`.
+
+### Product limit (Free plan)
+
+`FREE_PLAN_PRODUCT_LIMIT` in `ProductsPanel.tsx` is a hard UI cap of 15
+products: the Add button disables and an inline banner explains why once
+the catalog is at 15, pointing at the Account menu (see below) for the
+upgrade pitch. This is advisory only, nothing on the API/KV side enforces
+it, there's no concept of a "plan" in `functions/api/products.ts`. An
+admin who somehow already has more than 15 (a future limit change, or
+data imported outside this panel) can still edit or delete existing
+products, only adding a new one past the cap is blocked.
+
+### Product images
+
+Each product takes three images: two square (1:1) and one portrait (4:5),
+per the client's spec for this panel. That's a different shape from the
+convention the *existing* photographed catalog uses (one 4:3 landscape
+lead image + up to two 1:1 secondaries, see `docs/image-requirements.md`),
+which is why: a product added or edited here stores its images in the
+order **[square, square, portrait]**, not `[landscape, square, square]`.
+The live product detail page's gallery (`src/app/(site)/products/[slug]/page.tsx`)
+still renders the first image large in a 4:3 frame and the rest as
+squares, it hasn't been changed to match the new shape. If a set of admin
+images from here is applied to a live product, whoever applies it should
+either supply a genuinely wide first image or adjust that gallery
+component, the panel doesn't attempt that layout decision on its own.
+
+Images upload straight to Cloudinary from the browser (see "Image uploads
+(Cloudinary)" below). An aspect-ratio mismatch shows a warning but never
+blocks the upload.
+
+## Website Content tab
+
+Organized into four sections, each labeled with exactly what it covers so
+it doesn't turn into a wall of unlabeled text fields:
+
+- **Business Info**: real identity/settings that already lived in
+  `src/lib/site-config.ts` before this panel existed (name, tagline,
+  contact details, social links, shipping threshold, couriers, payment
+  methods). Edited directly, not duplicated elsewhere.
+- **Homepage**: every text block on the homepage, in page order (hero,
+  category tiles, founder story teaser, the Ritual section, the promo
+  band, testimonials heading, the four "Why Aulea" cards, final CTA).
+- **About Page**: intro, the three founder-story paragraphs, mission
+  statement, the three "Looking Ahead" cards.
+- **Contact Page**: heading and intro text (contact details themselves
+  come from Business Info, not duplicated here).
+
+Every field in this tab saves on a debounce (~800ms after the admin stops
+typing), not on every keystroke, that would mean a network request per
+character. `src/lib/admin-store.tsx` updates local state immediately (so
+typing feels normal) and fires the actual `PUT` after the pause.
+
+## Image uploads (Cloudinary)
+
+Cloud name (from the client): `o300ubug`
+Unsigned upload preset: `auleaskin`
+
+Because this site has no server *for images* (Cloudinary handles those,
+not KV, "our database will be text data only" was the client's own
+framing), uploads are **unsigned**: the browser posts the file straight to
+Cloudinary's REST endpoint with the cloud name and a preset name, nothing
+else. The API key the client also supplied isn't used anywhere in this
+code, an API key alone can't authorize an unsigned upload (that's the
+point of "unsigned"), and a key without its secret can't do a signed one
+either.
+
+**Both values are `NEXT_PUBLIC_*` vars, baked into the static output at
+`next build` time** (see `src/lib/cloudinary.ts`), not read at request
+time the way the KV binding and admin secrets are. That means:
+
+- **Local dev**: put them in `.env.local` (gitignored, not committed):
+  ```
+  NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=o300ubug
+  NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET=auleaskin
+  ```
+- **Production**: Cloudflare dashboard → Workers & Pages → your Pages
+  project → **Settings** → **Environment variables** → add both as
+  plain **Text** variables (not Secret, these aren't sensitive, an
+  unsigned preset name is meant to be public, it's what authorizes
+  browser uploads with no key at all) → **Save**, then redeploy
+  (**Deployments** → **⋯** on the latest → **Retry deployment**, or push
+  a commit). Same "only takes effect on the next deployment" rule as the
+  KV binding and secrets in "Production setup" above, this is a separate
+  environment-variables step from those, not something that setup
+  already covered.
+
+Until both are set, the panel shows a clear inline message instead of
+failing silently, both on the products tab (a banner) and on each image
+slot (an error under the upload button).
+
+## Account menu
+
+A dropdown from the header ("Free plan" button, `AccountMenu.tsx`), not a
+real multi-user account system, there's still one shared admin login (see
+"Sign in" above). It exists for two things the client's own Free-plan
+flyer calls for:
+
+- The upgrade pitch: advanced database structure, an order management
+  system, promotions/discounts, and unlimited products (past the
+  15-product cap above), each with a one-line reason, plus a link out to
+  `https://altasme.com` to actually start that conversation.
+- A direct link to the Website Service Agreement
+  (`https://altasme.com/WSA-free`).
+
+There's no backend concept of plans or entitlements behind this, it's
+informational, matching the product limit's own "advisory, not enforced"
+nature.
+
+## Backup and reset
+
+Removed. The panel no longer has an Export/Backup tab or a "restore
+original defaults" action (`restoreDefaults` is gone from
+`src/lib/admin-store.tsx`). If a JSON backup or a reset-to-shipped-defaults
+capability is needed again later, `functions/api/products.ts`,
+`site-config.ts`, and `site-content.ts` are already public `GET`
+endpoints, an admin can fetch and save each one's JSON directly, or the
+feature can be rebuilt as its own tab.
+
+## Files
+
+```
+functions/                Cloudflare Pages Functions, the admin API, see
+                           "Architecture" above
+src/app/adminpanel/
+  page.tsx                 Route entry, noindex metadata
+  AdminApp.tsx               Auth gate + tab shell + save-status banner
+  auth.ts                     sessionStorage helpers, no credentials live
+                               here anymore, see "Sign in" above
+  LoginGate.tsx               Sign-in form, POSTs to /api/login
+  AccountMenu.tsx              Free-plan upgrade pitch + WSA link, see
+                                "Account menu" above
+  ProductsPanel.tsx            Product list, add/edit/delete, 15-product
+                                limit banner
+  ProductForm.tsx               Add/edit form, all fields + image slots +
+                                 category dropdown
+  ImageSlot.tsx                  Cloudinary upload control per image
+  SiteContentPanel.tsx        Business Info / Homepage / About / Contact editor
+  ui.tsx                      Shared input/label/button classes, every tab
+                               draws from this instead of each declaring
+                               its own near-identical styles
+
+src/lib/admin-store.tsx    React context, fetches/PUTs the Functions API,
+                            debounces Website Content saves
+src/lib/cloudinary.ts      Unsigned upload helper
+src/lib/use-live-products.ts     Client hook: static catalog first, swaps
+                                   in live /api/products on mount, shared
+                                   by ShopView, HomeCatalogSections, and
+                                   LiveProductDetail
+src/lib/use-live-site-config.ts  Same pattern for Business Info
+                                   (/api/site-config), shared by Header,
+                                   Footer, ProductDetailView, the
+                                   homepage/About/Contact/policy pages
+src/lib/use-live-site-content.ts Same pattern for Website Content
+                                   (/api/site-content), shared by the
+                                   homepage, About, and Contact pages
+src/data/site-content.ts   Homepage/About/Contact copy, seeds KV on first
+                            read, now the real live source those pages
+                            read from, not a parallel unused copy
+
+src/app/(site)/products/ShopView.tsx        Shop grid, live via
+                                              useLiveProducts()
+src/app/(site)/HomeCatalogSections.tsx      Featured + category tiles,
+                                              live via useLiveProducts()
+                                              and useLiveSiteContent()
+src/components/LiveProductDetail.tsx        Existing product's own page,
+                                              live via useLiveProducts(),
+                                              see "What's actually live"
+src/data/products.ts: getRelatedProducts()  Shared "related products"
+                                              logic, used by the static
+                                              product page, the live
+                                              fallback, and
+                                              LiveProductDetail
+wrangler.toml               Build output dir / compatibility settings only,
+                             no KV binding here on purpose, see "Local
+                             development" above
+.dev.vars                   Local-only secrets, gitignored, create it
+                             yourself, see "Local development" above
+```

@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+:root {
+  /* Colour values updated to match the client-supplied reference design
+     (Aulea__template.zip screenshots), sampled directly from the
+     reference images rather than guessed. This supersedes the exact hex
+     values in spec v2.0 PART A (a warmer indigo/gold/cream set); token
+     names and roles are unchanged, so every component that reads
+     bg-navy/text-ink/etc. picked up the new values automatically. */
+  --navy: #102048; /* brand accent + large dark fills: headings, buttons, hero, footer, promo band */
+  --navy-deep: #0a1730; /* slightly deeper navy for the largest fills (hero/footer), same family as navy */
+  --gold: #c68b57; /* decoration only: eyebrow labels, dividers, hover, links on dark bg. Never body text. */
+  --cream: #fbfaf8; /* primary background, near-white per reference (not the old warm yellow-cream) */
+  --cream-deep: #f5f2ec; /* warm-neutral alternating section background */
+  --mist: #f0efeb; /* neutral alternating surface for cards/sections */
+  --ink: #16223d; /* body text on light: dark navy-charcoal, matches the reference's headline colour */
+  --white: #ffffff; /* product image areas, sparing */
+
+  --background: var(--cream);
+  --foreground: var(--ink);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-navy: var(--navy);
+  --color-navy-deep: var(--navy-deep);
+  --color-gold: var(--gold);
+  --color-cream: var(--cream);
+  --color-cream-deep: var(--cream-deep);
+  --color-mist: var(--mist);
+  --color-ink: var(--ink);
+  --color-white: var(--white);
+  --font-sans: var(--font-body);
+  --font-display: var(--font-display);
+  --font-label: var(--font-label);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.font-label {
+  font-family: var(--font-label);
+  letter-spacing: 0.03em;
+}
