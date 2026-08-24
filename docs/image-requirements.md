@@ -72,11 +72,10 @@ Auto-generated from the icon asset above (`src/app/icon.png` at 256x256,
 so the gold mark reads at small sizes). No separate deliverable needed
 unless the icon artwork itself changes.
 
-## Not yet created: social share image (Open Graph)
+## Social share image (Open Graph)
 
-Not currently in the codebase. If wanted for link previews on social/chat
-apps:
-
-- Aspect ratio: 1.91:1
-- Size: 1200 x 630 px
-- Format: JPG or PNG
+Real, client-supplied, live: `public/images/og/aulea-og-image.jpg`, wired
+into `src/app/layout.tsx`'s `openGraph`/`twitter` metadata (site-wide
+default, every page uses it, there's no per-page override yet). 1200 x 630
+px JPG, matches the spec exactly. This is what shows as the link preview
+when the site is shared on Facebook, Twitter/X, Slack, iMessage, etc.

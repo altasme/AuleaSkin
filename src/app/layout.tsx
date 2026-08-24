@@ -27,12 +27,33 @@ const labelFont = Bebas_Neue({
   subsets: ["latin"],
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://example.com";
+const title = `${siteConfig.businessName}: ${siteConfig.tagline}`;
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: {
-    default: `${siteConfig.businessName}: ${siteConfig.tagline}`,
+    default: title,
     template: `%s | ${siteConfig.businessName}`,
   },
   description: siteConfig.shortDescription,
+  openGraph: {
+    title,
+    description: siteConfig.shortDescription,
+    url: siteUrl,
+    siteName: siteConfig.businessName,
+    // Real 1200x630 social-share image supplied by the client, not a
+    // placeholder, see docs/image-requirements.md.
+    images: [{ url: "/images/og/aulea-og-image.jpg", width: 1200, height: 630, alt: title }],
+    locale: "en_PH",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title,
+    description: siteConfig.shortDescription,
+    images: ["/images/og/aulea-og-image.jpg"],
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

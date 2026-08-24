@@ -102,3 +102,43 @@ export function ArrowRightIcon({ className = "h-4 w-4" }: IconProps) {
     </svg>
   );
 }
+
+export function InstagramIcon({ className = "h-5 w-5" }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className={className} aria-hidden="true">
+      <rect x="3" y="3" width="18" height="18" rx="5" />
+      <circle cx="12" cy="12" r="4.5" />
+      <circle cx="17.2" cy="6.8" r="1" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+export function TiktokIcon({ className = "h-5 w-5" }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className={className} aria-hidden="true">
+      <path
+        d="M14 3v10.5a3.5 3.5 0 1 1-3-3.46"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M14 3c0 2.5 2 4.5 4.5 4.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function FacebookIcon({ className = "h-5 w-5" }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className={className} aria-hidden="true">
+      <circle cx="12" cy="12" r="9" />
+      <path
+        d="M13.5 21v-6.5H16l.5-3h-3V9.5c0-.9.3-1.5 1.6-1.5H16.5V5.3c-.3 0-1.2-.1-2.3-.1-2.3 0-3.7 1.4-3.7 3.9V11.5H8v3h2.5V21"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}

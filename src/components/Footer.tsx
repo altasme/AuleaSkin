@@ -3,6 +3,7 @@ import { categories } from "@/data/products";
 import { siteConfig } from "@/lib/site-config";
 import { Logo } from "./Logo";
 import { MailIcon, StoreIcon, TruckIcon, WalletIcon } from "./Icons";
+import { SocialLinks } from "./SocialLinks";
 
 export function Footer() {
   return (
@@ -14,12 +15,7 @@ export function Footer() {
             <p className="mt-4 text-sm text-cream/70 leading-relaxed">
               {siteConfig.shortDescription}
             </p>
-            <a
-              href={siteConfig.social.shopee}
-              className="mt-4 inline-block text-xs font-medium uppercase tracking-[0.1em] text-gold hover:text-cream"
-            >
-              Visit our Shopee store →
-            </a>
+            <SocialLinks />
           </div>
 
           <div>

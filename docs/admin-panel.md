@@ -125,14 +125,30 @@ after mount would close this too, a reasonable next step, not done yet.
 
 **Business Info (`site-config`) and Website Content (`site-content`,
 Homepage/About/Contact copy) are correctly saved to the database and
-readable via their public GET endpoints, but no public page fetches them
-yet.** The public pages (`src/app/(site)/page.tsx`,
+readable via their public GET endpoints, but almost no public page
+fetches them yet.** The public pages (`src/app/(site)/page.tsx`,
 `src/app/(site)/about/page.tsx`, `src/app/(site)/contact/page.tsx`,
-`src/components/Header.tsx`, `Footer.tsx`) still render their own literal
-JSX / the build-time `siteConfig` import. Wiring these the same way the
-product listings are wired (a client-side fetch-and-overlay) is the same
-kind of scoped follow-up as the product detail page gap above, not done
-as a silent side effect of this pass.
+`src/components/Header.tsx`) still render their own literal JSX / the
+build-time `siteConfig` import. Wiring these the same way the product
+listings are wired (a client-side fetch-and-overlay) is the same kind of
+scoped follow-up as the product detail page gap above, not done as a
+silent side effect of this pass.
+
+**One exception, and it's live**: the footer's social links (Instagram,
+TikTok, Facebook, Shopee, all under Business Info → Social links in the
+admin panel) render through `src/components/SocialLinks.tsx`, a small
+client island inside the otherwise-static `Footer.tsx`, using
+`useLiveSocialLinks()` (`src/lib/use-live-social-links.ts`) to fetch
+`/api/site-config` on mount, same static-shell-then-overlay pattern as
+`useLiveProducts()`. Edit any of those four fields in the admin panel and
+the footer picks it up with no rebuild. A field only renders as a link if
+its value actually looks like a URL (`http://` or `https://`); Instagram,
+TikTok, and Facebook shipped as the placeholder "recovering, not yet
+relinked" text (`src/lib/site-config.ts`, real social pages were lost per
+spec B2), so by default only the Shopee link shows, that's not a bug,
+it's the fallback correctly refusing to render a dead link out of
+placeholder text. Once real URLs are entered, all four show, icons for
+the first three and the existing text link for Shopee.
 
 ## Local development
 
